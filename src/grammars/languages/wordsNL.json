@@ -1,0 +1,986 @@
+{
+    "PREP": {
+        "in": [
+            {"num": ""},
+            {"translation": "in"},
+            {"numopposite": "in"},
+            {"gen": ""}
+        ],
+        "on": [
+            {"num": ""},
+            {"translation": "op"},
+            {"numopposite": "op"},
+            {"gen": ""}
+        ],
+        "with": [
+            {"num": ""},
+            {"translation": "met"},
+            {"numopposite": "met"},
+            {"gen": ""}
+        ],
+        "but": [
+            {"num": ""},
+            {"translation": "maar"},
+            {"numopposite": "maar"},
+            {"gen": ""}
+        ],
+        "against": [
+            {"num": ""},
+            {"translation": "tegen"},
+            {"numopposite": "tegen"},
+            {"gen": ""}
+        ],
+        "to": [
+            {"num": ""},
+            {"translation": "naar"},
+            {"numopposite": "naar"},
+            {"gen": ""}
+        ]
+    },
+    "DET": {
+        "the": [
+            {"num": "sing"},
+            {"translation": "de"},
+            {"genopposite": "het"},
+            {"numopposite": "the"},
+            {"gen": "mas"}
+        ],
+        "het": [
+            {"num": "sing"},
+            {"translation": "het"},
+            {"numopposite": "het"},
+            {"genopposite": "the"},
+            {"gen": "fem"}
+        ]
+    },
+    "ADJ": {
+        "red": 
+            [
+            {"num": "sing"},
+            {"translation": "rood"},
+            {"numopposite": "rojos"},
+            {"gen": "mas"}
+        ],
+        "good": 
+            [
+            {"num": "sing"},
+            {"translation": "goed"},
+            {"numopposite": "bondadosos"},
+            {"gen": "mas"}
+        ],
+        "normal": 
+            [
+            {"num": "sing"},
+            {"translation": "normaal"},
+            {"gen": ""}
+        ],
+        "average": 
+            [
+            {"num": "sing"},
+            {"translation": "gemiddeld"},
+            {"gen": ""}
+        ],
+        "big":
+            [
+            {"num": "sing"},
+            {"translation": "groot"}, 
+            {"gen": ""}
+        ],
+        "small":
+            [
+            {"num": "sing"},
+            {"translation": "klein"},
+            {"gen": "mas"}
+        ],
+        "old":
+            [
+            {"num": "sing"},
+            {"translation": "oud"},
+            {"gen": "mas"}
+        ],
+        "creepy":
+            [
+            {"num": "sing"},
+            {"translation": "eng"},
+            {"gen": "mas"}
+        ],
+        "life":
+            [
+            {"num": "sing"},
+            {"translation": "leven"}, 
+            {"gen": "fem"}
+        ],
+        "magic":
+            [
+            {"num": "sing"},
+            {"translation": "magisch"},
+            {"gen": "mas"}
+        ],
+        "short":
+            [
+            {"num": "sing"},
+            {"translation": "kort"},
+            {"gen": "fem"}
+        ],
+        "long":
+            [
+            {"num": "sing"},
+            {"translation": "lang"},
+            {"gen": "fem"}
+        ],
+        "some": 
+            [
+            {"num": "sing"},
+            {"translation": "enkele"}, 
+            {"numopposite": "some"}, 
+            {"gen": ""}
+        ],
+        "a lot of": 
+            [
+            {"num": "sing"},
+            {"translation": "veel"}, 
+            {"gen": "mas"}
+        ],
+        "a little": 
+            [
+            {"num": "sing"},
+            {"translation": "een beetje"},
+            {"gen": "mas"}
+        ],
+        "dead": 
+            [
+            {"num": "sing"},
+            {"translation": "dood"},
+            {"gen": "mas"}
+        ],
+        "brave": 
+            [
+            {"num": "sing"},
+            {"translation": "dapper"}, 
+            {"numopposite": "brave"}, 
+            {"gen": ""}
+        ],
+        "glorious": 
+            [
+            {"num": "sing"},
+            {"translation": "glorieus"},
+            {"gen": "mas"}
+        ],
+        "scared": 
+            [
+            {"num": "sing"},
+            {"translation": "bang"},
+            {"numopposite": "scared"}, 
+            {"gen": ""}
+        ],
+        "scary": 
+            [
+            {"num": "sing"},
+            {"translation": "angstaanjagend"},
+            {"numopposite": "scary"}, 
+            {"gen": ""}
+        ],
+        "grey": 
+            [
+            {"num": "sing"},
+            {"translation": "grijs"},
+            {"numopposite": "grey"}, 
+            {"gen": ""}
+        ]
+    },
+    "N": {
+        "shield": [
+            {"num": "sing"},
+            {"translation": "schild"},
+            {"numopposite": "schilden"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "schilden": [
+            {"num": "plural"},
+            {"translation": "schilden"},
+            {"numopposite": "shield"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "weapon": [
+            {"num": "sing"},
+            {"translation": "wapen"},
+            {"numopposite": "weapons"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "weapons": [
+            {"num": "plural"},
+            {"translation": "wapens"},
+            {"numopposite": "weapon"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "chest": [
+            {"num": "sing"},
+            {"translation": "borst"},
+            {"numopposite": "chests"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "chests": [
+            {"num": "plural"},
+            {"translation": "borsten"},
+            {"numopposite": "chest"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "glove": [
+            {"num": "sing"},
+            {"translation": "handschoen"},
+            {"numopposite": "gloves"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "gloves": [
+            {"num": "plural"},
+            {"translation": "handschoenen"},
+            {"numopposite": "glove"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "pants": [
+            {"num": "sing"},
+            {"translation": "broek"},
+            {"numopposite": "pants"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "sword": [
+            {"num": "sing"},
+            {"translation": "zwaard"},
+            {"numopposite": "swords"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "swords": [
+            {"num": "plural"},
+            {"translation": "zwaarden"},
+            {"numopposite": "sword"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "potion": [
+            {"num": "sing"},
+            {"translation": "drank"},
+            {"numopposite": "potions"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "potions": [
+            {"num": "plural"},
+            {"translation": "dranken"},
+            {"numopposite": "potion"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "hero": [
+            {"num": "sing"},
+            {"translation": "held"},
+            {"numopposite": "heroes"},
+            {"gen": "mas"},
+            {"pronoun": "hij"}
+        ],
+        "heroes": [
+            {"num": "plural"},
+            {"translation": "helden"},
+            {"numopposite": "hero"},
+            {"gen": "mas"},
+            {"pronoun": "zij"}
+        ],
+        "dragon": [
+            {"num": "sing"},
+            {"translation": "draak"},
+            {"numopposite": "dragones"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "dragones": [
+            {"num": "plural"},
+            {"translation": "draken"},
+            {"numopposite": "dragon"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "goblin": [
+            {"num": "sing"},
+            {"translation": "goblin"},
+            {"numopposite": "goblins"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "goblins": [
+            {"num": "plural"},
+            {"translation": "goblins"},
+            {"numopposite": "goblin"},
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "rat": [
+            {"num": "sing"},
+            {"translation": "rat"},
+            {"numopposite": "rats"},
+            {"gen": "mas"},
+            {"pronoun": "hij"}
+        ],
+        "rats": [
+            {"num": "plural"},
+            {"translation": "ratten"},
+            {"numopposite": "rat"},
+            {"gen": "mas"},
+            {"pronoun": "zij"}
+        ],
+        "life": [
+            {"num": "sing"},
+            {"translation": "leven"},
+            {"numopposite": "lives"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "lives": [
+            {"num": "plural"},
+            {"translation": "levens"},
+            {"numopposite": "life"},
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "mana":
+            [
+            {"num": "sing"},
+            {"translation": "mana"}, 
+            {"numopposite": "mana"}, 
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "east":
+            [
+            {"num": "sing"},
+            {"translation": "in het oosten"}, 
+            {"numopposite": "east"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "northeast":
+            [
+            {"num": "sing"},
+            {"translation": "in het noordoosten"}, 
+            {"numopposite": "northeast"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "southeast":
+            [
+            {"num": "sing"},
+            {"translation": "in het zuidoosten"}, 
+            {"numopposite": "southeast"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "west":
+            [
+            {"num": "sing"},
+            {"translation": "in het westen"}, 
+            {"numopposite": "west"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "northwest":
+            [
+            {"num": "sing"},
+            {"translation": "in het noordwesten"}, 
+            {"numopposite": "northwest"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "southwest":
+            [
+            {"num": "sing"},
+            {"translation": "in het zuidwesten"}, 
+            {"numopposite": "southwest"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "north":
+            [
+            {"num": "sing"},
+            {"translation": "in het noorden"}, 
+            {"numopposite": "north"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "south":
+            [
+            {"num": "sing"},
+            {"translation": "in het zuiden"}, 
+            {"numopposite": "south"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "door":
+            [
+            {"num": "sing"},
+            {"translation": "deur"}, 
+            {"numopposite": "doors"}, 
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "doors":
+            [
+            {"num": "plural"},
+            {"translation": "deuren"}, 
+            {"numopposite": "door"}, 
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "in the same position":
+            [
+            {"num": "sing"},
+            {"translation": "op dezelfde plek"}, 
+            {"numopposite": "in the same position"}, 
+            {"gen": ""},
+            {"pronoun": "het"}
+        ],
+        "portal":
+            [
+            {"num": "sing"},
+            {"translation": "portaal"}, 
+            {"numopposite": "portals"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "portals":
+            [
+            {"num": "plural"},
+            {"translation": "portalen"}, 
+            {"numopposite": "portal"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "head":
+            [
+            {"num": "sing"},
+            {"translation": "hoofd"}, 
+            {"numopposite": "heads"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "heads":
+            [
+            {"num": "plural"},
+            {"translation": "hoofden"}, 
+            {"numopposite": "head"}, 
+            {"gen": "fem"},
+            {"pronoun": "they"}
+        ],
+        "hand":
+            [
+            {"num": "sing"},
+            {"translation": "hand"}, 
+            {"numopposite": "hands"}, 
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "hands":
+            [
+            {"num": "plural"},
+            {"translation": "handen"}, 
+            {"numopposite": "hand"}, 
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "helmet":
+            [
+            {"num": "sing"},
+            {"translation": "helm"}, 
+            {"numopposite": "helmets"}, 
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "helmets":
+            [
+            {"num": "plural"},
+            {"translation": "helmen"}, 
+            {"numopposite": "helmet"}, 
+            {"gen": "mas"},
+            {"pronoun": ""}
+        ],
+        "armor":
+            [
+            {"num": "sing"},
+            {"translation": "harnas"}, 
+            {"numopposite": "armors"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "armors":
+            [
+            {"num": "sing"},
+            {"translation": "harnassen"}, 
+            {"numopposite": "armor"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "leg":
+            [
+            {"num": "sing"},
+            {"translation": "been"}, 
+            {"numopposite": "legs"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "legs":
+            [
+            {"num": "plural"},
+            {"translation": "benen"}, 
+            {"numopposite": "leg"}, 
+            {"gen": "fem"},
+            {"pronoun": ""}
+        ],
+        "that":
+            [
+            {"num": "sing"},
+            {"translation": "dat"}, 
+            {"numopposite": "that"}, 
+            {"gen": ""}
+        ],
+        "spell":
+            [
+            {"num": "sing"},
+            {"translation": "spreuk"}, 
+            {"numopposite": "spells"}, 
+            {"gen": "mas"}
+        ],
+        "spells":
+            [
+            {"num": "plural"},
+            {"translation": "spreuken"}, 
+            {"numopposite": "feitizo"}, 
+            {"gen": "mas"}
+        ],
+        "fireball":
+            [
+            {"num": "sing"},
+            {"translation": "vuurbal"}, 
+            {"numopposite": "fireball"}, 
+            {"gen": "mas"}
+        ],
+        "firering":
+            [
+            {"num": "sing"},
+            {"translation": "vuurring"}, 
+            {"numopposite": "firering"}, 
+            {"gen": "mas"}
+        ],
+        "score":
+            [
+            {"num": "sing"},
+            {"translation": "score"}, 
+            {"numopposite": "score"}, 
+            {"gen": "mas"}
+        ],
+        "experience":
+            [
+            {"num": "sing"},
+            {"translation": "ervaring"}, 
+            {"numopposite": "experiences"}, 
+            {"gen": "mas"}
+        ],
+        "experiences":
+            [
+            {"num": "plural"},
+            {"translation": "ervaring"}, 
+            {"numopposite": "experience"}, 
+            {"gen": "mas"}
+        ],
+        "level":
+            [
+            {"num": "sing"},
+            {"translation": "level"}, 
+            {"numopposite": "levels"}, 
+            {"gen": "fem"}
+        ],
+        "levels":
+            [
+            {"num": "plural"},
+            {"translation": "levels"}, 
+            {"numopposite": "level"}, 
+            {"gen": "fem"}
+        ],
+        "monster":
+            [
+            {"num": "sing"},
+            {"translation": "monster"}, 
+            {"numopposite": "monsters"}, 
+            {"gen": "fem"}
+        ],
+        "monsters":
+            [
+            {"num": "plural"},
+            {"translation": "monsters"}, 
+            {"numopposite": "monster"}, 
+            {"gen": "fem"}
+        ],
+        "item":
+            [
+            {"num": "sing"},
+            {"translation": "voorwerp"}, 
+            {"numopposite": "items"}, 
+            {"gen": "fem"}
+        ],
+        "items":
+            [
+            {"num": "plural"},
+            {"translation": "voorwerpen"}, 
+            {"numopposite": "item"}, 
+            {"gen": "fem"}
+        ]
+    },
+    "V": {
+        "ATTACK": {
+            "attacks": [
+                {"num": "sing"},
+                {"translation": "slaat"},
+                {"numopposite": "attack"},
+                {"gen": ""}
+            ],
+            "attack": [
+                {"num": "plural"},
+                {"translation": "slaan"},
+                {"numopposite": "attacks"},
+                {"gen": ""}
+            ],
+            "hurts": [
+                {"num": "sing"},
+                {"translation": "kwetst"},
+                {"numopposite": "hurt"},
+                {"gen": ""}
+            ],
+            "hurt": [
+                {"num": "plural"},
+                {"translation": "kwetsen"},
+                {"numopposite": "hurts"},
+                {"gen": ""}
+            ],
+            "charges against": [
+                {"num": "sing"},
+                {"translation": "vecht tegen"},
+                {"numopposite": "charge against"},
+                {"gen": ""}
+            ],
+            "charge against": [
+                {"num": "plural"},
+                {"translation": "vechten tegen"},
+                {"numopposite": "charges against"},
+                {"gen": ""}
+            ]
+        },
+        "NOTHAVE": {
+            "doesn't have": [
+                {"num": "sing"},
+                {"translation": "heeft geen"},
+                {"numopposite": "don't have"},
+                {"gen": ""}
+            ],
+            "don't have": [
+                {"num": "plural"},
+                {"translation": "hebben geen"},
+                {"numopposite": "doesn't have"},
+                {"gen": ""}
+            ]
+        },
+        "SPELLS": {
+            "casts": [
+                {"num": "sing"},
+                {"translation": "gooit"},
+                {"numopposite": "cast"},
+                {"gen": ""}
+            ],
+            "cast": [
+                {"num": "plural"},
+                {"translation": "gooien"},
+                {"numopposite": "casts"},
+                {"gen": ""}
+            ]
+        },
+        "PICK": {
+            "picks": [
+                {"num": "sing"},
+                {"translation": "neemt"},
+                {"numopposite": "pick"},
+                {"gen": ""}
+            ],
+            "pick": [
+                {"num": "plural"},
+                {"translation": "nemen"},
+                {"numopposite": "picks"},
+                {"gen": ""}
+            ],
+            "gets": [
+                {"num": "sing"},
+                {"translation": "krijgt"},
+                {"numopposite": "get"},
+                {"gen": ""}
+            ],
+            "get": [
+                {"num": "plural"},
+                {"translation": "krijgt"},
+                {"numopposite": "gets"},
+                {"gen": ""}
+            ],
+            "takes": [
+                {"num": "sing"},
+                {"translation": "ontvangt"},
+                {"numopposite": "take"},
+                {"gen": ""}
+            ],
+            "take": [
+                {"num": "plural"},
+                {"translation": "ontvangen"},
+                {"numopposite": "takes"},
+                {"gen": ""}
+            ]
+        },
+        "THROW": {
+            "throws": [
+                {"num": "sing"},
+                {"translation": "dumpt"},
+                {"numopposite": "throw"},
+                {"gen": ""}
+            ],
+            "throw": [
+                {"num": "plural"},
+                {"translation": "dumpen"},
+                {"numopposite": "throws"},
+                {"gen": ""}
+            ],
+            "gets rid of": [
+                {"num": "sing"},
+                {"translation": "verwijdert"},
+                {"numopposite": "get rid of"},
+                {"gen": ""}
+            ],
+            "get rid of": [
+                {"num": "plural"},
+                {"translation": "verwijderen"},
+                {"numopposite": "gets rid of"},
+                {"gen": ""}
+            ]
+        },
+        "UNEQUIP": {
+            "unequips": [
+                {"num": "sing"},
+                {"translation": "trekt uit"},
+                {"numopposite": "unequip"},
+                {"gen": ""}
+            ],
+            "unequip": [
+                {"num": "plural"},
+                {"translation": "trekken uit"},
+                {"numopposite": "unequips"},
+                {"gen": ""}
+            ]
+        },
+        "DESCUNVALID": {
+            "can't do": [
+                {"num": "sing"},
+                {"translation": "kan niet doen"},
+                {"numopposite": "no pueden hacer"},
+                {"gen": ""}
+            ],
+            "no pueden hacer": [
+                {"num": "plural"},
+                {"translation": "kunnen niet doen"},
+                {"numopposite": "can't do"},
+                {"gen": ""}
+            ],
+            "is not allowed to do": [
+                {"num": "sing"},
+                {"translation": "mag niet doen"},
+                {"numopposite": "are not allowed to do"},
+                {"gen": ""}
+            ],
+            "are not allowed to do": [
+                {"num": "plural"},
+                {"translation": "mogen niet doen"},
+                {"numopposite": "is not allowed to do"},
+                {"gen": ""}
+            ]
+        },
+        "USE": {
+            "uses": [
+                {"num": "sing"},
+                {"translation": "gebruikt"},
+                {"numopposite": "use"},
+                {"gen": ""}
+            ],
+            "use": [
+                {"num": "plural"},
+                {"translation": "gebruiken"},
+                {"numopposite": "uses"},
+                {"gen": ""}
+            ]
+        },
+        "EQUIP": {
+            "equips": [
+                {"num": "sing"},
+                {"translation": "voert uit"},
+                {"numopposite": "equip"},
+                {"gender": ""}
+            ],
+            "equip": [
+                {"num": "plural"},
+                {"translation": "voeren uit"},
+                {"numopposite": "equips"},
+                {"gender": ""}
+            ]
+        },
+        "MISS": {
+            "misses": [
+                {"num": "sing"},
+                {"translation": "mist"},
+                {"numopposite": "miss"},
+                {"gen": ""}
+            ],
+            "miss": [
+                {"num": "plural"},
+                {"translation": "missen"},
+                {"numopposite": "misses"},
+                {"gen": ""}
+            ]
+        },
+        "DESCITEM": {
+            "has": [
+                {"num": "sing"},
+                {"translation": "heeft"},
+                {"numopposite": "have"},
+                {"gen": ""}
+            ],
+            "have": [
+                {"num": "plural"},
+                {"translation": "hebben"},
+                {"numopposite": "has"},
+                {"gen": ""}
+            ]
+        },
+        "DESCPERSONAL": {
+            "has": [
+                {"num": "sing"},
+                {"translation": "heeft"},
+                {"numopposite": "have"},
+                {"gen": ""}
+            ],
+            "have": [
+                {"num": "plural"},
+                {"translation": "hebben"},
+                {"numopposite": "has"},
+                {"gen": ""}
+            ]
+        },
+        "DESCGENERAL": {
+            "is": [
+                {"num": "sing"},
+                {"translation": "is"},
+                {"numopposite": "are"},
+                {"gen": ""}
+            ],
+            "are": [
+                {"num": "plural"},
+                {"translation": "zijn"},
+                {"numopposite": "is"},
+                {"gen": ""}
+            ]
+        },
+        "DESCTOBE": {
+            "is": [
+                {"num": "sing"},
+                {"translation": "is"},
+                {"numopposite": "are"},
+                {"gen": ""}
+            ],
+            "are": [
+                {"num": "plural"},
+                {"translation": "zijn"},
+                {"numopposite": "is"},
+                {"gen": ""}
+            ]
+        },
+        "DESCWEARS": {
+            "wears": [
+                {"num": "sing"},
+                {"translation": "draagt"},
+                {"numopposite": "wear"},
+                {"gen": ""}
+            ],
+            "wear": [
+                {"num": "plural"},
+                {"translation": "dragen"},
+                {"numopposite": "wears"},
+                {"gen": ""}
+            ]
+        },
+        "DESCGOESTHROUGH": {
+            "goes through": [
+                {"num": "sing"},
+                {"translation": "gaat door"},
+                {"numopposite": "go through"},
+                {"gen": ""}
+            ],
+            "go through": [
+                {"num": "plural"},
+                {"translation": "gaan door"},
+                {"numopposite": "goes through"},
+                {"gen": ""}
+            ]
+        }
+    },
+    "OTHERS": {
+        "and": [
+            {
+                "translation": "en",
+                "gen": ""
+            }
+        ],
+        "or": [
+            {
+                "translation": "of",
+                "gen": ""
+            }
+        ],
+        "reachable positions": [
+            {
+                "translation": "Bereikbare plekken",
+                "gen": ""
+            }
+        ],
+        "out of": [
+            {
+                "translation": "van de",
+                "gender": ""
+            }
+        ],
+        "again": {
+            "again": [
+                {"translation": "opnieuw"},
+                {"gender": ""}
+            ],
+            "one more time": [
+                {"translation": "nog één keer"},
+                {"gender": ""}
+            ],
+            "once again": [
+                {"translation": "weer"},
+                {"gender": ""}
+            ]
+        },
+        "restart": [
+        	{"translation": "Start het spel opnieuw op om de wijzigingen toe te passen"},
+        	{"gender": ""}
+        ]
+    }
+}
