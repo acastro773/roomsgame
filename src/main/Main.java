@@ -447,6 +447,7 @@ public class Main {
 	
 	public static void makeMovement(int i) throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		if (isInputType(movementInput, i)){
+			walkSound = new SoundReproduction("./src/sounds/steps.wav", user, user);
         	doMonstersTurn = true;
         	_moveCharacterAction(i);
         	setFlagsToFalse();
@@ -650,7 +651,6 @@ public class Main {
 		grammarMissDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "ATTACKMISS").getAsJsonObject());
 		grammarSimpleVerb = new GrammarsGeneral(JSONParsing.getElement(rootObj, "SIMPLEVERB").getAsJsonObject());
 		grammarGeneralObj = new GrammarsGeneral(JSONParsing.getElement(rootObjGrammar, "GENERAL").getAsJsonObject());
-		walkSound = new SoundReproduction("./src/sounds/step.wav");
 		if (!testMode){
 			gameFlow();
 		}

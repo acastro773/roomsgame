@@ -2,10 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/Dario/Downloads/PFC/gson-2.3.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Dario/Downloads/PFC/jcurses-0.9.5.3.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Dario/Downloads/PFC/libjcsi.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry exported="true" kind="lib" path="C:/TFG/roomsgame/lib/guava-28.2-jre.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/TFG/roomsgame/lib/gson-2.8.2.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/TFG/roomsgame/lib/glassfish-corba-omgapi-4.2.3.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/TFG/roomsgame/lib/jcurses-0.9.5.3.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
