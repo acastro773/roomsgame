@@ -79,22 +79,32 @@ public class SoundReproduction {
 	
 	static void RelativeDistance(SourceDataLine audioLine) {
 		FloatControl pan = null;
+		FloatControl volume = null;
 		if (audioLine.isControlSupported(FloatControl.Type.PAN))
 			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
+		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
+			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
 		Tuple<Integer, Integer> pos_or = origin.getPosition();
 		Tuple<Integer, Integer> pos_pl = player.getPosition();
 		int lim_room = origin.getRoom().getCorners().get(1).x - origin.getRoom().getCorners().get(0).x;
 		//for (Tuple<?, ?> corner : origin.getRoom().getCorners())
 		//	System.out.println(corner.x);
-		double dist = pos_or.x + 4 - pos_pl.x;
-		System.out.println(dist);
-		System.out.println(lim_room);
+		float range = volume.getMaximum() - volume.getMinimum();
+		double dist = pos_or.x - pos_pl.x;
 		float vol = (float)(dist/lim_room);
 		if (vol > 1)
 			vol = 1;
 		else if (vol < -1)
 			vol = -1;
+		float vol_c = (range - (float)Math.abs(dist) * volume.getMaximum());
+		float gain = vol_c + volume.getMinimum();
+		if (gain > volume.getMaximum())
+			gain = volume.getMaximum();
+		else if (gain < volume.getMinimum())
+			gain = volume.getMinimum();
 		pan.setValue(vol);
-		System.out.println(pan.getValue());
+		volume.setValue(gain);
+		System.out.println("Panning: " + pan.getValue());
+		System.out.println("Volume (dB): " + volume.getValue());
 	}
 }
