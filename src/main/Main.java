@@ -44,6 +44,7 @@ import map.Map;
 import map.Room;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Pair;
+import net.slashie.util.Util;
 import util.ActionHandler;
 import util.JTextAreaWithListener;
 import util.MessageDescriptionsUtil;
@@ -129,6 +130,14 @@ public class Main {
 	static GrammarsGeneral grammarSimpleVerb;
 	static GrammarsGeneral grammarGeneralObj;
 	static SoundReproduction walkSound;
+	static SoundReproduction beepSound;
+	static SoundReproduction hitSwordSound;
+	static SoundReproduction heroHitSound;
+	static SoundReproduction deathSound;
+	static SoundReproduction deathEnemySound;
+	static SoundReproduction collisionSound;
+	static SoundReproduction waterdropSound;
+	static int countAction = 0;
 	
 	public static boolean isInputType(Integer[] type, int key) {
 		return Arrays.asList(type).contains(key);
@@ -258,6 +267,9 @@ public class Main {
         	_messageUnvalid();
         	printEverything(true);
         	hasMoved = false;
+        	if (isSoundActivated) {
+        		collisionSound.reproduce();
+        	}
         }
 		if (user.getRoom().isPortal(user.getPosition())) {
 			hasUsedPortal = true;
@@ -451,6 +463,10 @@ public class Main {
         	doMonstersTurn = true;
         	_moveCharacterAction(i);
         	setFlagsToFalse();
+        	if (countAction > 0) {
+        		countAction--;
+        		System.out.println("countAction: " + countAction);
+        	}
         }
         else if (isInputType(inventoryInput, i)) {
         	doMonstersTurn = true;
@@ -460,6 +476,9 @@ public class Main {
         	hasUnequipedItem = false;
         	hasThrownItem = false;
         	hasPickedItem = false;
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         }
         else if (isInputType(pickItemInput, i)) {
         	doMonstersTurn = true;
@@ -469,6 +488,9 @@ public class Main {
         	hasEquipedItem = false;
         	hasUnequipedItem = false;
         	hasThrownItem = false;
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         }
         else if (isInputType(attackInput, i)) {
         	doMonstersTurn = true;
@@ -476,25 +498,40 @@ public class Main {
         	canUsePronoun = true;
         	printEverything(true);
         	setFlagsToFalse();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } 
         else if (isInputType(spellInput, i)) {
         	spellsPressed = true;
         	setFlagsToFalse();
         	messageLabel.requestFocus();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(descriptionInput, i) || isInputType(descriptionWereableInput, i)) {
         	setFlagsToFalse();
         	doMonstersTurn = false;
         	actionHandler._descriptionAction(i, usePronoun(), isNumericDescription);
         	canUsePronoun = true;
         	printEverything(false);
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(throwItemInput, i)) {
         	hasUnequipedItem = false;
         	hasEquipedItem = false;
         	hasPickedItem = false;
         	throwPressed = true;
         	messageLabel.requestFocus();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(changeNumericDescInput, i)) {
         	isNumericDescription = !isNumericDescription;
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(changeColorsInput, i)) {
         	if (selectedColor == arrayColors.length - 1) {
         		selectedColor = 0;
@@ -502,23 +539,45 @@ public class Main {
         		selectedColor++;
         	}
         	printEverything(true);
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(unequipItemInput, i)) {
         	hasEquipedItem = false;
         	hasPickedItem = false;
         	hasThrownItem = false;
         	unequipPressed = true;
         	messageLabel.requestFocus();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(rebindKeysInput, i)) {
         	rebindKeys();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(descriptionSpellInput, i)) {
         	MessageDescriptionsUtil.describeSpells(user, rootObjWords, grammarSimpleVerb);
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(activateSoundInput, i)) {
         	activateDeactivateSound();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(increaseFontInput, i)) {
         	increaseFontSize();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         } else if (isInputType(decreaseFontInput, i)) {
         	decreaseFontSize();
+        	if (isSoundActivated) {
+        		beepSound.reproduce();
+        	}
         }
+		
 	}
 	
 	public static void gameFlow() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
@@ -569,10 +628,20 @@ public class Main {
 				int i = j.inkey().code;
 				
 				System.out.println("Code" + i);
+				
 				makeMovement(i);
+				
+				if (countAction == 0) {
+					if (isSoundActivated)
+						waterdropSound.reproduce();
+					countAction = Util.rand(12, 25);
+					System.out.println("countAction set: " + countAction);
+				}
 				
 			}
 			else {
+				if (isSoundActivated)
+					deathSound.reproduce();
 				MessageDescriptionsUtil._messageDescriptionDead(user, true, grammarAdjectiveDescription);
 				try {
 					deepnessScore = 0;
@@ -651,6 +720,13 @@ public class Main {
 		grammarMissDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "ATTACKMISS").getAsJsonObject());
 		grammarSimpleVerb = new GrammarsGeneral(JSONParsing.getElement(rootObj, "SIMPLEVERB").getAsJsonObject());
 		grammarGeneralObj = new GrammarsGeneral(JSONParsing.getElement(rootObjGrammar, "GENERAL").getAsJsonObject());
+		beepSound = new SoundReproduction("./src/sounds/beep.wav");
+		collisionSound = new SoundReproduction("./src/sounds/collision.wav");
+		deathSound = new SoundReproduction("./src/sounds/death.wav");
+		waterdropSound = new SoundReproduction("./src/sounds/waterdrop.wav");
+		heroHitSound = new SoundReproduction("./src/sounds/herohit.wav");
+		countAction = Util.rand(12, 25);
+		System.out.println("countAction set: " + countAction);
 		if (!testMode){
 			gameFlow();
 		}

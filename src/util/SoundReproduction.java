@@ -16,6 +16,7 @@ import javax.sound.sampled.FloatControl;
 
 import characters.active.ActiveCharacter;
 import map.Map;
+import net.slashie.util.Util;
 
 public class SoundReproduction {
 	
@@ -57,8 +58,16 @@ public class SoundReproduction {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
+		FloatControl pan = null;
+		FloatControl volume = null;
+		if (audioLine.isControlSupported(FloatControl.Type.PAN))
+			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
+		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
+			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
 		if (typeSound.equals("steps")) {
-			RelativeDistance(audioLine);
+			RelativeDistance(audioLine, pan, volume);
+		} else if (typeSound.equals("waterdrop")) {
+			WaterdropRand(audioLine, pan, volume);
 		}
 		audioLine.start();
 		 
@@ -68,22 +77,16 @@ public class SoundReproduction {
 		try {
 			while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
 			    audioLine.write(bytesBuffer, 0, bytesRead);
-			    audioLine.drain();
-			    audioLine.close();
-			    //audioStream.close();
 			}
+			audioLine.drain();
+		    audioLine.close();
+			audioStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	static void RelativeDistance(SourceDataLine audioLine) {
-		FloatControl pan = null;
-		FloatControl volume = null;
-		if (audioLine.isControlSupported(FloatControl.Type.PAN))
-			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
-		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
-			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
+	static void RelativeDistance(SourceDataLine audioLine, FloatControl pan, FloatControl volume) {
 		Tuple<Integer, Integer> pos_or = origin.getPosition();
 		Tuple<Integer, Integer> pos_pl = player.getPosition();
 		int lim_room = origin.getRoom().getCorners().get(1).x - origin.getRoom().getCorners().get(0).x;
@@ -97,6 +100,30 @@ public class SoundReproduction {
 		else if (vol < -1)
 			vol = -1;
 		float vol_c = (range - (float)Math.abs(dist) * volume.getMaximum());
+		float gain = vol_c + volume.getMinimum();
+		if (gain > volume.getMaximum())
+			gain = volume.getMaximum();
+		else if (gain < volume.getMinimum())
+			gain = volume.getMinimum();
+		pan.setValue(vol);
+		volume.setValue(gain);
+		//System.out.println("Panning: " + pan.getValue());
+		//System.out.println("Volume (dB): " + volume.getValue());
+	}
+	
+	static void WaterdropRand(SourceDataLine audioLine, FloatControl pan, FloatControl volume) {
+		float range = volume.getMaximum() - volume.getMinimum();
+		double dist = Util.rand(-3, 3);
+		System.out.println("VolMax: " + volume.getMaximum());
+		System.out.println("VolMin: " + volume.getMinimum());
+		System.out.println("Dist: " + dist);
+		float vol = (float)(dist/3);
+		if (vol > 1)
+			vol = 1;
+		else if (vol < -1)
+			vol = -1;
+		float vol_c = (range - (float)Math.abs(dist) * volume.getMaximum());
+		System.out.println("VolC: " + vol_c);
 		float gain = vol_c + volume.getMinimum();
 		if (gain > volume.getMaximum())
 			gain = volume.getMaximum();

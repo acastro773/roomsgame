@@ -10,9 +10,11 @@ import com.google.gson.JsonObject;
 import characters.active.ActiveCharacter;
 import grammars.parsing.JSONParsing;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
+import net.slashie.util.Util;
 import main.Main;
 import util.GenericMatrixFunctions;
 import util.RandUtil;
+import util.SoundReproduction;
 import util.Tuple;
 
 /**
@@ -36,6 +38,9 @@ public class Map {
 	private ArrayList<Room> rooms;
 	private int size;
 	private boolean hasPortals = false;
+	static SoundReproduction goblinAppearSound;
+	static SoundReproduction ratAppearSound;
+	static SoundReproduction dragonAppearSound;
 
 	/**
 	 * Creates a random map, which is a collection of rooms
@@ -674,12 +679,29 @@ public class Map {
 		}
 	}
 	
-	public void printMonsters(WSwingConsoleInterface j, ActiveCharacter user){
+	public void printMonsters(WSwingConsoleInterface j, ActiveCharacter user){	
 		for (Room room : getRooms()){
 			if (user.getRoom().equals(room)){
 				for (ActiveCharacter enemy: room.getMonsters()){
 					if (RandUtil.containsTuple(enemy.getPosition(), user.getVisiblePositions())){
+						int possibleCry = Util.rand(0, 20);
 						room.printMonsters(j, user.getVisiblePositions());
+						if (possibleCry > 18) {
+							if (enemy.getName().equals("goblin")) {
+								goblinAppearSound = new SoundReproduction("./src/sounds/goblinappear.wav", enemy, user);
+								if (Main.isSoundActivated)
+									goblinAppearSound.reproduce();
+							} else if (enemy.getName().equals("rat")) { 
+								ratAppearSound = new SoundReproduction("./src/sounds/ratappear.wav", enemy, user);
+								if (Main.isSoundActivated)
+									ratAppearSound.reproduce();
+							} else if (enemy.getName().equals("dragon")) { 
+								dragonAppearSound = new SoundReproduction("./src/sounds/dragonappear.wav", enemy, user);
+								if (Main.isSoundActivated)
+									dragonAppearSound.reproduce();
+							}
+						}
+							
 					}
 				}
 			}
