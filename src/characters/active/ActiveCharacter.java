@@ -61,6 +61,7 @@ public class ActiveCharacter extends Character {
 	private int actualInventorySpace;
 	private int evasion;
 	private int vision;
+	private int limLifeLevel;
 	private Movement movementType;
 	private boolean isDead;
 	private boolean isFirstTimeDead;
@@ -80,19 +81,20 @@ public class ActiveCharacter extends Character {
 
 	public ActiveCharacter(String name, String description,
 			Map map, Room room, Tuple<Integer, Integer> position, int damage,
-			int defense, int life, int luck, int weight, int length, 
+			int defense, int life, int luck, int weight, int length, String mood,
 			ArrayList<WereableWeapon> weaponsEquipped,
 			ArrayList<WereableArmor> armorsEquipped, int inventorySpace, int carryWeight,
 			int actualCarryWeight, ArrayList<Item> inventory, int actualInventorySpace, int evasion,
 			int totalLife, int magic, int totalMagic, String symbolRepresentation, int vision, Movement movementType,
 			ArrayList<String> adjectives, int level) {
 		super(name, description, map, room, position, weight, length, carryWeight, actualCarryWeight, 
-				inventory, symbolRepresentation, adjectives);
+				inventory, symbolRepresentation, mood, adjectives);
 		this.damage = damage;
 		this.totalMagic = totalMagic;
 		this.magic = magic;
 		this.defense = defense;
 		this.life = life;
+		this.limLifeLevel = life;
 		this.luck = luck; // number between 0 and 100
 		this.weaponsEquipped = weaponsEquipped;
 		this.armorsEquipped = armorsEquipped;
@@ -483,6 +485,12 @@ public class ActiveCharacter extends Character {
 		j.print(initPos_j, initPos_i, magic);
 	}
 	
+	public void _printMood(JsonObject rootObjWords, WSwingConsoleInterface j, int initPos_i, int initPos_j){
+		String translation = JSONParsing.getTranslationWord("mood", "N", rootObjWords);
+		String mood = translation + ": " + this.getMood();
+		j.print(initPos_j, initPos_i, mood);
+	}
+	
 	public void _printName(WSwingConsoleInterface j, int initPos_i, int initPos_j){
 		String name = this.getName();
 		j.print(initPos_j, initPos_i, name);
@@ -757,11 +765,21 @@ public class ActiveCharacter extends Character {
 		this.setNextLevelExperience();
 	}
 	
+	public void setLimLife(int newLimLife) {
+		this.limLifeLevel = newLimLife;
+	}
+	
+	public void setNewLimLife(int newLimLife) {
+		this.setLimLife(newLimLife);
+		this.setLife(newLimLife);
+	}
+	
 	public void addNewExperience(int addExperience) {
 		if (this.getExperience() + addExperience >= this.getNextLevelExperience()) {
 			int experienceToNextLevel = this.getNextLevelExperience() - this.getExperience();
 			this.setExperience(addExperience - experienceToNextLevel);
 			this.setNewLevel(this.getLevel() + 1);
+			this.setNewLimLife(this.getTotalLife() + 5);
 		} else {
 			this.setExperience(this.getExperience() + addExperience);
 		}
@@ -840,7 +858,7 @@ public class ActiveCharacter extends Character {
 	}
 
 	public int getTotalLife() {
-		return totalLife;
+		return limLifeLevel;
 	}
 
 	public void setTotalLife(int totalLife) {

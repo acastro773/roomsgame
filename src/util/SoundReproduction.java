@@ -64,7 +64,7 @@ public class SoundReproduction {
 			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
 		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
 			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
-		if (typeSound.equals("steps")) {
+		if ((typeSound.equals("ratappear")) || (typeSound.equals("goblinappear")) || (typeSound.equals("dragonappear"))) {
 			RelativeDistance(audioLine, pan, volume);
 		} else if (typeSound.equals("waterdrop")) {
 			WaterdropRand(audioLine, pan, volume);
@@ -99,6 +99,8 @@ public class SoundReproduction {
 			vol = 1;
 		else if (vol < -1)
 			vol = -1;
+		if (dist == 0)
+			dist = pos_or.y - pos_pl.y;
 		float vol_c = (range - (float)Math.abs(dist) * volume.getMaximum());
 		float gain = vol_c + volume.getMinimum();
 		if (gain > volume.getMaximum())

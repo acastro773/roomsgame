@@ -194,476 +194,441 @@
             {"gender": ""}
         ]
     },
-    "N": {
-        "shield": [
-            {"num": "sing"},
-            {"translation": "shield"},
-            {"numopposite": "shields"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "shields": [
-            {"num": "plural"},
-            {"translation": "shields"},
-            {"numopposite": "shield"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "weapon": [
-            {"num": "sing"},
-            {"translation": "weapon"},
-            {"numopposite": "weapons"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "weapons": [
-            {"num": "plural"},
-            {"translation": "weapons"},
-            {"numopposite": "weapon"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "glove": [
-            {"num": "sing"},
-            {"translation": "glove"},
-            {"numopposite": "gloves"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "gloves": [
-            {"num": "plural"},
-            {"translation": "gloves"},
-            {"numopposite": "glove"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "pants": [
-            {"num": "sing"},
-            {"translation": "pants"},
-            {"numopposite": "pants"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "sword": [
-            {"num": "sing"},
-            {"translation": "sword"},
-            {"numopposite": "swords"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "swords": [
-            {"num": "plural"},
-            {"translation": "swords"},
-            {"numopposite": "sword"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "potion": [
-            {"num": "sing"},
-            {"translation": "potion"},
-            {"numopposite": "potions"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "potions": [
-            {"num": "plural"},
-            {"translation": "potions"},
-            {"numopposite": "potion"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "hero": [
-            {"num": "sing"},
-            {"translation": "hero"},
-            {"numopposite": "heroes"},
-            {"gender": ""},
-            {"pronoun": "he"}
-        ],
-        "heroes": [
-            {"num": "plural"},
-            {"translation": "heroes"},
-            {"numopposite": "hero"},
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "dragon": [
-            {"num": "sing"},
-            {"translation": "dragon"},
-            {"numopposite": "dragons"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "dragons": [
-            {"num": "plural"},
-            {"translation": "dragons"},
-            {"numopposite": "dragon"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "goblin": [
-            {"num": "sing"},
-            {"translation": "goblin"},
-            {"numopposite": "goblins"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "goblins": [
-            {"num": "plural"},
-            {"translation": "goblins"},
-            {"numopposite": "goblin"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "rat": [
-            {"num": "sing"},
-            {"translation": "rat"},
-            {"numopposite": "rats"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "rats": [
-            {"num": "plural"},
-            {"translation": "rats"},
-            {"numopposite": "rat"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "life": [
-            {"num": "sing"},
-            {"translation": "life"},
-            {"numopposite": "lives"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "lives": [
-            {"num": "plural"},
-            {"translation": "lives"},
-            {"numopposite": "life"},
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "mana":
-            [
-            {"num": "sing"},
-            {"translation": "mana"}, 
-            {"numopposite": "mana"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "east":
-            [
-            {"num": "sing"},
-            {"translation": "east"}, 
-            {"numopposite": "east"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "northeast":
-            [
-            {"num": "sing"},
-            {"translation": "northeast"}, 
-            {"numopposite": "northeast"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "southeast":
-            [
-            {"num": "sing"},
-            {"translation": "southeast"}, 
-            {"numopposite": "southeast"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "west":
-            [
-            {"num": "sing"},
-            {"translation": "west"}, 
-            {"numopposite": "west"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "northwest":
-            [
-            {"num": "sing"},
-            {"translation": "northwest"}, 
-            {"numopposite": "northwest"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "southwest":
-            [
-            {"num": "sing"},
-            {"translation": "southwest"}, 
-            {"numopposite": "southwest"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "north":
-            [
-            {"num": "sing"},
-            {"translation": "north"}, 
-            {"numopposite": "north"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "south":
-            [
-            {"num": "sing"},
-            {"translation": "south"}, 
-            {"numopposite": "south"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "door":
-            [
-            {"num": "sing"},
-            {"translation": "door"}, 
-            {"numopposite": "doors"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "doors":
-            [
-            {"num": "sing"},
-            {"translation": "doors"}, 
-            {"numopposite": "door"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "in the same position":
-            [
-            {"num": "sing"},
-            {"translation": "in the same position"}, 
-            {"numopposite": "in the same position"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "portal":
-            [
-            {"num": "sing"},
-            {"translation": "portal"}, 
-            {"numopposite": "portals"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "portals":
-            [
-            {"num": "plural"},
-            {"translation": "portals"}, 
-            {"numopposite": "portal"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "head":
-            [
-            {"num": "sing"},
-            {"translation": "head"}, 
-            {"numopposite": "heads"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "heads":
-            [
-            {"num": "plural"},
-            {"translation": "heads"}, 
-            {"numopposite": "head"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "hand":
-            [
-            {"num": "sing"},
-            {"translation": "hand"}, 
-            {"numopposite": "hands"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "hands":
-            [
-            {"num": "plural"},
-            {"translation": "hands"}, 
-            {"numopposite": "hand"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "helmet":
-            [
-            {"num": "sing"},
-            {"translation": "helmet"}, 
-            {"numopposite": "helmets"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "helmets":
-            [
-            {"num": "plural"},
-            {"translation": "helmets"}, 
-            {"numopposite": "helmet"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "chest":
-            [
-            {"num": "sing"},
-            {"translation": "chest"}, 
-            {"numopposite": "chests"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "chests":
-            [
-            {"num": "plural"},
-            {"translation": "chests"}, 
-            {"numopposite": "chest"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "armor":
-            [
-            {"num": "sing"},
-            {"translation": "armor"}, 
-            {"numopposite": "armor"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "leg":
-            [
-            {"num": "sing"},
-            {"translation": "leg"}, 
-            {"numopposite": "legs"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "legs":
-            [
-            {"num": "plural"},
-            {"translation": "legs"}, 
-            {"numopposite": "leg"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "glove":
-            [
-            {"num": "sing"},
-            {"translation": "glove"}, 
-            {"numopposite": "gloves"}, 
-            {"gender": ""},
-            {"pronoun": "it"}
-        ],
-        "gloves":
-            [
-            {"num": "plural"},
-            {"translation": "gloves"}, 
-            {"numopposite": "glove"}, 
-            {"gender": ""},
-            {"pronoun": "they"}
-        ],
-        "that":
-            [
-            {"num": "sing"},
-            {"translation": "that"}, 
-            {"numopposite": "that"}, 
-            {"gender": ""}
-        ],
-        "spell":
-            [
-            {"num": "sing"},
-            {"translation": "spell"}, 
-            {"numopposite": "spells"}, 
-            {"gender": ""}
-        ],
-        "spells":
-            [
-            {"num": "plural"},
-            {"translation": "spells"}, 
-            {"numopposite": "spell"}, 
-            {"gender": ""}
-        ],
-        "fireball":
-            [
-            {"num": "sing"},
-            {"translation": "fireball"}, 
-            {"numopposite": "fireball"}, 
-            {"gen": ""}
-        ],
-        "firering":
-            [
-            {"num": "sing"},
-            {"translation": "firering"}, 
-            {"numopposite": "firering"}, 
-            {"gen": ""}
-        ],
-        "score":
-            [
-            {"num": "sing"},
-            {"translation": "score"}, 
-            {"numopposite": "score"}, 
-            {"gen": ""}
-        ],
-        "experience":
-            [
-            {"num": "sing"},
-            {"translation": "experience"}, 
-            {"numopposite": "experiences"}, 
-            {"gen": ""}
-        ],
-        "experiences":
-            [
-            {"num": "plural"},
-            {"translation": "experiences"}, 
-            {"numopposite": "experience"}, 
-            {"gen": ""}
-        ],
-        "level":
-            [
-            {"num": "sing"},
-            {"translation": "level"}, 
-            {"numopposite": "levels"}, 
-            {"gen": ""}
-        ],
-        "levels":
-            [
-            {"num": "plural"},
-            {"translation": "levels"}, 
-            {"numopposite": "level"}, 
-            {"gen": ""}
-        ],
-        "score":
-            [
-            {"num": "sing"},
-            {"translation": "score"}, 
-            {"numopposite": "score"}, 
-            {"gen": ""}
-        ],
-        "monster":
-            [
-            {"num": "sing"},
-            {"translation": "monster"}, 
-            {"numopposite": "monsters"}, 
-            {"gen": ""}
-        ],
-        "monsters":
-            [
-            {"num": "sing"},
-            {"translation": "monsters"}, 
-            {"numopposite": "monster"}, 
-            {"gen": ""}
-        ],
-        "item":
-            [
-            {"num": "sing"},
-            {"translation": "item"}, 
-            {"numopposite": "items"}, 
-            {"gen": ""}
-        ],
-        "items":
-            [
-            {"num": "plural"},
-            {"translation": "items"}, 
-            {"numopposite": "item"}, 
-            {"gen": ""}
-        ]
-    },
+  "N": {
+    "shield": [
+      { "num": "sing" },
+      { "translation": "shield" },
+      { "numopposite": "shields" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "shields": [
+      { "num": "plural" },
+      { "translation": "shields" },
+      { "numopposite": "shield" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "weapon": [
+      { "num": "sing" },
+      { "translation": "weapon" },
+      { "numopposite": "weapons" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "weapons": [
+      { "num": "plural" },
+      { "translation": "weapons" },
+      { "numopposite": "weapon" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "glove": [
+      { "num": "sing" },
+      { "translation": "glove" },
+      { "numopposite": "gloves" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "gloves": [
+      { "num": "plural" },
+      { "translation": "gloves" },
+      { "numopposite": "glove" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "pants": [
+      { "num": "sing" },
+      { "translation": "pants" },
+      { "numopposite": "pants" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "sword": [
+      { "num": "sing" },
+      { "translation": "sword" },
+      { "numopposite": "swords" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "swords": [
+      { "num": "plural" },
+      { "translation": "swords" },
+      { "numopposite": "sword" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "potion": [
+      { "num": "sing" },
+      { "translation": "potion" },
+      { "numopposite": "potions" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "potions": [
+      { "num": "plural" },
+      { "translation": "potions" },
+      { "numopposite": "potion" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "hero": [
+      { "num": "sing" },
+      { "translation": "hero" },
+      { "numopposite": "heroes" },
+      { "gender": "" },
+      { "pronoun": "he" }
+    ],
+    "heroes": [
+      { "num": "plural" },
+      { "translation": "heroes" },
+      { "numopposite": "hero" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "dragon": [
+      { "num": "sing" },
+      { "translation": "dragon" },
+      { "numopposite": "dragons" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "dragons": [
+      { "num": "plural" },
+      { "translation": "dragons" },
+      { "numopposite": "dragon" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "goblin": [
+      { "num": "sing" },
+      { "translation": "goblin" },
+      { "numopposite": "goblins" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "goblins": [
+      { "num": "plural" },
+      { "translation": "goblins" },
+      { "numopposite": "goblin" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "rat": [
+      { "num": "sing" },
+      { "translation": "rat" },
+      { "numopposite": "rats" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "rats": [
+      { "num": "plural" },
+      { "translation": "rats" },
+      { "numopposite": "rat" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "life": [
+      { "num": "sing" },
+      { "translation": "life" },
+      { "numopposite": "lives" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "lives": [
+      { "num": "plural" },
+      { "translation": "lives" },
+      { "numopposite": "life" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "mana": [
+      { "num": "sing" },
+      { "translation": "mana" },
+      { "numopposite": "mana" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "mood": [
+      { "num": "sing" },
+      { "translation": "mood" },
+      { "numopposite": "mood" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "east": [
+      { "num": "sing" },
+      { "translation": "east" },
+      { "numopposite": "east" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "northeast": [
+      { "num": "sing" },
+      { "translation": "northeast" },
+      { "numopposite": "northeast" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "southeast": [
+      { "num": "sing" },
+      { "translation": "southeast" },
+      { "numopposite": "southeast" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "west": [
+      { "num": "sing" },
+      { "translation": "west" },
+      { "numopposite": "west" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "northwest": [
+      { "num": "sing" },
+      { "translation": "northwest" },
+      { "numopposite": "northwest" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "southwest": [
+      { "num": "sing" },
+      { "translation": "southwest" },
+      { "numopposite": "southwest" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "north": [
+      { "num": "sing" },
+      { "translation": "north" },
+      { "numopposite": "north" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "south": [
+      { "num": "sing" },
+      { "translation": "south" },
+      { "numopposite": "south" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "door": [
+      { "num": "sing" },
+      { "translation": "door" },
+      { "numopposite": "doors" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "doors": [
+      { "num": "sing" },
+      { "translation": "doors" },
+      { "numopposite": "door" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "in the same position": [
+      { "num": "sing" },
+      { "translation": "in the same position" },
+      { "numopposite": "in the same position" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "portal": [
+      { "num": "sing" },
+      { "translation": "portal" },
+      { "numopposite": "portals" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "portals": [
+      { "num": "plural" },
+      { "translation": "portals" },
+      { "numopposite": "portal" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "head": [
+      { "num": "sing" },
+      { "translation": "head" },
+      { "numopposite": "heads" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "heads": [
+      { "num": "plural" },
+      { "translation": "heads" },
+      { "numopposite": "head" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "hand": [
+      { "num": "sing" },
+      { "translation": "hand" },
+      { "numopposite": "hands" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "hands": [
+      { "num": "plural" },
+      { "translation": "hands" },
+      { "numopposite": "hand" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "helmet": [
+      { "num": "sing" },
+      { "translation": "helmet" },
+      { "numopposite": "helmets" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "helmets": [
+      { "num": "plural" },
+      { "translation": "helmets" },
+      { "numopposite": "helmet" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "chest": [
+      { "num": "sing" },
+      { "translation": "chest" },
+      { "numopposite": "chests" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "chests": [
+      { "num": "plural" },
+      { "translation": "chests" },
+      { "numopposite": "chest" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "armor": [
+      { "num": "sing" },
+      { "translation": "armor" },
+      { "numopposite": "armor" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "leg": [
+      { "num": "sing" },
+      { "translation": "leg" },
+      { "numopposite": "legs" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "legs": [
+      { "num": "plural" },
+      { "translation": "legs" },
+      { "numopposite": "leg" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "glove": [
+      { "num": "sing" },
+      { "translation": "glove" },
+      { "numopposite": "gloves" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
+    "gloves": [
+      { "num": "plural" },
+      { "translation": "gloves" },
+      { "numopposite": "glove" },
+      { "gender": "" },
+      { "pronoun": "they" }
+    ],
+    "that": [
+      { "num": "sing" },
+      { "translation": "that" },
+      { "numopposite": "that" },
+      { "gender": "" }
+    ],
+    "spell": [
+      { "num": "sing" },
+      { "translation": "spell" },
+      { "numopposite": "spells" },
+      { "gender": "" }
+    ],
+    "spells": [
+      { "num": "plural" },
+      { "translation": "spells" },
+      { "numopposite": "spell" },
+      { "gender": "" }
+    ],
+    "fireball": [
+      { "num": "sing" },
+      { "translation": "fireball" },
+      { "numopposite": "fireball" },
+      { "gen": "" }
+    ],
+    "firering": [
+      { "num": "sing" },
+      { "translation": "firering" },
+      { "numopposite": "firering" },
+      { "gen": "" }
+    ],
+    "score": [
+      { "num": "sing" },
+      { "translation": "score" },
+      { "numopposite": "score" },
+      { "gen": "" }
+    ],
+    "experience": [
+      { "num": "sing" },
+      { "translation": "experience" },
+      { "numopposite": "experiences" },
+      { "gen": "" }
+    ],
+    "experiences": [
+      { "num": "plural" },
+      { "translation": "experiences" },
+      { "numopposite": "experience" },
+      { "gen": "" }
+    ],
+    "level": [
+      { "num": "sing" },
+      { "translation": "level" },
+      { "numopposite": "levels" },
+      { "gen": "" }
+    ],
+    "levels": [
+      { "num": "plural" },
+      { "translation": "levels" },
+      { "numopposite": "level" },
+      { "gen": "" }
+    ],
+    "score": [
+      { "num": "sing" },
+      { "translation": "score" },
+      { "numopposite": "score" },
+      { "gen": "" }
+    ],
+    "monster": [
+      { "num": "sing" },
+      { "translation": "monster" },
+      { "numopposite": "monsters" },
+      { "gen": "" }
+    ],
+    "monsters": [
+      { "num": "sing" },
+      { "translation": "monsters" },
+      { "numopposite": "monster" },
+      { "gen": "" }
+    ],
+    "item": [
+      { "num": "sing" },
+      { "translation": "item" },
+      { "numopposite": "items" },
+      { "gen": "" }
+    ],
+    "items": [
+      { "num": "plural" },
+      { "translation": "items" },
+      { "numopposite": "item" },
+      { "gen": "" }
+    ]
+  },
     "V": {
         "ATTACK": {
             "attacks": [

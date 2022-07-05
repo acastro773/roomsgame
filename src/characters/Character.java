@@ -11,6 +11,7 @@ import util.Tuple;
 public abstract class Character extends PrintableObject {
 	private String name;
 	private String description;
+	private String mood;
 	private int weight; // Character's weight
 	private int carryWeight; // Max weight we can carry
 	private int actualCarryWeight;
@@ -22,7 +23,7 @@ public abstract class Character extends PrintableObject {
 	
 	public Character(String name, String description, Map map,
 			Room room, Tuple<Integer, Integer> position, int weight, int length, int carryWeight,
-			int actualCarryWeight, ArrayList<Item> inventory, String symbolRepresentation, ArrayList<String> adjectives) {
+			int actualCarryWeight, ArrayList<Item> inventory, String symbolRepresentation, String mood, ArrayList<String> adjectives) {
 		super(name, description, adjectives, position);
 		this.name = name;
 		this.description = description;
@@ -34,6 +35,7 @@ public abstract class Character extends PrintableObject {
 		this.actualCarryWeight = actualCarryWeight;
 		this.inventory = inventory;
 		this.symbolRepresentation = symbolRepresentation;
+		this.mood = mood;
 		ArrayList<String> newPrepositions = new ArrayList<String>();
 		newPrepositions.add("against");
 		this.setPrepositions(newPrepositions);
@@ -57,6 +59,14 @@ public abstract class Character extends PrintableObject {
 
 	public void setRoom(Room room) {
 		this.room = room;
+	}
+	
+	public String getMood() {
+		return mood;
+	}
+	
+	public void setMood(String mood) {
+		this.mood = mood;
 	}
 
 	public ArrayList<Item> getInventory() {

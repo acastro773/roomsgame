@@ -81,35 +81,35 @@ public class ActiveCharacterTest {
 		adjectives.add("small");
 
 		attacker = new ActiveCharacter("hero", "", map, room, position, 40, 10,
-				100, 100, 100, 100, new ArrayList<WereableWeapon>(),
+				100, 100, 100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		defender = new ActiveCharacter("goblin", "", map, room, position, 40, 10,
-				100, 0, 100, 100, new ArrayList<WereableWeapon>(),
+				100, 0, 100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		c1 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 100,
-				50, 100, 100, new ArrayList<WereableWeapon>(),
+				50, 100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		c2 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 100, 50,
-				100, 100, new ArrayList<WereableWeapon>(),
+				100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 95,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		c3 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 100,
-				50, 100, 100, new ArrayList<WereableWeapon>(),
+				50, 100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		c4 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 100,
-				50, 100, 100, new ArrayList<WereableWeapon>(),
+				50, 100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		c5 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 100,
-				50, 100, 100, new ArrayList<WereableWeapon>(),
+				50, 100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		c6 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 100,
-				50, 100, 100, new ArrayList<WereableWeapon>(),
+				50, 100, 100, "", new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		itemTypeArmor1 = new ArrayList<ItemEnumerate.ArmorType>();

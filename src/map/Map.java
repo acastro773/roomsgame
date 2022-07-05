@@ -687,18 +687,20 @@ public class Map {
 						int possibleCry = Util.rand(0, 20);
 						room.printMonsters(j, user.getVisiblePositions());
 						if (possibleCry > 18) {
-							if (enemy.getName().equals("goblin")) {
-								goblinAppearSound = new SoundReproduction("./src/sounds/goblinappear.wav", enemy, user);
-								if (Main.isSoundActivated)
-									goblinAppearSound.reproduce();
-							} else if (enemy.getName().equals("rat")) { 
-								ratAppearSound = new SoundReproduction("./src/sounds/ratappear.wav", enemy, user);
-								if (Main.isSoundActivated)
-									ratAppearSound.reproduce();
-							} else if (enemy.getName().equals("dragon")) { 
-								dragonAppearSound = new SoundReproduction("./src/sounds/dragonappear.wav", enemy, user);
-								if (Main.isSoundActivated)
-									dragonAppearSound.reproduce();
+							if (enemy.getLife() > 0) {
+								if (enemy.getName().equals("goblin")) {
+									goblinAppearSound = new SoundReproduction("./src/sounds/goblinappear.wav", enemy, user);
+									if (Main.isSoundActivated)
+										goblinAppearSound.reproduce();
+								} else if (enemy.getName().equals("rat")) { 
+									ratAppearSound = new SoundReproduction("./src/sounds/ratappear.wav", enemy, user);
+									if (Main.isSoundActivated)
+										ratAppearSound.reproduce();
+								} /*else if (enemy.getName().equals("dragon")) { 
+									dragonAppearSound = new SoundReproduction("./src/sounds/dragonappear.wav", enemy, user);
+									if (Main.isSoundActivated)
+										dragonAppearSound.reproduce();
+								}*/
 							}
 						}
 							

@@ -219,11 +219,12 @@ public class Main {
 		user._printInventory(j, rootObjGrammar, rootObjWords);
 		user._printLife(rootObjWords, j, 0, map.global_fin().y + 1);
 		user._printMana(rootObjWords, j, 1, map.global_fin().y + 1);
-		j.print(map.global_fin().y + 1, 2, JSONParsing.getTranslationWord("score", "N", rootObjWords) + ": " + 
+		user._printMood(rootObjWords, j, 2, map.global_fin().y + 1);
+		j.print(map.global_fin().y + 1, 3, JSONParsing.getTranslationWord("score", "N", rootObjWords) + ": " + 
 				Integer.toString(deepnessScore));
-		j.print(map.global_fin().y + 1, 3, JSONParsing.getTranslationWord("level", "N", rootObjWords) + ": " + 
+		j.print(map.global_fin().y + 1, 4, JSONParsing.getTranslationWord("level", "N", rootObjWords) + ": " + 
 				Integer.toString(user.getLevel()));
-		j.print(map.global_fin().y + 1, 4, "exp" + ": " + 
+		j.print(map.global_fin().y + 1, 5, "exp" + ": " + 
 				Integer.toString(user.getExperience()) + "/" + user.getNextLevelExperience());
 	}
 	
@@ -285,7 +286,7 @@ public class Main {
 			adjectives.add("brave");
 			adjectives.add("glorious");
 			user = new ActiveCharacter("hero", "", null, null, null, 
-					40, 0, 20, 100, 100, 100, new ArrayList<WereableWeapon>(),
+					40, 0, 20, 100, 100, 100, "neutral", new ArrayList<WereableWeapon>(),
 					new ArrayList<WereableArmor>(), 100, 100, 0,
 					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 1);
 			user.setNextLevelExperience();
@@ -459,7 +460,7 @@ public class Main {
 	
 	public static void makeMovement(int i) throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		if (isInputType(movementInput, i)){
-			walkSound = new SoundReproduction("./src/sounds/steps.wav", user, user);
+			walkSound = new SoundReproduction("./src/sounds/steps.wav");
         	doMonstersTurn = true;
         	_moveCharacterAction(i);
         	setFlagsToFalse();
