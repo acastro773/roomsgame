@@ -20,7 +20,7 @@ public class Dragon extends ActiveCharacter {
 	
 	public Dragon(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
 		super("dragon", "", map, room, position, 8+level, 3+level, 80+(level*5),
-				100, 100, 100, "", new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
+				100, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
 				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "D", 2, new FollowingMove(), adjectives, level);
 		this.setTirenessTotal(7);
 		this.setExperienceGiven(100+level*10);

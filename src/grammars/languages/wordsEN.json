@@ -45,155 +45,170 @@
             {"gender": ""}
         ]
     },
-    "ADJ": {
-        "red": 
-            [
-            {"num": ""},
-            {"translation": "red"},
-            {"numopposite": "red"},
-            {"gender": ""}
-        ],
-        "good": 
-            [
-            {"num": ""},
-            {"translation": "good"},
-            {"numopposite": "good"},
-            {"gender": ""}
-        ],
-        "normal": 
-            [
-            {"num": ""},
-            {"translation": "regular"},
-            {"numopposite": "regular"},
-            {"gender": ""}
-        ],
-        "average": 
-            [
-            {"num": ""},
-            {"translation": "average"},
-            {"numopposite": "average"},
-            {"gender": ""}
-        ],
-        "big":
-            [
-            {"num": ""},
-            {"translation": "big"},
-            {"numopposite": "big"}, 
-            {"gender": ""}
-        ],
-        "small":
-            [
-            {"num": "sing"},
-            {"translation": "small"}, 
-            {"numopposite": "small"}, 
-            {"gender": ""}
-        ],
-        "old":
-            [
-            {"num": "sing"},
-            {"translation": "old"}, 
-            {"numopposite": "old"}, 
-            {"gender": ""}
-        ],
-        "creepy":
-            [
-            {"num": "sing"},
-            {"translation": "creepy"}, 
-            {"numopposite": "creepy"}, 
-            {"gender": ""}
-        ],
-        "life":
-            [
-            {"num": "sing"},
-            {"translation": "life"}, 
-            {"numopposite": "life"}, 
-            {"gender": ""}
-        ],
-        "magic":
-            [
-            {"num": "sing"},
-            {"translation": "magic"}, 
-            {"numopposite": "magic"}, 
-            {"gender": ""}
-        ],
-        "short":
-            [
-            {"num": "sing"},
-            {"translation": "short"}, 
-            {"numopposite": "short"}, 
-            {"gender": ""}
-        ],
-        "long":
-            [
-            {"num": "sing"},
-            {"translation": "long"}, 
-            {"numopposite": "long"},
-            {"gender": ""}
-        ],
-        "some": 
-            [
-            {"num": "sing"},
-            {"translation": "some"}, 
-            {"numopposite": "some"}, 
-            {"gender": ""}
-        ],
-        "a lot of": 
-            [
-            {"num": "sing"},
-            {"translation": "a lot of"}, 
-            {"numopposite": "a lot of"}, 
-            {"gender": ""}
-        ],
-        "a little": 
-            [
-            {"num": "sing"},
-            {"translation": "a little"}, 
-            {"numopposite": "a little"}, 
-            {"gender": ""}
-        ],
-        "dead": 
-            [
-            {"num": "sing"},
-            {"translation": "dead"}, 
-            {"numopposite": "dead"}, 
-            {"gender": ""}
-        ],
-        "brave": 
-            [
-            {"num": "sing"},
-            {"translation": "brave"}, 
-            {"numopposite": "brave"}, 
-            {"gender": ""}
-        ],
-        "glorious": 
-            [
-            {"num": "sing"},
-            {"translation": "glorious"}, 
-            {"numopposite": "glorious"}, 
-            {"gender": ""}
-        ],
-        "scared": 
-            [
-            {"num": "sing"},
-            {"translation": "scared"},
-            {"numopposite": "scared"}, 
-            {"gender": ""}
-        ],
-        "scary": 
-            [
-            {"num": "sing"},
-            {"translation": "scary"},
-            {"numopposite": "scary"}, 
-            {"gender": ""}
-        ],
-        "grey": 
-            [
-            {"num": "sing"},
-            {"translation": "grey"},
-            {"numopposite": "grey"}, 
-            {"gender": ""}
-        ]
-    },
+  "ADJ": {
+    "red": [
+      { "num": "" },
+      { "translation": "red" },
+      { "numopposite": "red" },
+      { "gender": "" }
+    ],
+    "good": [
+      { "num": "" },
+      { "translation": "good" },
+      { "numopposite": "good" },
+      { "gender": "" }
+    ],
+    "normal": [
+      { "num": "" },
+      { "translation": "regular" },
+      { "numopposite": "regular" },
+      { "gender": "" }
+    ],
+    "average": [
+      { "num": "" },
+      { "translation": "average" },
+      { "numopposite": "average" },
+      { "gender": "" }
+    ],
+    "big": [
+      { "num": "" },
+      { "translation": "big" },
+      { "numopposite": "big" },
+      { "gender": "" }
+    ],
+    "small": [
+      { "num": "sing" },
+      { "translation": "small" },
+      { "numopposite": "small" },
+      { "gender": "" }
+    ],
+    "old": [
+      { "num": "sing" },
+      { "translation": "old" },
+      { "numopposite": "old" },
+      { "gender": "" }
+    ],
+    "creepy": [
+      { "num": "sing" },
+      { "translation": "creepy" },
+      { "numopposite": "creepy" },
+      { "gender": "" }
+    ],
+    "life": [
+      { "num": "sing" },
+      { "translation": "life" },
+      { "numopposite": "life" },
+      { "gender": "" }
+    ],
+    "magic": [
+      { "num": "sing" },
+      { "translation": "magic" },
+      { "numopposite": "magic" },
+      { "gender": "" }
+    ],
+    "short": [
+      { "num": "sing" },
+      { "translation": "short" },
+      { "numopposite": "short" },
+      { "gender": "" }
+    ],
+    "long": [
+      { "num": "sing" },
+      { "translation": "long" },
+      { "numopposite": "long" },
+      { "gender": "" }
+    ],
+    "some": [
+      { "num": "sing" },
+      { "translation": "some" },
+      { "numopposite": "some" },
+      { "gender": "" }
+    ],
+    "a lot of": [
+      { "num": "sing" },
+      { "translation": "a lot of" },
+      { "numopposite": "a lot of" },
+      { "gender": "" }
+    ],
+    "a little": [
+      { "num": "sing" },
+      { "translation": "a little" },
+      { "numopposite": "a little" },
+      { "gender": "" }
+    ],
+    "dead": [
+      { "num": "sing" },
+      { "translation": "dead" },
+      { "numopposite": "dead" },
+      { "gender": "" }
+    ],
+    "brave": [
+      { "num": "sing" },
+      { "translation": "brave" },
+      { "numopposite": "brave" },
+      { "gender": "" }
+    ],
+    "glorious": [
+      { "num": "sing" },
+      { "translation": "glorious" },
+      { "numopposite": "glorious" },
+      { "gender": "" }
+    ],
+    "scared": [
+      { "num": "sing" },
+      { "translation": "scared" },
+      { "numopposite": "scared" },
+      { "gender": "" }
+    ],
+    "scary": [
+      { "num": "sing" },
+      { "translation": "scary" },
+      { "numopposite": "scary" },
+      { "gender": "" }
+    ],
+    "grey": [
+      { "num": "sing" },
+      { "translation": "grey" },
+      { "numopposite": "grey" },
+      { "gender": "" }
+    ],
+    "neutral": [
+      { "num": "sing" },
+      { "translation": "neutral" },
+      { "numopposite": "neutral" },
+      { "gender": "" }
+    ],
+    "encouraged": [
+      { "num": "sing" },
+      { "translation": "encouraged" },
+      { "numopposite": "encouraged" },
+      { "gender": "" }
+    ],
+    "confused": [
+      { "num": "sing" },
+      { "translation": "confused" },
+      { "numopposite": "confused" },
+      { "gender": "" }
+    ],
+    "angry": [
+      { "num": "sing" },
+      { "translation": "angry" },
+      { "numopposite": "angry" },
+      { "gender": "" }
+    ],
+    "terrified": [
+      { "num": "sing" },
+      { "translation": "terrified" },
+      { "numopposite": "terrified" },
+      { "gender": "" }
+    ],
+    "sleepy": [
+      { "num": "sing" },
+      { "translation": "sleepy" },
+      { "numopposite": "sleepy" },
+      { "gender": "" }
+    ]
+  },
   "N": {
     "shield": [
       { "num": "sing" },

@@ -23,6 +23,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import characters.Character.Mood;
 import characters.active.ActiveCharacter;
 import config.ChangeKeyBinding;
 import grammars.grammars.GrammarIndividual;
@@ -286,7 +287,7 @@ public class Main {
 			adjectives.add("brave");
 			adjectives.add("glorious");
 			user = new ActiveCharacter("hero", "", null, null, null, 
-					40, 0, 20, 100, 100, 100, "neutral", new ArrayList<WereableWeapon>(),
+					40, 0, 20, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 					new ArrayList<WereableArmor>(), 100, 100, 0,
 					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 1);
 			user.setNextLevelExperience();
@@ -635,7 +636,7 @@ public class Main {
 				if (countAction == 0) {
 					if (isSoundActivated)
 						waterdropSound.reproduce();
-					countAction = Util.rand(12, 25);
+					countAction = Util.rand(25, 50);
 					System.out.println("countAction set: " + countAction);
 				}
 				
@@ -721,6 +722,12 @@ public class Main {
 		grammarMissDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "ATTACKMISS").getAsJsonObject());
 		grammarSimpleVerb = new GrammarsGeneral(JSONParsing.getElement(rootObj, "SIMPLEVERB").getAsJsonObject());
 		grammarGeneralObj = new GrammarsGeneral(JSONParsing.getElement(rootObjGrammar, "GENERAL").getAsJsonObject());
+		Map.sndObj = parser.parse(new FileReader("./src/sounds/soundsLoc.json")).getAsJsonObject();
+		/*beepSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "BEEP"));
+		collisionSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "COLLISION"));
+		deathSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "DEATH"));
+		waterdropSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "WATERDROP"));
+		heroHitSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "HURT"));*/
 		beepSound = new SoundReproduction("./src/sounds/beep.wav");
 		collisionSound = new SoundReproduction("./src/sounds/collision.wav");
 		deathSound = new SoundReproduction("./src/sounds/death.wav");

@@ -2,12 +2,16 @@ package map;
 
 import items.Item;
 
+import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import characters.active.ActiveCharacter;
+import grammars.grammars.GrammarsGeneral;
 import grammars.parsing.JSONParsing;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Util;
@@ -38,9 +42,10 @@ public class Map {
 	private ArrayList<Room> rooms;
 	private int size;
 	private boolean hasPortals = false;
-	static SoundReproduction goblinAppearSound;
-	static SoundReproduction ratAppearSound;
-	static SoundReproduction dragonAppearSound;
+	static JsonParser parser = new JsonParser();
+	static public JsonObject sndObj;
+	static public GrammarsGeneral sndRat;
+	static SoundReproduction appearSound;
 
 	/**
 	 * Creates a random map, which is a collection of rooms
@@ -684,26 +689,14 @@ public class Map {
 			if (user.getRoom().equals(room)){
 				for (ActiveCharacter enemy: room.getMonsters()){
 					if (RandUtil.containsTuple(enemy.getPosition(), user.getVisiblePositions())){
-						int possibleCry = Util.rand(0, 20);
+						int possibleCry = Util.rand(0, 10);
 						room.printMonsters(j, user.getVisiblePositions());
-						if (possibleCry > 18) {
-							if (enemy.getLife() > 0) {
-								if (enemy.getName().equals("goblin")) {
-									goblinAppearSound = new SoundReproduction("./src/sounds/goblinappear.wav", enemy, user);
-									if (Main.isSoundActivated)
-										goblinAppearSound.reproduce();
-								} else if (enemy.getName().equals("rat")) { 
-									ratAppearSound = new SoundReproduction("./src/sounds/ratappear.wav", enemy, user);
-									if (Main.isSoundActivated)
-										ratAppearSound.reproduce();
-								} /*else if (enemy.getName().equals("dragon")) { 
-									dragonAppearSound = new SoundReproduction("./src/sounds/dragonappear.wav", enemy, user);
-									if (Main.isSoundActivated)
-										dragonAppearSound.reproduce();
-								}*/
-							}
-						}
-							
+						if (possibleCry > 8 && enemy.getLife() > 0 && Main.isSoundActivated) {
+							String loc = JSONParsing.getSoundSource(sndObj, enemy, "IDLE");
+							System.out.println(loc);
+							appearSound = new SoundReproduction(loc, enemy, user);
+							appearSound.reproduce();
+						}						
 					}
 				}
 			}

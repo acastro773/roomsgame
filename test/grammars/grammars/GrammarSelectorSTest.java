@@ -17,6 +17,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
+import characters.Character.Mood;
 import characters.active.ActiveCharacter;
 import characters.active.enemies.Goblin;
 import grammars.parsing.JSONParsing;
@@ -52,7 +53,7 @@ public class GrammarSelectorSTest {
 		ArrayList<String> adjectives = new ArrayList<String>();
 		adjectives.add("small");
 		user = new ActiveCharacter("hero", "", map, room, position, 40, 10,
-				100, 100, 100, 100, "", new ArrayList<WereableWeapon>(),
+				100, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
 		ArrayList<ItemEnumerate.WeaponType> itemTypeWeapon;

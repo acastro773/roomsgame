@@ -7,6 +7,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import characters.active.ActiveCharacter;
 import grammars.grammars.GrammarsRetrieval;
 import main.Main;
 import util.RandUtil;
@@ -77,5 +78,15 @@ public class JSONParsing {
 		JsonArray name = getSpecificValueFromSet(position, allTypeElements).getAsJsonArray();
 		String translation = getElement(name, "translation");
 		return translation;
+	}
+	
+	public static String getSoundSource(JsonObject sndObj, ActiveCharacter enemy, String action) {
+		JsonObject snd = null;
+		if (enemy != null) {
+			snd = sndObj.get(enemy.getName().toUpperCase()).getAsJsonObject();
+		} else
+			snd = sndObj;
+		
+		return getElement(snd, action).toString();
 	}
 }

@@ -67,453 +67,542 @@
             {"gen": "fem"}
         ]
     },
-    "ADJ": {
-        "red": 
-            [
-            {"num": "sing"},
-            {"translation": "rojo"},
-            {"numopposite": "rojos"},
-            {"genopposite": "roja"},
-            {"gen": "mas"}
-        ],
-        "roja": 
-            [
-            {"num": "sing"},
-            {"translation": "roja"},
-            {"numopposite": "rojas"},
-            {"genopposite": "red"},
-            {"gen": "fem"}
-        ],
-        "rojos": 
-            [
-            {"num": "plural"},
-            {"translation": "rojos"},
-            {"numopposite": "red"},
-            {"genopposite": "rojas"},
-            {"gen": "mas"}
-        ],
-        "rojas": 
-            [
-            {"num": "plural"},
-            {"translation": "rojas"},
-            {"numopposite": "roja"},
-            {"genopposite": "rojos"},
-            {"gen": "fem"}
-        ],
-        "good": 
-            [
-            {"num": "sing"},
-            {"translation": "bondadoso"},
-            {"numopposite": "bondadosos"},
-            {"genopposite": "bondadosa"},
-            {"gen": "mas"}
-        ],
-        "bondadosa": 
-            [
-            {"num": "sing"},
-            {"translation": "bondadosa"},
-            {"numopposite": "bondadosas"},
-            {"genopposite": "good"},
-            {"gen": "fem"}
-        ],
-        "bondadosos": 
-            [
-            {"num": "plural"},
-            {"translation": "bondadosos"},
-            {"numopposite": "bondadoso"},
-            {"genopposite": "bondadosas"},
-            {"gen": "mas"}
-        ],
-        "bondadosas": 
-            [
-            {"num": "plural"},
-            {"translation": "bondadosas"},
-            {"numopposite": "bondadosa"},
-            {"genopposite": "bondadosos"},
-            {"gen": "fem"}
-        ],
-        "normal": 
-            [
-            {"num": "sing"},
-            {"translation": "normal"},
-            {"numopposite": "normales"},
-            {"gen": ""}
-        ],
-        "average": 
-            [
-            {"num": "sing"},
-            {"translation": "normal"},
-            {"numopposite": "normales"},
-            {"gen": ""}
-        ],
-        "normales": 
-            [
-            {"num": "plural"},
-            {"translation": "normales"},
-            {"numopposite": "average"},
-            {"gen": ""}
-        ],
-        "big":
-            [
-            {"num": "sing"},
-            {"translation": "grande"},
-            {"numopposite": "grandes"}, 
-            {"gen": ""}
-        ],
-        "grandes":
-            [
-            {"num": "plural"},
-            {"translation": "grandes"},
-            {"numopposite": "big"}, 
-            {"gen": ""}
-        ],
-        "small":
-            [
-            {"num": "sing"},
-            {"translation": "pequeño"}, 
-            {"numopposite": "pequeños"}, 
-            {"genopposite": "pequeña"},
-            {"gen": "mas"}
-        ],
-        "pequeños": 
-            [
-            {"num": "plural"},
-            {"translation": "pequeños"},
-            {"numopposite": "small"},
-            {"genopposite": "pequeñas"},
-            {"gen": "mas"}
-        ],
-        "pequeñas": 
-            [
-            {"num": "plural"},
-            {"translation": "pequeñas"},
-            {"numopposite": "pequeña"},
-            {"genopposite": "pequeños"},
-            {"gen": "fem"}
-        ],
-        "pequeña": 
-            [
-            {"num": "sing"},
-            {"translation": "pequeña"},
-            {"numopposite": "pequeñas"},
-            {"genopposite": "small"},
-            {"gen": "fem"}
-        ],
-        "old":
-            [
-            {"num": "sing"},
-            {"translation": "viejo"}, 
-            {"numopposite": "viejos"}, 
-            {"genopposite": "vieja"},
-            {"gen": "mas"}
-        ],
-        "vieja":
-            [
-            {"num": "sing"},
-            {"translation": "vieja"}, 
-            {"numopposite": "viejas"}, 
-            {"genopposite": "old"},
-            {"gen": "fem"}
-        ],
-        "viejos":
-            [
-            {"num": "plural"},
-            {"translation": "viejos"}, 
-            {"numopposite": "old"}, 
-            {"genopposite": "viejas"},
-            {"gen": "mas"}
-        ],
-        "viejas":
-            [
-            {"num": "plural"},
-            {"translation": "viejas"}, 
-            {"numopposite": "vieja"},
-            {"genopposite": "viejos"},
-            {"gen": "fem"}
-        ],
-        "creepy":
-            [
-            {"num": "sing"},
-            {"translation": "asqueroso"}, 
-            {"numopposite": "asquerosos"}, 
-            {"genopposite": "asquerosa"},
-            {"gen": "mas"}
-        ],
-        "asquerosos":
-            [
-            {"num": "plural"},
-            {"translation": "asquerosos"}, 
-            {"numopposite": "creepy"}, 
-            {"genopposite": "asquerosas"},
-            {"gen": "mas"}
-        ],
-        "asquerosas":
-            [
-            {"num": "plural"},
-            {"translation": "asquerosas"}, 
-            {"numopposite": "asquerosa"}, 
-            {"genopposite": "asquerosos"},
-            {"gen": "fem"}
-        ],
-        "asquerosa":
-            [
-            {"num": "sing"},
-            {"translation": "asquerosa"}, 
-            {"numopposite": "asquerosas"}, 
-            {"genopposite": "creepy"},
-            {"gen": "fem"}
-        ],
-        "life":
-            [
-            {"num": "sing"},
-            {"translation": "vida"}, 
-            {"numopposite": "life"}, 
-            {"gen": "fem"}
-        ],
-        "magic":
-            [
-            {"num": "sing"},
-            {"translation": "mágico"}, 
-            {"numopposite": "mágicos"},
-            {"genopposite": "mágica"},
-            {"gen": "mas"}
-        ],
-        "mágica":
-            [
-            {"num": "sing"},
-            {"translation": "mágica"}, 
-            {"numopposite": "mágicas"},
-            {"genopposite": "magic"},
-            {"gen": "fem"}
-        ],
-        "mágicos":
-            [
-            {"num": "plural"},
-            {"translation": "mágicos"}, 
-            {"numopposite": "magic"},
-            {"genopposite": "mágicas"},
-            {"gen": "mas"}
-        ],
-        "mágicas":
-            [
-            {"num": "plural"},
-            {"translation": "mágicas"},
-            {"numopposite": "mágica"},
-            {"genopposite": "mágicos"},
-            {"gen": "fem"}
-        ],
-        "short":
-            [
-            {"num": "sing"},
-            {"translation": "corta"}, 
-            {"numopposite": "cortas"},
-            {"genopposite": "corto"},
-            {"gen": "fem"}
-        ],
-        "corto":
-            [
-            {"num": "sing"},
-            {"translation": "corto"}, 
-            {"numopposite": "cortos"},
-            {"genopposite": "corta"},
-            {"gen": "mas"}
-        ],
-        "cortos":
-            [
-            {"num": "plural"},
-            {"translation": "cortos"}, 
-            {"numopposite": "corto"},
-            {"genopposite": "cortas"},
-            {"gen": "mas"}
-        ],
-        "cortas":
-            [
-            {"num": "plural"},
-            {"translation": "cortas"}, 
-            {"numopposite": "corta"},
-            {"genopposite": "cortos"},
-            {"gen": "fem"}
-        ],
-        "long":
-            [
-            {"num": "sing"},
-            {"translation": "larga"}, 
-            {"numopposite": "largas"},
-            {"genopposite": "largo"},
-            {"gen": "fem"}
-        ],
-        "largo":
-            [
-            {"num": "sing"},
-            {"translation": "largo"}, 
-            {"numopposite": "largos"},
-            {"genopposite": "larga"},
-            {"gen": "mas"}
-        ],
-        "largas":
-            [
-            {"num": "plural"},
-            {"translation": "largas"}, 
-            {"numopposite": "long"}, 
-            {"genopposite": "largos"},
-            {"gen": "fem"}
-        ],
-        "largas":
-            [
-            {"num": "plural"},
-            {"translation": "largos"}, 
-            {"numopposite": "largo"},
-            {"genopposite": "largas"},
-            {"gen": "mas"}
-        ],
-        "some": 
-            [
-            {"num": "sing"},
-            {"translation": "algo"}, 
-            {"numopposite": "some"}, 
-            {"gen": ""}
-        ],
-        "a lot of": 
-            [
-            {"num": "sing"},
-            {"translation": "mucho"}, 
-            {"numopposite": "muchos"}, 
-            {"genopposite": "mucha"}, 
-            {"gen": "mas"}
-        ],
-        "mucha": 
-            [
-            {"num": "sing"},
-            {"translation": "mucha"}, 
-            {"numopposite": "muchas"},
-            {"genopposite": "a lot of"},
-            {"gen": "fem"}
-        ],
-        "muchos": 
-            [
-            {"num": "sing"},
-            {"translation": "muchos"}, 
-            {"numopposite": "a lot of"},
-            {"genopposite": "muchas"},
-            {"gen": "fem"}
-        ],
-        "muchas": 
-            [
-            {"num": "sing"},
-            {"translation": "muchas"}, 
-            {"numopposite": "mucha"},
-            {"genopposite": "muchos"},
-            {"gen": "fem"}
-        ],
-        "a little": 
-            [
-            {"num": "sing"},
-            {"translation": "un poco"}, 
-            {"numopposite": "a little"},
-            {"genopposite": "una poca"},
-            {"gen": "mas"}
-        ],
-        "una poca": 
-            [
-            {"num": "sing"},
-            {"translation": "una poca"}, 
-            {"numopposite": "una poca"},
-            {"genopposite": "a little"},
-            {"gen": "fem"}
-        ],
-        "dead": 
-            [
-            {"num": "sing"},
-            {"translation": "muerto"}, 
-            {"numopposite": "dead"},
-            {"genopposite": "muerta"},
-            {"gen": "mas"}
-        ],
-        "muerta": 
-            [
-            {"num": "sing"},
-            {"translation": "muerta"}, 
-            {"numopposite": "muertas"},
-            {"genopposite": "dead"},
-            {"gen": "fem"}
-        ],
-        "muertas": 
-            [
-            {"num": "plural"},
-            {"translation": "muertas"}, 
-            {"numopposite": "muerta"},
-            {"genopposite": "muertos"},
-            {"gen": "fem"}
-        ],
-        "muertos": 
-            [
-            {"num": "plural"},
-            {"translation": "muertos"}, 
-            {"numopposite": "dead"},
-            {"genopposite": "muertas"},
-            {"gen": "mas"}
-        ],
-        "brave": 
-            [
-            {"num": "sing"},
-            {"translation": "valiente"}, 
-            {"numopposite": "brave"}, 
-            {"gen": ""}
-        ],
-        "glorious": 
-            [
-            {"num": "sing"},
-            {"translation": "glorioso"}, 
-            {"numopposite": "gloriosos"},
-            {"genopposite": "gloriosa"},
-            {"gen": "mas"}
-        ],
-        "gloriosa": 
-            [
-            {"num": "sing"},
-            {"translation": "gloriosa"}, 
-            {"numopposite": "gloriosas"},
-            {"genopposite": "glorious"},
-            {"gen": "fem"}
-        ],
-        "gloriosos": 
-            [
-            {"num": "sing"},
-            {"translation": "gloriosos"}, 
-            {"numopposite": "gloriosas"},
-            {"genopposite": "gloriosas"},
-            {"gen": "mas"}
-        ],
-        "gloriosas": 
-            [
-            {"num": "sing"},
-            {"translation": "gloriosas"}, 
-            {"numopposite": "gloriosa"},
-            {"genopposite": "gloriosos"},
-            {"gen": "fem"}
-        ],
-        "scared": 
-            [
-            {"num": "sing"},
-            {"translation": "miedoso"},
-            {"numopposite": "scared"}, 
-            {"gen": ""}
-        ],
-        "scary": 
-            [
-            {"num": "sing"},
-            {"translation": "escalofriante"},
-            {"numopposite": "scary"}, 
-            {"gen": ""}
-        ],
-        "grey": 
-            [
-            {"num": "sing"},
-            {"translation": "gris"},
-            {"numopposite": "grey"}, 
-            {"gen": ""}
-        ]
-    },
+  "ADJ": {
+    "red": [
+      { "num": "sing" },
+      { "translation": "rojo" },
+      { "numopposite": "rojos" },
+      { "genopposite": "roja" },
+      { "gen": "mas" }
+    ],
+    "roja": [
+      { "num": "sing" },
+      { "translation": "roja" },
+      { "numopposite": "rojas" },
+      { "genopposite": "red" },
+      { "gen": "fem" }
+    ],
+    "rojos": [
+      { "num": "plural" },
+      { "translation": "rojos" },
+      { "numopposite": "red" },
+      { "genopposite": "rojas" },
+      { "gen": "mas" }
+    ],
+    "rojas": [
+      { "num": "plural" },
+      { "translation": "rojas" },
+      { "numopposite": "roja" },
+      { "genopposite": "rojos" },
+      { "gen": "fem" }
+    ],
+    "good": [
+      { "num": "sing" },
+      { "translation": "bondadoso" },
+      { "numopposite": "bondadosos" },
+      { "genopposite": "bondadosa" },
+      { "gen": "mas" }
+    ],
+    "bondadosa": [
+      { "num": "sing" },
+      { "translation": "bondadosa" },
+      { "numopposite": "bondadosas" },
+      { "genopposite": "good" },
+      { "gen": "fem" }
+    ],
+    "bondadosos": [
+      { "num": "plural" },
+      { "translation": "bondadosos" },
+      { "numopposite": "bondadoso" },
+      { "genopposite": "bondadosas" },
+      { "gen": "mas" }
+    ],
+    "bondadosas": [
+      { "num": "plural" },
+      { "translation": "bondadosas" },
+      { "numopposite": "bondadosa" },
+      { "genopposite": "bondadosos" },
+      { "gen": "fem" }
+    ],
+    "normal": [
+      { "num": "sing" },
+      { "translation": "normal" },
+      { "numopposite": "normales" },
+      { "gen": "" }
+    ],
+    "average": [
+      { "num": "sing" },
+      { "translation": "normal" },
+      { "numopposite": "normales" },
+      { "gen": "" }
+    ],
+    "normales": [
+      { "num": "plural" },
+      { "translation": "normales" },
+      { "numopposite": "average" },
+      { "gen": "" }
+    ],
+    "big": [
+      { "num": "sing" },
+      { "translation": "grande" },
+      { "numopposite": "grandes" },
+      { "gen": "" }
+    ],
+    "grandes": [
+      { "num": "plural" },
+      { "translation": "grandes" },
+      { "numopposite": "big" },
+      { "gen": "" }
+    ],
+    "small": [
+      { "num": "sing" },
+      { "translation": "pequeño" },
+      { "numopposite": "pequeños" },
+      { "genopposite": "pequeña" },
+      { "gen": "mas" }
+    ],
+    "pequeños": [
+      { "num": "plural" },
+      { "translation": "pequeños" },
+      { "numopposite": "small" },
+      { "genopposite": "pequeñas" },
+      { "gen": "mas" }
+    ],
+    "pequeñas": [
+      { "num": "plural" },
+      { "translation": "pequeñas" },
+      { "numopposite": "pequeña" },
+      { "genopposite": "pequeños" },
+      { "gen": "fem" }
+    ],
+    "pequeña": [
+      { "num": "sing" },
+      { "translation": "pequeña" },
+      { "numopposite": "pequeñas" },
+      { "genopposite": "small" },
+      { "gen": "fem" }
+    ],
+    "old": [
+      { "num": "sing" },
+      { "translation": "viejo" },
+      { "numopposite": "viejos" },
+      { "genopposite": "vieja" },
+      { "gen": "mas" }
+    ],
+    "vieja": [
+      { "num": "sing" },
+      { "translation": "vieja" },
+      { "numopposite": "viejas" },
+      { "genopposite": "old" },
+      { "gen": "fem" }
+    ],
+    "viejos": [
+      { "num": "plural" },
+      { "translation": "viejos" },
+      { "numopposite": "old" },
+      { "genopposite": "viejas" },
+      { "gen": "mas" }
+    ],
+    "viejas": [
+      { "num": "plural" },
+      { "translation": "viejas" },
+      { "numopposite": "vieja" },
+      { "genopposite": "viejos" },
+      { "gen": "fem" }
+    ],
+    "creepy": [
+      { "num": "sing" },
+      { "translation": "asqueroso" },
+      { "numopposite": "asquerosos" },
+      { "genopposite": "asquerosa" },
+      { "gen": "mas" }
+    ],
+    "asquerosos": [
+      { "num": "plural" },
+      { "translation": "asquerosos" },
+      { "numopposite": "creepy" },
+      { "genopposite": "asquerosas" },
+      { "gen": "mas" }
+    ],
+    "asquerosas": [
+      { "num": "plural" },
+      { "translation": "asquerosas" },
+      { "numopposite": "asquerosa" },
+      { "genopposite": "asquerosos" },
+      { "gen": "fem" }
+    ],
+    "asquerosa": [
+      { "num": "sing" },
+      { "translation": "asquerosa" },
+      { "numopposite": "asquerosas" },
+      { "genopposite": "creepy" },
+      { "gen": "fem" }
+    ],
+    "life": [
+      { "num": "sing" },
+      { "translation": "vida" },
+      { "numopposite": "life" },
+      { "gen": "fem" }
+    ],
+    "magic": [
+      { "num": "sing" },
+      { "translation": "mágico" },
+      { "numopposite": "mágicos" },
+      { "genopposite": "mágica" },
+      { "gen": "mas" }
+    ],
+    "mágica": [
+      { "num": "sing" },
+      { "translation": "mágica" },
+      { "numopposite": "mágicas" },
+      { "genopposite": "magic" },
+      { "gen": "fem" }
+    ],
+    "mágicos": [
+      { "num": "plural" },
+      { "translation": "mágicos" },
+      { "numopposite": "magic" },
+      { "genopposite": "mágicas" },
+      { "gen": "mas" }
+    ],
+    "mágicas": [
+      { "num": "plural" },
+      { "translation": "mágicas" },
+      { "numopposite": "mágica" },
+      { "genopposite": "mágicos" },
+      { "gen": "fem" }
+    ],
+    "short": [
+      { "num": "sing" },
+      { "translation": "corta" },
+      { "numopposite": "cortas" },
+      { "genopposite": "corto" },
+      { "gen": "fem" }
+    ],
+    "corto": [
+      { "num": "sing" },
+      { "translation": "corto" },
+      { "numopposite": "cortos" },
+      { "genopposite": "corta" },
+      { "gen": "mas" }
+    ],
+    "cortos": [
+      { "num": "plural" },
+      { "translation": "cortos" },
+      { "numopposite": "corto" },
+      { "genopposite": "cortas" },
+      { "gen": "mas" }
+    ],
+    "cortas": [
+      { "num": "plural" },
+      { "translation": "cortas" },
+      { "numopposite": "corta" },
+      { "genopposite": "cortos" },
+      { "gen": "fem" }
+    ],
+    "long": [
+      { "num": "sing" },
+      { "translation": "larga" },
+      { "numopposite": "largas" },
+      { "genopposite": "largo" },
+      { "gen": "fem" }
+    ],
+    "largo": [
+      { "num": "sing" },
+      { "translation": "largo" },
+      { "numopposite": "largos" },
+      { "genopposite": "larga" },
+      { "gen": "mas" }
+    ],
+    "largas": [
+      { "num": "plural" },
+      { "translation": "largas" },
+      { "numopposite": "long" },
+      { "genopposite": "largos" },
+      { "gen": "fem" }
+    ],
+    "largos": [
+      { "num": "plural" },
+      { "translation": "largos" },
+      { "numopposite": "largo" },
+      { "genopposite": "largas" },
+      { "gen": "mas" }
+    ],
+    "some": [
+      { "num": "sing" },
+      { "translation": "algo" },
+      { "numopposite": "some" },
+      { "gen": "" }
+    ],
+    "a lot of": [
+      { "num": "sing" },
+      { "translation": "mucho" },
+      { "numopposite": "muchos" },
+      { "genopposite": "mucha" },
+      { "gen": "mas" }
+    ],
+    "mucha": [
+      { "num": "sing" },
+      { "translation": "mucha" },
+      { "numopposite": "muchas" },
+      { "genopposite": "a lot of" },
+      { "gen": "fem" }
+    ],
+    "muchos": [
+      { "num": "sing" },
+      { "translation": "muchos" },
+      { "numopposite": "a lot of" },
+      { "genopposite": "muchas" },
+      { "gen": "fem" }
+    ],
+    "muchas": [
+      { "num": "sing" },
+      { "translation": "muchas" },
+      { "numopposite": "mucha" },
+      { "genopposite": "muchos" },
+      { "gen": "fem" }
+    ],
+    "a little": [
+      { "num": "sing" },
+      { "translation": "un poco" },
+      { "numopposite": "a little" },
+      { "genopposite": "una poca" },
+      { "gen": "mas" }
+    ],
+    "una poca": [
+      { "num": "sing" },
+      { "translation": "una poca" },
+      { "numopposite": "una poca" },
+      { "genopposite": "a little" },
+      { "gen": "fem" }
+    ],
+    "dead": [
+      { "num": "sing" },
+      { "translation": "muerto" },
+      { "numopposite": "dead" },
+      { "genopposite": "muerta" },
+      { "gen": "mas" }
+    ],
+    "muerta": [
+      { "num": "sing" },
+      { "translation": "muerta" },
+      { "numopposite": "muertas" },
+      { "genopposite": "dead" },
+      { "gen": "fem" }
+    ],
+    "muertas": [
+      { "num": "plural" },
+      { "translation": "muertas" },
+      { "numopposite": "muerta" },
+      { "genopposite": "muertos" },
+      { "gen": "fem" }
+    ],
+    "muertos": [
+      { "num": "plural" },
+      { "translation": "muertos" },
+      { "numopposite": "dead" },
+      { "genopposite": "muertas" },
+      { "gen": "mas" }
+    ],
+    "brave": [
+      { "num": "sing" },
+      { "translation": "valiente" },
+      { "numopposite": "brave" },
+      { "gen": "" }
+    ],
+    "glorious": [
+      { "num": "sing" },
+      { "translation": "glorioso" },
+      { "numopposite": "gloriosos" },
+      { "genopposite": "gloriosa" },
+      { "gen": "mas" }
+    ],
+    "gloriosa": [
+      { "num": "sing" },
+      { "translation": "gloriosa" },
+      { "numopposite": "gloriosas" },
+      { "genopposite": "glorious" },
+      { "gen": "fem" }
+    ],
+    "gloriosos": [
+      { "num": "sing" },
+      { "translation": "gloriosos" },
+      { "numopposite": "gloriosas" },
+      { "genopposite": "gloriosas" },
+      { "gen": "mas" }
+    ],
+    "gloriosas": [
+      { "num": "sing" },
+      { "translation": "gloriosas" },
+      { "numopposite": "gloriosa" },
+      { "genopposite": "gloriosos" },
+      { "gen": "fem" }
+    ],
+    "scared": [
+      { "num": "sing" },
+      { "translation": "miedoso" },
+      { "numopposite": "scared" },
+      { "gen": "" }
+    ],
+    "scary": [
+      { "num": "sing" },
+      { "translation": "escalofriante" },
+      { "numopposite": "scary" },
+      { "gen": "" }
+    ],
+    "grey": [
+      { "num": "sing" },
+      { "translation": "gris" },
+      { "numopposite": "grey" },
+      { "gen": "" }
+    ],
+    "neutral": [
+      { "num": "sing" },
+      { "translation": "neutro" },
+      { "numopposite": "neutral" },
+      { "gender": "" }
+    ],
+    "encouraged": [
+      { "num": "sing" },
+      { "translation": "motivado" },
+      { "numopposite": "motivados" },
+      { "genopposite": "motivada" },
+      { "gender": "mas" }
+    ],
+    "motivada": [
+      { "num": "sing" },
+      { "translation": "motivada" },
+      { "numopposite": "motivadas" },
+      { "genopposite": "encouraged" },
+      { "gender": "fem" }
+    ],
+    "motivadas": [
+      { "num": "plural" },
+      { "translation": "motivadas" },
+      { "numopposite": "motivada" },
+      { "genopposite": "motivados" },
+      { "gender": "fem" }
+    ],
+    "motivados": [
+      { "num": "plural" },
+      { "translation": "motivados" },
+      { "numopposite": "encouraged" },
+      { "genopposite": "motivadas" },
+      { "gender": "mas" }
+    ],
+    "confused": [
+      { "num": "sing" },
+      { "translation": "confuso" },
+      { "numopposite": "confusos" },
+      { "genopposite": "confusa" },
+      { "gender": "mas" }
+    ],
+    "confusa": [
+      { "num": "sing" },
+      { "translation": "confusa" },
+      { "numopposite": "confusas" },
+      { "genopposite": "confused" },
+      { "gender": "fem" }
+    ],
+    "confusas": [
+      { "num": "plural" },
+      { "translation": "confusas" },
+      { "numopposite": "confusa" },
+      { "genopposite": "confusos" },
+      { "gender": "fem" }
+    ],
+    "confusos": [
+      { "num": "plural" },
+      { "translation": "confusos" },
+      { "numopposite": "confused" },
+      { "genopposite": "confusas" },
+      { "gender": "mas" }
+    ],
+    "angry": [
+      { "num": "sing" },
+      { "translation": "furioso" },
+      { "numopposite": "furiosos" },
+      { "genopposite": "furiosa" },
+      { "gender": "mas" }
+    ],
+    "furiosa": [
+      { "num": "sing" },
+      { "translation": "furiosa" },
+      { "numopposite": "furiosas" },
+      { "genopposite": "angry" },
+      { "gender": "fem" }
+    ],
+    "furiosas": [
+      { "num": "plural" },
+      { "translation": "furiosas" },
+      { "numopposite": "furiosa" },
+      { "genopposite": "furiosos" },
+      { "gender": "fem" }
+    ],
+    "furiosos": [
+      { "num": "plural" },
+      { "translation": "furiosos" },
+      { "numopposite": "angry" },
+      { "genopposite": "furiosas" },
+      { "gender": "mas" }
+    ],
+    "terrified": [
+      { "num": "sing" },
+      { "translation": "aterrorizado" },
+      { "numopposite": "aterrorizados" },
+      { "genopposite": "aterrorizada" },
+      { "gender": "mas" }
+    ],
+    "aterrorizada": [
+      { "num": "sing" },
+      { "translation": "aterrorizada" },
+      { "numopposite": "aterrorizadas" },
+      { "genopposite": "terrified" },
+      { "gender": "fem" }
+    ],
+    "aterrorizadas": [
+      { "num": "plural" },
+      { "translation": "aterrorizadas" },
+      { "numopposite": "aterrorizada" },
+      { "genopposite": "aterrorizados" },
+      { "gender": "fem" }
+    ],
+    "aterrorizados": [
+      { "num": "plural" },
+      { "translation": "aterrorizados" },
+      { "numopposite": "terrified" },
+      { "genopposite": "aterrorizadas" },
+      { "gender": "mas" }
+    ],
+    "sleepy": [
+      { "num": "sing" },
+      { "translation": "somnoliento" },
+      { "numopposite": "somnolientos" },
+      { "genopposite": "somnolienta" },
+      { "gender": "mas" }
+    ],
+    "somnolienta": [
+      { "num": "sing" },
+      { "translation": "somnolienta" },
+      { "numopposite": "somnolientas" },
+      { "genopposite": "sleepy" },
+      { "gender": "fem" }
+    ],
+    "somnolientas": [
+      { "num": "plural" },
+      { "translation": "somnolientas" },
+      { "numopposite": "somnolienta" },
+      { "genopposite": "somnolientos" },
+      { "gender": "fem" }
+    ],
+    "somnolientos": [
+      { "num": "plural" },
+      { "translation": "somnolientos" },
+      { "numopposite": "sleepy" },
+      { "genopposite": "somnolientas" },
+      { "gender": "mas" }
+    ]
+  },
   "N": {
     "shield": [
       { "num": "sing" },

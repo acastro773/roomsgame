@@ -81,7 +81,7 @@ public class ActiveCharacter extends Character {
 
 	public ActiveCharacter(String name, String description,
 			Map map, Room room, Tuple<Integer, Integer> position, int damage,
-			int defense, int life, int luck, int weight, int length, String mood,
+			int defense, int life, int luck, int weight, int length, Mood mood,
 			ArrayList<WereableWeapon> weaponsEquipped,
 			ArrayList<WereableArmor> armorsEquipped, int inventorySpace, int carryWeight,
 			int actualCarryWeight, ArrayList<Item> inventory, int actualInventorySpace, int evasion,
@@ -487,7 +487,7 @@ public class ActiveCharacter extends Character {
 	
 	public void _printMood(JsonObject rootObjWords, WSwingConsoleInterface j, int initPos_i, int initPos_j){
 		String translation = JSONParsing.getTranslationWord("mood", "N", rootObjWords);
-		String mood = translation + ": " + this.getMood();
+		String mood = translation + ": " + JSONParsing.getTranslationWord(this.getMood().name().toLowerCase(), "ADJ", rootObjWords);
 		j.print(initPos_j, initPos_i, mood);
 	}
 	
@@ -500,6 +500,8 @@ public class ActiveCharacter extends Character {
 		_printName(j, initPos_j, initPos_i);
 		Main.countElements++;
 		_printLife(rootObjWords, j, initPos_j + 1, initPos_i);
+		Main.countElements++;
+		_printMood(rootObjWords, j, initPos_j + 2, initPos_i);
 	}
 	
 	public void _printGroundObjects(WSwingConsoleInterface j, JsonObject rootObjWords){

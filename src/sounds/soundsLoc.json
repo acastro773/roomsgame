@@ -1,0 +1,26 @@
+{
+  "HERO": {
+    "STEP": "./src/sounds/goblinappear.wav",
+    "ATTACK": "",
+    "DEAD": "./src/sounds/death.wav",
+    "COLLISION": "./src/sounds/collision.wav",
+    "HURT": "./src/sounds/herohit.wav"
+  },
+  "GOBLIN": {
+    "IDLE": "./src/sounds/goblinappear.wav",
+    "ATTACK": "",
+    "DEAD": ""
+  },
+  "RAT": {
+    "IDLE": "./src/sounds/ratappear.wav",
+    "ATTACK": "",
+    "DEAD": ""
+  },
+  "DRAGON": {
+    "IDLE": "./src/sounds/dragonappear.wav",
+    "ATTACK": "",
+    "DEAD": ""
+  },
+  "WATERDROP": "./src/sounds/waterdrop.wav",
+  "BEEP": "./src/sounds/beep.wav"
+}

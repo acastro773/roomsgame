@@ -18,10 +18,11 @@ import characters.active.ActiveCharacter;
 import map.Map;
 import net.slashie.util.Util;
 
-public class SoundReproduction {
+public class SoundReproduction implements Runnable {
 	
 	private File audiofile;
-	static SoundReproduction walkSound;
+	private Thread t;
+	static SoundReproduction sound;
 	private String typeSound;
 	static ActiveCharacter user = null;
 	static ActiveCharacter origin = null;
@@ -31,11 +32,13 @@ public class SoundReproduction {
 	int BUFFER_SIZE = 4096;
 	
 	public SoundReproduction(String pathFile) {
+		pathFile = pathFile.replace("\\", "/");
 		this.audiofile = new File(pathFile);
 		String fileName = this.audiofile.getName();
 		this.typeSound = fileName.substring(0, fileName.lastIndexOf("."));
 	}
 	public SoundReproduction(String pathFile, ActiveCharacter origin, ActiveCharacter player) {
+		pathFile = pathFile.replace("\\", "/");
 		this.audiofile = new File(pathFile);
 		String fileName = this.audiofile.getName();
 		this.typeSound = fileName.substring(0, fileName.lastIndexOf("."));
@@ -43,47 +46,8 @@ public class SoundReproduction {
 		this.player = player;
 	}
 	public void reproduce() {
-		AudioInputStream audioStream = null;
-		try {
-			audioStream = AudioSystem.getAudioInputStream(this.audiofile);
-		} catch (UnsupportedAudioFileException | IOException e) {
-			e.printStackTrace();
-		}
-		AudioFormat format = audioStream.getFormat();
-		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
-		SourceDataLine audioLine = null;
-		try {
-			audioLine = (SourceDataLine) AudioSystem.getLine(info);
-			audioLine.open(format);
-		} catch (LineUnavailableException e) {
-			e.printStackTrace();
-		}
-		FloatControl pan = null;
-		FloatControl volume = null;
-		if (audioLine.isControlSupported(FloatControl.Type.PAN))
-			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
-		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
-			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
-		if ((typeSound.equals("ratappear")) || (typeSound.equals("goblinappear")) || (typeSound.equals("dragonappear"))) {
-			RelativeDistance(audioLine, pan, volume);
-		} else if (typeSound.equals("waterdrop")) {
-			WaterdropRand(audioLine, pan, volume);
-		}
-		audioLine.start();
-		 
-		byte[] bytesBuffer = new byte[BUFFER_SIZE];
-		int bytesRead = -1;
-		 
-		try {
-			while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
-			    audioLine.write(bytesBuffer, 0, bytesRead);
-			}
-			audioLine.drain();
-		    audioLine.close();
-			audioStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		t = new Thread(this, "thread");
+		t.start();
 	}
 	
 	static void RelativeDistance(SourceDataLine audioLine, FloatControl pan, FloatControl volume) {
@@ -135,5 +99,53 @@ public class SoundReproduction {
 		volume.setValue(gain);
 		System.out.println("Panning: " + pan.getValue());
 		System.out.println("Volume (dB): " + volume.getValue());
+	}
+	@Override
+	public void run() {
+		AudioInputStream audioStream = null;
+		try {
+			audioStream = AudioSystem.getAudioInputStream(this.audiofile);
+		} catch (UnsupportedAudioFileException | IOException e) {
+			e.printStackTrace();
+		}
+		AudioFormat format = audioStream.getFormat();
+		DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+		SourceDataLine audioLine = null;
+		try {
+			audioLine = (SourceDataLine) AudioSystem.getLine(info);
+			audioLine.open(format);
+		} catch (LineUnavailableException e) {
+			e.printStackTrace();
+		}
+		FloatControl pan = null;
+		FloatControl volume = null;
+		if (audioLine.isControlSupported(FloatControl.Type.PAN))
+			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
+		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
+			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
+		if ((typeSound.equals("ratappear")) || (typeSound.equals("goblinappear")) || (typeSound.equals("dragonappear"))) {
+			RelativeDistance(audioLine, pan, volume);
+		} else if (typeSound.equals("waterdrop")) {
+			WaterdropRand(audioLine, pan, volume);
+		}
+		audioLine.start();
+		 
+		byte[] bytesBuffer = new byte[BUFFER_SIZE];
+		int bytesRead = -1;
+		 
+		try {
+			while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
+			    audioLine.write(bytesBuffer, 0, bytesRead);
+			}
+			audioLine.drain();
+		    audioLine.close();
+			audioStream.close();
+			Thread.sleep(50);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

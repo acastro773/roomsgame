@@ -6,12 +6,13 @@ import grammars.grammars.PrintableObject;
 import items.Item;
 import map.Map;
 import map.Room;
+import net.slashie.util.Util;
 import util.Tuple;
 
 public abstract class Character extends PrintableObject {
 	private String name;
 	private String description;
-	private String mood;
+	private Mood mood;
 	private int weight; // Character's weight
 	private int carryWeight; // Max weight we can carry
 	private int actualCarryWeight;
@@ -20,10 +21,18 @@ public abstract class Character extends PrintableObject {
 	private Room room;
 	private String symbolRepresentation;
 	private ArrayList<Item> inventory;
+	public enum Mood {
+		NEUTRAL,
+		ENCOURAGED,
+		CONFUSED,
+		ANGRY,
+		TERRIFIED,
+		SLEEPY
+	}
 	
 	public Character(String name, String description, Map map,
 			Room room, Tuple<Integer, Integer> position, int weight, int length, int carryWeight,
-			int actualCarryWeight, ArrayList<Item> inventory, String symbolRepresentation, String mood, ArrayList<String> adjectives) {
+			int actualCarryWeight, ArrayList<Item> inventory, String symbolRepresentation, Mood mood, ArrayList<String> adjectives) {
 		super(name, description, adjectives, position);
 		this.name = name;
 		this.description = description;
@@ -61,11 +70,11 @@ public abstract class Character extends PrintableObject {
 		this.room = room;
 	}
 	
-	public String getMood() {
+	public Mood getMood() {
 		return mood;
 	}
 	
-	public void setMood(String mood) {
+	public void setMood(Mood mood) {
 		this.mood = mood;
 	}
 
@@ -127,6 +136,38 @@ public abstract class Character extends PrintableObject {
 
 	public void setSymbolRepresentation(String symbolRepresentation) {
 		this.symbolRepresentation = symbolRepresentation;
+	}
+	
+	public static Mood getRandomMood() {
+		Mood mood;
+		int value = Util.rand(0, 10);
+		switch(value) {
+		case 6: {
+			mood = Mood.ENCOURAGED;
+			break;
+		}
+		case 7: {
+			mood = Mood.CONFUSED;
+			break;
+		}
+		case 8: {
+			mood = Mood.ANGRY;
+			break;
+		}
+		case 9: {
+			mood = Mood.TERRIFIED;
+			break;
+		}
+		case 10: {
+			mood = Mood.SLEEPY;
+			break;
+		}
+		default: {
+			mood = Mood.NEUTRAL;
+			break;
+		}
+		}
+		return mood;
 	}
 
 }
