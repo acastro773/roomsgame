@@ -287,7 +287,7 @@ public class Main {
 			adjectives.add("brave");
 			adjectives.add("glorious");
 			user = new ActiveCharacter("hero", "", null, null, null, 
-					40, 0, 20, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
+					40, 0, 20, 100, 100, 100, Mood.CONFUSED, new ArrayList<WereableWeapon>(),
 					new ArrayList<WereableArmor>(), 100, 100, 0,
 					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 1);
 			user.setNextLevelExperience();

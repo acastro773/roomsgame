@@ -9,6 +9,7 @@ import com.google.gson.JsonSyntaxException;
 
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Pair;
+import net.slashie.util.Util;
 import map.Map;
 import map.Room;
 import characters.Character;
@@ -182,15 +183,57 @@ public class ActiveCharacter extends Character {
 		return walkablePositions;
 	}
 
+	public Tuple<Integer,Integer> getDamageLuckMood(ActiveCharacter character, int damage) {
+		int luck = character.getLuck();
+		Mood actual = this.getMood();
+		if (actual.name().equals(Mood.ANGRY.name())) {
+			damage += (int)(Math.ceil(damage*0.3));
+			luck -= (int)(Math.ceil(luck*0.25));
+		} else if (actual.name().equals(Mood.TERRIFIED.name())) {
+			damage -= (int)(Math.ceil(damage*0.25));
+			luck -= (int)(Math.ceil(luck*0.3));
+		} else if (actual.name().equals(Mood.CONFUSED.name())) {
+			damage += (int)(Math.ceil(damage*0.2));
+			luck -= (int)(Math.ceil(luck*0.2));
+		} else if (actual.name().equals(Mood.SLEEPY.name())) {
+			damage -= (int)(Math.ceil(damage*0.1));
+			luck -= (int)(Math.ceil(luck*0.35));
+		} else if (actual.name().equals(Mood.ENCOURAGED.name())) {
+			damage += (int)(Math.ceil(damage*0.2));
+			luck += (int)(Math.ceil(luck*0.1));
+		}	
+		if (luck > 100)
+			luck = 100;
+		else if (luck < 0)
+			luck = 5;
+		return new Tuple<Integer,Integer> (luck, damage);
+	}
+	
+	public int getDefenseMood(ActiveCharacter character) {
+		int defense = character.getDefense();
+		Mood actual = this.getMood();
+		if (actual.name().equals(Mood.ANGRY.name())) {
+			defense -= (int)(Math.ceil(defense*0.1));
+		} else if (actual.name().equals(Mood.TERRIFIED.name())) {
+			defense -= (int)(Math.ceil(defense*0.25));
+		} else if (actual.name().equals(Mood.SLEEPY.name())) {
+			defense -= (int)(Math.ceil(defense*0.2));
+		} else if (actual.name().equals(Mood.ENCOURAGED.name())) {
+			defense += (int)(Math.ceil(defense*0.1));
+		}	
+		return defense;
+	}
+	
 	public int getAttackFromWeapons(ActiveCharacter character){
 		int damage = 0;
 		for (WereableWeapon w: character.getWeaponsEquipped()){
 			if (w.getDurability() > 0){
+				Tuple<Integer,Integer> statsMood = getDamageLuckMood(character, w.getAttack());
 				int randNumber = RandUtil.RandomNumber(0, 100);
-				if (character.getLuck() <= randNumber){
+				if (statsMood.x <= randNumber){
 					w.setDurability(w.getDurability() - w.getErosion());
 				}
-				damage += w.getAttack() + this.getLevel();
+				damage += statsMood.y + this.getLevel();
 			}
 		}
 		return damage;
@@ -228,7 +271,7 @@ public class ActiveCharacter extends Character {
 		int randNumber = RandUtil.RandomNumber(0, 100);
 		if (attacker.getLuck() >= randNumber && defender.evasion <= randNumber){
 			int damage = this.getAttackFromWeapons(attacker) - this.getDefenseFromArmor(defender)
-					- this.getDefenseFromShields(defender);
+					- this.getDefenseFromShields(defender) - this.getDefenseMood(defender);
 			if (damage > 0){
 				return damage;
 			}
@@ -254,21 +297,38 @@ public class ActiveCharacter extends Character {
 		}
 	}
 
-	private boolean attack(ActiveCharacter defender){
+	//duple of 2 booleans, the first one returns true if the user has inflict damage on the foe
+	//and the second value returns true if the user has damaged itself
+	private Tuple<Boolean, Boolean> attack(ActiveCharacter defender){
+		if (this.getMood().name().equals(Mood.CONFUSED.name())) {
+			int randLuck = Util.rand(0, 100);
+			int luck = this.getLuck();
+			luck -= (int)(Math.ceil(luck*0.2));
+			System.out.println("Self attack? luck: " + luck + "rand: " + randLuck);
+			if (luck <= randLuck) {
+				int selfDamage = (int)(Math.ceil(this.getFullAttackNumbers(this, this)*0.5));
+				int attackerLife = this.getLife() - selfDamage;
+				attackerLife = attackerLife < 0 ? 0 : attackerLife;
+				this.setLife(attackerLife);
+				this.setCharacterDead(this);
+				System.out.println("selfDamage:" + selfDamage);
+				return new Tuple<Boolean, Boolean> (false, true);
+			}
+		}
 		int damageDone = this.getFullAttackNumbers(this, defender);
+		System.out.println("Attack Done: " + damageDone);
 		if (Main.debug){
 			System.out.println("Attack Done: " + damageDone);
 		}
-		
-		if (damageDone <= 0) return false;
+		if (damageDone <= 0) return new Tuple<Boolean, Boolean> (false, false);
 		int defenderLife = defender.getLife() - damageDone;
 		defenderLife = defenderLife < 0 ? 0 : defenderLife;
 		defender.setLife(defenderLife);
 		this.setCharacterDead(defender);
-		return true;
+		return new Tuple<Boolean, Boolean> (true, false);
 	}
 	
-	public Pair<Boolean, ActiveCharacter> weaponAttack() {
+	public Pair<Tuple<Boolean, Boolean>, ActiveCharacter> weaponAttack() {
 		Map map = this.getMap();
 		ActiveCharacter monster = map.getMonstersPosition(this).get(0);
 		for (int i = 0; i < map.getMonstersPosition(this).size(); i++) {
@@ -278,7 +338,7 @@ public class ActiveCharacter extends Character {
 				break;
 			}
 		}
-		Pair<Boolean, ActiveCharacter> returnValue = new Pair<Boolean, ActiveCharacter>(this.attack(monster), monster);
+		Pair<Tuple<Boolean, Boolean>, ActiveCharacter> returnValue = new Pair<Tuple<Boolean,Boolean>, ActiveCharacter>(this.attack(monster), monster);
 		return returnValue;
 	}
 	
@@ -286,7 +346,7 @@ public class ActiveCharacter extends Character {
 		if (Main.debug){
 			System.out.println("Spell attack Done: " + spell.getDamage());
 		}
-		int defenderLife = defender.getLife() - spell.getDamage();
+		int defenderLife = defender.getLife() - this.getDamageLuckMood(this, spell.getDamage()).y;
 		defenderLife = defenderLife < 0 ? 0 : defenderLife;
 		defender.setLife(defenderLife);
 		this.setCharacterDead(defender);
@@ -720,7 +780,7 @@ public class ActiveCharacter extends Character {
 				} else {
 					hasAttackedHeroe = true;
 				}
-				Pair<Boolean, String> returnValue = new Pair<Boolean, String>(this.attack(user), message);
+				Pair<Boolean, String> returnValue = new Pair<Boolean, String>(this.attack(user).x, message);
 				return returnValue;
 			} else {
 				if (this.tirenessTotal <= 0 || this.tirenessCurrent != this.tirenessTotal) {

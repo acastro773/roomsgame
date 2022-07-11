@@ -78,7 +78,7 @@ public class ActionHandler {
 			main.Main.generatePrintMessage(names, grammarGeneralDescription, "NOTHAVE", "NOTHAVE", usePronoun, false);
 		} else {
 			if (user.getMap().getMonstersPosition(user).size() > 0) {
-				Pair<Boolean, ActiveCharacter> monster = user.weaponAttack();
+				Pair<Tuple<Boolean, Boolean>, ActiveCharacter> monster = user.weaponAttack();
 				main.Main.printEverything(true);
 				ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
 				names.add(user);
@@ -86,7 +86,13 @@ public class ActionHandler {
 				names.add(user.getWeaponsEquipped().get(0));
 				GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
 				String message = main.Main._getMessage(grammarIndividual, names, "ATTACK", "ATTACK", usePronoun, false);
-				if (monster.getA()) {
+				//obtains tuple of (didDamage, selfDamage), check values and form the phrase
+				/*
+				 * 
+				 * CHANGE CODE HERE
+				 * 
+				 */
+				if (monster.getA().x) {
 					if (monster.getB().getLife() <= 0) {
 						user.addNewExperience(monster.getB().getExperienceGiven());
 						monster.getB().setExperienceGiven(0);
