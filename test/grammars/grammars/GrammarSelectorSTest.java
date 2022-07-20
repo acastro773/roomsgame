@@ -77,9 +77,9 @@ public class GrammarSelectorSTest {
 			if (!usePronoun) {
 				return selector.getRandomSentence();
 			} else if (useAnd){
-				return selector.getRandomSentence(true, true);
+				return selector.getRandomSentence(true, true, false);
 			} else {
-				return selector.getRandomSentence(true, false);
+				return selector.getRandomSentence(true, false, false);
 			}
 		}
 		

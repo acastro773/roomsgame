@@ -1,6 +1,6 @@
 {
   "HERO": {
-    "STEP": "./src/sounds/goblinappear.wav",
+    "STEP": "./src/sounds/steps.wav",
     "ATTACK": "",
     "DEAD": "./src/sounds/death.wav",
     "COLLISION": "./src/sounds/collision.wav",

@@ -187,7 +187,7 @@ public class ActiveCharacter extends Character {
 		int luck = character.getLuck();
 		Mood actual = this.getMood();
 		if (actual.name().equals(Mood.ANGRY.name())) {
-			damage += (int)(Math.ceil(damage*0.3));
+			damage += (int)(Math.ceil(damage*0.2));
 			luck -= (int)(Math.ceil(luck*0.25));
 		} else if (actual.name().equals(Mood.TERRIFIED.name())) {
 			damage -= (int)(Math.ceil(damage*0.25));
@@ -199,7 +199,7 @@ public class ActiveCharacter extends Character {
 			damage -= (int)(Math.ceil(damage*0.1));
 			luck -= (int)(Math.ceil(luck*0.35));
 		} else if (actual.name().equals(Mood.ENCOURAGED.name())) {
-			damage += (int)(Math.ceil(damage*0.2));
+			damage += (int)(Math.ceil(damage*0.1));
 			luck += (int)(Math.ceil(luck*0.1));
 		}	
 		if (luck > 100)
@@ -269,9 +269,14 @@ public class ActiveCharacter extends Character {
 
 	public int getFullAttackNumbers(ActiveCharacter attacker, ActiveCharacter defender){
 		int randNumber = RandUtil.RandomNumber(0, 100);
+		int damage = 0;
 		if (attacker.getLuck() >= randNumber && defender.evasion <= randNumber){
-			int damage = this.getAttackFromWeapons(attacker) - this.getDefenseFromArmor(defender)
-					- this.getDefenseFromShields(defender) - this.getDefenseMood(defender);
+			if (attacker.equals(defender)) {
+				damage = this.getAttackFromWeapons(attacker) - this.getDefenseMood(defender);
+			} else {
+				damage = this.getAttackFromWeapons(attacker) - this.getDefenseFromArmor(defender)
+						- this.getDefenseFromShields(defender) - this.getDefenseMood(defender);
+			}
 			if (damage > 0){
 				return damage;
 			}
@@ -303,7 +308,7 @@ public class ActiveCharacter extends Character {
 		if (this.getMood().name().equals(Mood.CONFUSED.name())) {
 			int randLuck = Util.rand(0, 100);
 			int luck = this.getLuck();
-			luck -= (int)(Math.ceil(luck*0.2));
+			luck -= (int)(Math.ceil(luck*1));
 			System.out.println("Self attack? luck: " + luck + "rand: " + randLuck);
 			if (luck <= randLuck) {
 				int selfDamage = (int)(Math.ceil(this.getFullAttackNumbers(this, this)*0.5));

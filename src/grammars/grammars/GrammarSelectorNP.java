@@ -20,6 +20,7 @@ public class GrammarSelectorNP extends GrammarSelector {
 	private ArrayList<Pair<String, JsonArray>> allAdjectives;
 	private ArrayList<Pair<String, JsonArray>> names;
 	private ArrayList<Pair<String, JsonArray>> determinants;
+	private ArrayList<Pair<String, JsonArray>> possesives;
 
 	public GrammarSelectorNP(GrammarIndividual grammar, JsonObject wordsGrammar, PrintableObject name, String type) {
 		super(grammar, wordsGrammar);
@@ -31,11 +32,19 @@ public class GrammarSelectorNP extends GrammarSelector {
 		this.adjectives = WordsGrammar.getAdjectives(wordsGrammar, name.getAdjectives());
 		this.names = WordsGrammar.getName(wordsGrammar, name.getName());
 		this.determinants = WordsGrammar.getDeterminant(wordsGrammar);
+		this.possesives = WordsGrammar.getPossesives(wordsGrammar);
 	}
 	
 	private Pair<String, JsonArray> getRandomDeterminant() {
 		if (this.getDeterminants().size() > 0) {
 			return this.getDeterminants().get(RandUtil.RandomNumber(0, this.getDeterminants().size()));
+		}
+		return null;
+	}
+	
+	private Pair<String, JsonArray> getRandomPossesive() {
+		if (this.getPossesives().size() > 0) {
+			return this.getPossesives().get(RandUtil.RandomNumber(0, this.getPossesives().size()));
 		}
 		return null;
 	}
@@ -54,16 +63,32 @@ public class GrammarSelectorNP extends GrammarSelector {
 		return null;
 	}
 	
+	public Pair<String, JsonArray> getCurrentPreposition(int n) {
+		if (this.getPrepositions().size() > 0) {
+			return this.getPrepositions().get(n);
+		}
+		return null;
+	}
+	
 	protected ArrayList<Pair<String, JsonArray>> fillWords() {
 		ArrayList<Pair<String, JsonArray>> resultArray = new ArrayList<Pair<String, JsonArray>>();
 		for (String value : this.getGrammar().getTypeWordGrammar()) {
 			if (Main.debug) {
 				System.out.println("Value: " + value);
 			}
+			System.out.println("VALOR ACTUAL GRAMMAR" + value);
 			switch (value) {
 				case "DET" : resultArray.add(getRandomDeterminant());
 					break;
+				case "POS" : resultArray.add(getRandomPossesive());
+					break;
 				case "PREP" : resultArray.add(getRandomPreposition());
+					/*System.out.println("**************");
+					System.out.println("current_prep: " + GrammarSelectorS.getCurrentPrep());
+					GrammarSelectorS.setCurrentPrep(GrammarSelectorS.getCurrentPrep()+1);
+					if (GrammarSelectorS.getCurrentPrep() >= this.getPrepositions().size())
+						GrammarSelectorS.setCurrentPrep(0);
+					System.out.println("current_prep: " + GrammarSelectorS.getCurrentPrep());*/
 					break;
 				case "ADJ" : resultArray.add(getRandomAdjective());
 					break;
@@ -84,6 +109,9 @@ public class GrammarSelectorNP extends GrammarSelector {
 		switch (typeChangeToValue) {
 			case "DET" :
 				selectedTypeWord = this.getDeterminants();
+				break;
+			case "POS" :
+				selectedTypeWord = this.getPossesives();
 				break;
 			case "N" :
 				selectedTypeWord = this.getNames();
@@ -175,7 +203,7 @@ public class GrammarSelectorNP extends GrammarSelector {
 	public void setName(PrintableObject name) {
 		this.name = name;
 	}
-
+	
 	public ArrayList<Pair<String, JsonArray>> getAdjectives() {
 		return adjectives;
 	}
@@ -198,6 +226,14 @@ public class GrammarSelectorNP extends GrammarSelector {
 
 	public void setDeterminants(ArrayList<Pair<String, JsonArray>> determinants) {
 		this.determinants = determinants;
+	}
+	
+	public ArrayList<Pair<String, JsonArray>> getPossesives() {
+		return possesives;
+	}
+
+	public void setPossesives(ArrayList<Pair<String, JsonArray>> possesives) {
+		this.possesives = possesives;
 	}
 
 	public String getType() {

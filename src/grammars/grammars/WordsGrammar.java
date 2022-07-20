@@ -103,5 +103,17 @@ public class WordsGrammar {
 		
 		return itemsReturn;
 	}
+	
+	public static ArrayList<Pair<String, JsonArray>> getPossesives(JsonObject object) {
+		ArrayList<Pair<String, JsonArray>> itemsReturn = new ArrayList<Pair<String, JsonArray>>();
+		JsonObject possesivesJSON = JSONParsing.getElement((JsonObject)object, "POS").getAsJsonObject();
+		for (int i = 0; i < possesivesJSON.entrySet().size(); i++) {
+			String name = JSONParsing.getSpecificKeyFromSet(i, possesivesJSON);
+			JsonArray value = JSONParsing.getSpecificValueFromSet(i, possesivesJSON).getAsJsonArray();
+			itemsReturn.add(new Pair<String, JsonArray>(name, value));
+		}
+		
+		return itemsReturn;
+	}
 
 }

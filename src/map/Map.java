@@ -689,13 +689,13 @@ public class Map {
 			if (user.getRoom().equals(room)){
 				for (ActiveCharacter enemy: room.getMonsters()){
 					if (RandUtil.containsTuple(enemy.getPosition(), user.getVisiblePositions())){
-						int possibleCry = Util.rand(0, 10);
+						Main.possibleCry--;
 						room.printMonsters(j, user.getVisiblePositions());
-						if (possibleCry > 8 && enemy.getLife() > 0 && Main.isSoundActivated) {
+						if (Main.possibleCry <= 0 && enemy.getLife() > 0 && Main.isSoundActivated) {
 							String loc = JSONParsing.getSoundSource(sndObj, enemy, "IDLE");
-							System.out.println(loc);
 							appearSound = new SoundReproduction(loc, enemy, user);
 							appearSound.reproduce();
+							Main.possibleCry = Util.rand(8, 20);
 						}						
 					}
 				}

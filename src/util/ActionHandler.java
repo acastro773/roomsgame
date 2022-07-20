@@ -9,6 +9,7 @@ import characters.active.ActiveCharacter;
 import grammars.grammars.GrammarIndividual;
 import grammars.grammars.GrammarsGeneral;
 import grammars.grammars.PrintableObject;
+import grammars.grammars.WordsGrammar;
 import grammars.parsing.JSONParsing;
 import items.Item;
 import net.slashie.util.Pair;
@@ -19,6 +20,7 @@ public class ActionHandler {
 	private GrammarsGeneral grammarUseItem;
 	private GrammarsGeneral grammarPickItem;
 	private GrammarsGeneral grammarMissDescription;
+	private GrammarsGeneral grammarSelfharmDescription;
 	private GrammarsGeneral grammarAdjectiveDescription;
 	private GrammarsGeneral grammarGeneralDescription;
 	private GrammarsGeneral grammarAttack;
@@ -43,6 +45,7 @@ public class ActionHandler {
 		grammarDescribeCharacterWears = new GrammarsGeneral(JSONParsing.getElement(rootObj, "DESCCHAWEARS").getAsJsonObject());
 		grammarAdjectiveDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "DESCRIPTIONADJECTIVE").getAsJsonObject());
 		grammarMissDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "ATTACKMISS").getAsJsonObject());
+		grammarSelfharmDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "SELFHARM").getAsJsonObject());
 		grammarGeneralDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "GENERAL").getAsJsonObject());
 		this.keysMap = keysMap;
 		this.rootObjWords = rootObjWords;
@@ -59,7 +62,7 @@ public class ActionHandler {
 				main.Main.useAndWithItem(item);
 			} else {
 				main.Main.hasPickedItem = true;
-				main.Main.generatePrintMessage(names, grammarPickItem, "PICK", "PICK", usePronoun, false);
+				main.Main.generatePrintMessage(names, grammarPickItem, "PICK", "PICK", usePronoun, false, false);
 			}
 			
 			main.Main.printEverything(true);
@@ -75,7 +78,7 @@ public class ActionHandler {
 			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
 			names.add(user);
 			names.add(weapons);
-			main.Main.generatePrintMessage(names, grammarGeneralDescription, "NOTHAVE", "NOTHAVE", usePronoun, false);
+			main.Main.generatePrintMessage(names, grammarGeneralDescription, "NOTHAVE", "NOTHAVE", usePronoun, false, false);
 		} else {
 			if (user.getMap().getMonstersPosition(user).size() > 0) {
 				Pair<Tuple<Boolean, Boolean>, ActiveCharacter> monster = user.weaponAttack();
@@ -85,7 +88,7 @@ public class ActionHandler {
 				names.add(monster.getB());
 				names.add(user.getWeaponsEquipped().get(0));
 				GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
-				String message = main.Main._getMessage(grammarIndividual, names, "ATTACK", "ATTACK", usePronoun, false);
+				String message = main.Main._getMessage(grammarIndividual, names, "ATTACK", "ATTACK", usePronoun, false, false);
 				//obtains tuple of (didDamage, selfDamage), check values and form the phrase
 				/*
 				 * 
@@ -108,22 +111,40 @@ public class ActionHandler {
 						main.Main.printMessage(message);
 					}
 				} else {
-					GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
-					ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
-					ArrayList<String> preposition = new ArrayList<String>();
-					preposition.add("but");
-					user.setPrepositions(preposition);
-					namesMiss.add(user);
-					String messageAgain = "";
-					String messageMiss = ", " + main.Main._getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false);
-					if (monster.getB().isHasBeenAttackedByHeroe() && RandUtil.RandomNumber(0, 3) == 1) {
-						messageAgain += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
+					//user too confused
+					if (monster.getA().y) {
+						GrammarIndividual grammarIndividualSh = grammarSelfharmDescription.getRandomGrammar();
+						ArrayList<PrintableObject> namesSh = new ArrayList<PrintableObject>();
+						ArrayList<String> prepositionUser = new ArrayList<String>();
+						ArrayList<String> prepositionConf = new ArrayList<String>();
+						PrintableObject confusion = new PrintableObject("confusion", "", null, null);
+						prepositionUser.add("but");
+						prepositionConf.add("in");
+						user.setPrepositions(prepositionUser);
+						confusion.setPrepositions(prepositionConf);
+						namesSh.add(user);
+						namesSh.add(user);
+						namesSh.add(confusion);
+						String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
+						main.Main.printMessage(message + messageMiss);
 					} else {
-						monster.getB().setHasBeenAttackedByHeroe(true);
+						GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
+						ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
+						ArrayList<String> preposition = new ArrayList<String>();
+						preposition.add("but");
+						user.setPrepositions(preposition);
+						namesMiss.add(user);
+						String messageAgain = "";
+						String messageMiss = ", " + main.Main._getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
+						if (monster.getB().isHasBeenAttackedByHeroe() && RandUtil.RandomNumber(0, 3) == 1) {
+							messageAgain += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
+						} else {
+							monster.getB().setHasBeenAttackedByHeroe(true);
+						}
+						String[] words = messageMiss.split("\\s+");
+						messageMiss = messageMiss.replaceFirst(words[1] + " ", "");
+						main.Main.printMessage(message + messageAgain + messageMiss);
 					}
-					String[] words = messageMiss.split("\\s+");
-					messageMiss = messageMiss.replaceFirst(words[1] + " ", "");
-					main.Main.printMessage(message + messageAgain + messageMiss);
 				}
 	    	}
 		}
@@ -146,11 +167,11 @@ public class ActionHandler {
 				if (main.Main.hasEquipedItem) {
 					main.Main.useAndWithItem(item);
 				} else if (result) {
-					main.Main.generatePrintMessage(names, grammarUseItem, "EQUIP", "EQUIP", usePronoun, false);
+					main.Main.generatePrintMessage(names, grammarUseItem, "EQUIP", "EQUIP", usePronoun, false, false);
 					main.Main.hasEquipedItem = true;
 				}
 			} else {
-				main.Main.generatePrintMessage(names, grammarUseItem, "USE", "USE", usePronoun, false);
+				main.Main.generatePrintMessage(names, grammarUseItem, "USE", "USE", usePronoun, false, false);
 			}
 		}
 		main.Main.hasChanged = false;
@@ -167,7 +188,7 @@ public class ActionHandler {
 				if (main.Main.hasThrownItem) {
 					main.Main.useAndWithItem(item);
 				} else {
-					main.Main.generatePrintMessage(names, grammarPickItem, "THROW", "THROW", usePronoun, false);
+					main.Main.generatePrintMessage(names, grammarPickItem, "THROW", "THROW", usePronoun, false, false);
 					main.Main.hasThrownItem = true;
 				}
 				main.Main.printEverything(true);
@@ -183,7 +204,7 @@ public class ActionHandler {
 			names.add(user);
 			names.add(user.getSpells().get(itemNumber));
 			names.add(monsterAffected);
-			main.Main.generatePrintMessage(names, grammarAttack, "SPELLS", "SPELLS", usePronoun, false);
+			main.Main.generatePrintMessage(names, grammarAttack, "SPELLS", "SPELLS", usePronoun, false, false);
 			if (monsterAffected.isDead()) {
 				user.addNewExperience(monsterAffected.getExperienceGiven());
 				monsterAffected.setExperienceGiven(0);

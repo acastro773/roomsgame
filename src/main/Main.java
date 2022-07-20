@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Font;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -139,6 +140,7 @@ public class Main {
 	static SoundReproduction collisionSound;
 	static SoundReproduction waterdropSound;
 	static int countAction = 0;
+	public static int possibleCry = 0;
 	
 	public static boolean isInputType(Integer[] type, int key) {
 		return Arrays.asList(type).contains(key);
@@ -306,6 +308,10 @@ public class Main {
 			FireRing fireRing = new FireRing();
 			user.addSpell(fireRing);
 		}
+		walkSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "STEP"));
+		collisionSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "COLLISION"));
+		deathSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "DEAD"));
+		heroHitSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "HURT"));
 		newMatch = false;
 		_initializeMap();
 		_setKeyMap();
@@ -325,7 +331,8 @@ public class Main {
 		j.refresh();
 	}
 	
-	public static String _getMessage(GrammarIndividual grammarIndividual, ArrayList<PrintableObject> names, String type, String verbType, boolean usePronoun, boolean useAnd) {
+	public static String _getMessage(GrammarIndividual grammarIndividual, ArrayList<PrintableObject> names, String type, String verbType, boolean usePronoun
+			, boolean useAnd, boolean isConfused) {
 		GrammarSelectorS selector = null;
 		try {
 			selector = new GrammarSelectorS(grammarIndividual, rootObjWords, names, type, verbType);
@@ -334,22 +341,16 @@ public class Main {
 			e.printStackTrace();
 		}
 		if (selector != null) {
-			if (!usePronoun) {
-				return selector.getRandomSentence();
-			} else if (useAnd){
-				return selector.getRandomSentence(true, true);
-			} else {
-				return selector.getRandomSentence(true, false);
-			}
+			return selector.getRandomSentence(usePronoun, useAnd, isConfused);
 		}
 		
 		return "";
 	}
 	
 	public static void generatePrintMessage(ArrayList<PrintableObject> names, GrammarsGeneral grammar, String type, String verbType, 
-			boolean usePronoun, boolean useAnd) {
+			boolean usePronoun, boolean useAnd, boolean isConfused) {
 		GrammarIndividual grammarIndividual = grammar.getRandomGrammar();
-		printMessage(_getMessage(grammarIndividual, names, type, verbType, usePronoun, useAnd));
+		printMessage(_getMessage(grammarIndividual, names, type, verbType, usePronoun, useAnd, isConfused));
 	}
 	
 	public static void useAndWithItem(Item item) {
@@ -366,7 +367,7 @@ public class Main {
 		names.add(user);
 		names.add(that);
 		GrammarIndividual grammarIndividual = grammarUnvalidDescription.getRandomGrammar();
-		message += _getMessage(grammarIndividual, names, "DESCUNVALID", "DESCUNVALID", usePronoun(), false);
+		message += _getMessage(grammarIndividual, names, "DESCUNVALID", "DESCUNVALID", usePronoun(), false, false);
 		if (!message.isEmpty()) {
 			printMessage(message);
 		}
@@ -381,7 +382,7 @@ public class Main {
 			if (hasUnequipedItem) {
 				useAndWithItem(item);
 			} else {
-				generatePrintMessage(names, grammarPickItem, "UNEQUIP", "UNEQUIP", usePronoun(), false);
+				generatePrintMessage(names, grammarPickItem, "UNEQUIP", "UNEQUIP", usePronoun(), false, false);
 				hasUnequipedItem = true;
 			}
 			hasChanged = false;
@@ -461,7 +462,6 @@ public class Main {
 	
 	public static void makeMovement(int i) throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		if (isInputType(movementInput, i)){
-			walkSound = new SoundReproduction("./src/sounds/steps.wav");
         	doMonstersTurn = true;
         	_moveCharacterAction(i);
         	setFlagsToFalse();
@@ -596,7 +596,7 @@ public class Main {
 			names.add(user);
 			names.add(portal);
 			GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
-			printMessage(_getMessage(grammarIndividual, names, "DESCGOESTHROUGH", "DESCGOESTHROUGH", false, false));
+			printMessage(_getMessage(grammarIndividual, names, "DESCGOESTHROUGH", "DESCGOESTHROUGH", false, false, false));
 			deepnessScore++;
 			hasUsedPortal = false;
 		}
@@ -620,7 +620,7 @@ public class Main {
 						preposition.add("but");
 						user.setPrepositions(preposition);
 						namesMiss.add(user);
-						String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false);
+						String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
 						user.setPrepositions(prepositionBefore);
 						String[] words = messageMiss.split("\\s+");
 						messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
@@ -723,17 +723,10 @@ public class Main {
 		grammarSimpleVerb = new GrammarsGeneral(JSONParsing.getElement(rootObj, "SIMPLEVERB").getAsJsonObject());
 		grammarGeneralObj = new GrammarsGeneral(JSONParsing.getElement(rootObjGrammar, "GENERAL").getAsJsonObject());
 		Map.sndObj = parser.parse(new FileReader("./src/sounds/soundsLoc.json")).getAsJsonObject();
-		/*beepSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "BEEP"));
-		collisionSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "COLLISION"));
-		deathSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "DEATH"));
+		beepSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "BEEP"));
 		waterdropSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "WATERDROP"));
-		heroHitSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "HURT"));*/
-		beepSound = new SoundReproduction("./src/sounds/beep.wav");
-		collisionSound = new SoundReproduction("./src/sounds/collision.wav");
-		deathSound = new SoundReproduction("./src/sounds/death.wav");
-		waterdropSound = new SoundReproduction("./src/sounds/waterdrop.wav");
-		heroHitSound = new SoundReproduction("./src/sounds/herohit.wav");
 		countAction = Util.rand(12, 25);
+		possibleCry = Util.rand(3, 10);
 		System.out.println("countAction set: " + countAction);
 		if (!testMode){
 			gameFlow();

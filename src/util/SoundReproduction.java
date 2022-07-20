@@ -27,6 +27,7 @@ public class SoundReproduction implements Runnable {
 	static ActiveCharacter user = null;
 	static ActiveCharacter origin = null;
 	static ActiveCharacter player = null;
+	private boolean isEnemy = false;
 	double distanceToPlayer = 0.0;
 	static Map map;
 	int BUFFER_SIZE = 4096;
@@ -42,6 +43,8 @@ public class SoundReproduction implements Runnable {
 		this.audiofile = new File(pathFile);
 		String fileName = this.audiofile.getName();
 		this.typeSound = fileName.substring(0, fileName.lastIndexOf("."));
+		if ((typeSound.equals("ratappear")) || (typeSound.equals("goblinappear")) || (typeSound.equals("dragonappear")))
+			isEnemy = true;
 		this.origin = origin;
 		this.player = player;
 	}
@@ -123,7 +126,7 @@ public class SoundReproduction implements Runnable {
 			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
 		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
 			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
-		if ((typeSound.equals("ratappear")) || (typeSound.equals("goblinappear")) || (typeSound.equals("dragonappear"))) {
+		if (isEnemy) {
 			RelativeDistance(audioLine, pan, volume);
 		} else if (typeSound.equals("waterdrop")) {
 			WaterdropRand(audioLine, pan, volume);

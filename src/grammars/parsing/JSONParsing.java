@@ -80,13 +80,13 @@ public class JSONParsing {
 		return translation;
 	}
 	
-	public static String getSoundSource(JsonObject sndObj, ActiveCharacter enemy, String action) {
+	public static String getSoundSource(JsonObject sndObj, ActiveCharacter src, String action) {
 		JsonObject snd = null;
-		if (enemy != null) {
-			snd = sndObj.get(enemy.getName().toUpperCase()).getAsJsonObject();
-		} else
+		if (src != null) {
+			snd = sndObj.get(src.getName().toUpperCase()).getAsJsonObject();
+		} else {
 			snd = sndObj;
-		
-		return getElement(snd, action).toString();
+		}
+		return getElement(snd, action).toString().replace("\"","");
 	}
 }

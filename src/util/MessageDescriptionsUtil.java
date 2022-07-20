@@ -31,7 +31,7 @@ public class MessageDescriptionsUtil {
 		names.add(item);
 		names.add(bodyPart);
 		GrammarIndividual grammarIndividual = grammarDescribeCharacterWears.getRandomGrammar();
-		return main.Main._getMessage(grammarIndividual, names, "DESCWEARS", "DESCWEARS", usePronoun, false);
+		return main.Main._getMessage(grammarIndividual, names, "DESCWEARS", "DESCWEARS", usePronoun, false, false);
 	}
 	
 	public static void _messageDescriptionInventory(ActiveCharacter user, GrammarsGeneral grammarDescribeItem) {
@@ -41,7 +41,7 @@ public class MessageDescriptionsUtil {
 			for (Item item : user.getInventory()) {
 				names.add(item);
 			}
-			main.Main.generatePrintMessage(names, grammarDescribeItem, "DESCITEM", "DESCITEM", false, false);
+			main.Main.generatePrintMessage(names, grammarDescribeItem, "DESCITEM", "DESCITEM", false, false, false);
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class MessageDescriptionsUtil {
 		names.add(object);
 		names.add(direction);
 		GrammarIndividual grammarIndividual = grammarDescribeEnvironment.getRandomGrammar();
-		return main.Main._getMessage(grammarIndividual, names, "DESCTOBE", "DESCTOBE", false, false);
+		return main.Main._getMessage(grammarIndividual, names, "DESCTOBE", "DESCTOBE", false, false, false);
 	}
 	
 	public static void _messageDescriptionEnvironment(ActiveCharacter user, boolean isNumericDescription, 
@@ -124,7 +124,7 @@ public class MessageDescriptionsUtil {
 		names.add(object);
 		names.add(direction);
 		GrammarIndividual grammarIndividual = grammarDescribeEnvironmentSimple.getRandomGrammar();
-		return main.Main._getMessage(grammarIndividual, names, "DESCTOBE", "DESCTOBE", false, false);
+		return main.Main._getMessage(grammarIndividual, names, "DESCTOBE", "DESCTOBE", false, false, false);
 	}
 	
 	public static void _messageDescriptionWalkablePositions(ActiveCharacter user, JsonObject rootObjWords) {
@@ -162,7 +162,7 @@ public class MessageDescriptionsUtil {
 			names.add(weapon);
 			names.add(hand);
 			GrammarIndividual grammarIndividual = grammarDescribeCharacterWears.getRandomGrammar();
-			message += main.Main._getMessage(grammarIndividual, names, "DESCWEARS", "DESCWEARS", usePronoun, false);
+			message += main.Main._getMessage(grammarIndividual, names, "DESCWEARS", "DESCWEARS", usePronoun, false, false);
 		}
 		
 		return message;
@@ -177,7 +177,7 @@ public class MessageDescriptionsUtil {
 		names.add(character);
 		names.add(life);
 		GrammarIndividual grammarIndividual = grammarDescribePersonal.getRandomGrammar();
-		String message = main.Main._getMessage(grammarIndividual, names, "DESCPERSONAL", "DESCPERSONAL", usePronoun, usePronoun);
+		String message = main.Main._getMessage(grammarIndividual, names, "DESCPERSONAL", "DESCPERSONAL", usePronoun, usePronoun, false);
 		if (isNumericDescription) {
 			String valueToChange = JSONParsing.getElement(WordsGrammar.getAdjectives(rootObjWords, adjectives).get(0).getB(), "translation");
 			message = message.replaceAll(valueToChange, String.valueOf(character.getLife()));
@@ -194,7 +194,7 @@ public class MessageDescriptionsUtil {
 		names.add(character);
 		names.add(mana);
 		GrammarIndividual grammarIndividual = grammarDescribePersonal.getRandomGrammar();
-		String message = main.Main._getMessage(grammarIndividual, names, "DESCPERSONAL", "DESCPERSONAL", usePronoun, useAnd);
+		String message = main.Main._getMessage(grammarIndividual, names, "DESCPERSONAL", "DESCPERSONAL", usePronoun, useAnd, false);
 		if (isNumericDescription) {
 			String valueToChange = JSONParsing.getElement(WordsGrammar.getAdjectives(rootObjWords, adjectives).get(0).getB(), "translation");
 			message = message.replaceAll(valueToChange, String.valueOf(character.getMagic()));
@@ -216,7 +216,7 @@ public class MessageDescriptionsUtil {
 		names.add(character);
 		names.add(level);
 		GrammarIndividual grammarIndividual = grammarDescribeEnvironmentSimple.getRandomGrammar();
-		message = message + main.Main._getMessage(grammarIndividual, names, "DESCGENERAL", "DESCGENERAL", true, false) + " " + character.getLevel();
+		message = message + main.Main._getMessage(grammarIndividual, names, "DESCGENERAL", "DESCGENERAL", true, false, false) + " " + character.getLevel();
 		
 		if (!isMonster) {
 			PrintableObject experience = new PrintableObject("experience", "", new ArrayList<String>(), null);
@@ -226,7 +226,7 @@ public class MessageDescriptionsUtil {
 			grammarIndividual = grammarDescribeEnvironmentSimple.getRandomGrammar();
 			System.out.println(message);
 			message = message + 
-					main.Main._getMessage(grammarIndividual, namesExperience, "DESCPERSONAL", "DESCPERSONAL", true, false) + 
+					main.Main._getMessage(grammarIndividual, namesExperience, "DESCPERSONAL", "DESCPERSONAL", true, false, false) + 
 					" " + user.getExperience();
 			JsonObject others = JSONParsing.getElement(rootObjWords, "OTHERS").getAsJsonObject();
 			JsonArray outOf = JSONParsing.getElement(others, "out of").getAsJsonArray();
@@ -243,13 +243,13 @@ public class MessageDescriptionsUtil {
 		names.add(character);
 		if (popup) {
 			GrammarIndividual grammarIndividual = grammarAdjectiveDescription.getRandomGrammar();
-			String message = main.Main._getMessage(grammarIndividual, names, "DESCTOBE", "DESCTOBE", false, false);
+			String message = main.Main._getMessage(grammarIndividual, names, "DESCTOBE", "DESCTOBE", false, false, false);
 			JLabel label= new JLabel();
 			label.setText(message);
 			label.requestFocusInWindow();
 			JOptionPane.showMessageDialog(null, message, "", JOptionPane.PLAIN_MESSAGE);
 		}
-		main.Main.generatePrintMessage(names, grammarAdjectiveDescription, "DESCTOBE", "DESCTOBE", false, false);
+		main.Main.generatePrintMessage(names, grammarAdjectiveDescription, "DESCTOBE", "DESCTOBE", false, false, false);
 	}
 	
 	public static void describeSpells(ActiveCharacter user, JsonObject rootObjWords, GrammarsGeneral grammarSimpleVerb){
@@ -257,7 +257,7 @@ public class MessageDescriptionsUtil {
 		PrintableObject spells = new PrintableObject("spells", "", null, null);
 		names.add(spells);
 		GrammarIndividual grammarIndividual = grammarSimpleVerb.getRandomGrammar();
-		String message = main.Main._getMessage(grammarIndividual, names, "DESCGENERAL", "DESCGENERAL", false, false) + ": ";
+		String message = main.Main._getMessage(grammarIndividual, names, "DESCGENERAL", "DESCGENERAL", false, false, false) + ": ";
 		
 		JsonObject namesWords = JSONParsing.getElement(rootObjWords, "N").getAsJsonObject();
 		for (Spell spell : user.getSpells()) {
@@ -290,6 +290,6 @@ public class MessageDescriptionsUtil {
 		if (hands.size() > 0) {
 			names.add(hands.get(0));
 		}
-		main.Main.generatePrintMessage(names, grammarDescribeItem, "DESCITEM", "DESCWEARS", usePronoun, false);
+		main.Main.generatePrintMessage(names, grammarDescribeItem, "DESCITEM", "DESCWEARS", usePronoun, false, false);
 	}
 }

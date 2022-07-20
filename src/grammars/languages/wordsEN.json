@@ -1,51 +1,71 @@
 {
-    "PREP": {
-        "in": [
-            {"num": ""},
-            {"translation": "in"},
-            {"numopposite": "in"},
-            {"gender": ""}
-        ],
-        "on": [
-            {"num": ""},
-            {"translation": "on"},
-            {"numopposite": "on"},
-            {"gender": ""}
-        ],
-        "with": [
-            {"num": ""},
-            {"translation": "with"},
-            {"numopposite": "with"},
-            {"gender": ""}
-        ],
-        "but": [
-            {"num": ""},
-            {"translation": "but"},
-            {"numopposite": "but"},
-            {"gender": ""}
-        ],
-        "against": [
-            {"num": ""},
-            {"translation": "against"},
-            {"numopposite": "against"},
-            {"gender": ""}
-        ],
-        "to": [
-            {"num": ""},
-            {"translation": "to"},
-            {"numopposite": "to"},
-            {"gen": ""}
-        ]
-    },
-    "DET": {
-        "the": [
-            {"num": ""},
-            {"translation": "the"},
-            {"numopposite": "the"},
-            {"gender": ""}
-        ]
-    },
+  "PREP": {
+    "in": [
+      { "num": "" },
+      { "translation": "in" },
+      { "numopposite": "in" },
+      { "gender": "" }
+    ],
+    "on": [
+      { "num": "" },
+      { "translation": "on" },
+      { "numopposite": "on" },
+      { "gender": "" }
+    ],
+    "with": [
+      { "num": "" },
+      { "translation": "with" },
+      { "numopposite": "with" },
+      { "gender": "" }
+    ],
+    "but": [
+      { "num": "" },
+      { "translation": "but" },
+      { "numopposite": "but" },
+      { "gender": "" }
+    ],
+    "against": [
+      { "num": "" },
+      { "translation": "against" },
+      { "numopposite": "against" },
+      { "gender": "" }
+    ],
+    "to": [
+      { "num": "" },
+      { "translation": "to" },
+      { "numopposite": "to" },
+      { "gen": "" }
+    ]
+  },
+  "DET": {
+    "the": [
+      { "num": "" },
+      { "translation": "the" },
+      { "numopposite": "the" },
+      { "gender": "" }
+    ]
+  },
+  "POS": {
+    "his": [
+      { "num": "sing" },
+      { "translation": "his" },
+      { "genopposite": "her" },
+      { "gender": "masc" }
+    ],
+    "her": [
+      { "num": "sing" },
+      { "translation": "her" },
+      { "genopposite": "his" },
+      { "gender": "fem" }
+    ]
+  },
   "ADJ": {
+    "its": [
+      { "num": "sing" },
+      { "translation": "its" },
+      { "numopposite": "their" },
+      { "gender": "" }
+    ],
     "red": [
       { "num": "" },
       { "translation": "red" },
@@ -210,6 +230,12 @@
     ]
   },
   "N": {
+    "confusion": [
+      { "num": "sing" },
+      { "translation": "confusion" },
+      { "gender": "" },
+      { "pronoun": "it" }
+    ],
     "shield": [
       { "num": "sing" },
       { "translation": "shield" },
@@ -292,14 +318,16 @@
       { "translation": "hero" },
       { "numopposite": "heroes" },
       { "gender": "" },
-      { "pronoun": "he" }
+      { "pronoun": "he" },
+      { "pronoun_ref": "himself" }
     ],
     "heroes": [
       { "num": "plural" },
       { "translation": "heroes" },
       { "numopposite": "hero" },
       { "gender": "" },
-      { "pronoun": "they" }
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
     ],
     "dragon": [
       { "num": "sing" },
@@ -644,352 +672,378 @@
       { "gen": "" }
     ]
   },
-    "V": {
-        "ATTACK": {
-            "attacks": [
-                {"num": "sing"},
-                {"translation": "attacks"},
-                {"numopposite": "attack"},
-                {"gender": ""}
-            ],
-            "attack": [
-                {"num": "plural"},
-                {"translation": "attack"},
-                {"numopposite": "attacks"},
-                {"gender": ""}
-            ],
-            "hurts": [
-                {"num": "sing"},
-                {"translation": "hurts"},
-                {"numopposite": "hurt"},
-                {"gender": ""}
-            ],
-            "hurt": [
-                {"num": "plural"},
-                {"translation": "hurt"},
-                {"numopposite": "hurts"},
-                {"gender": ""}
-            ],
-            "charges against": [
-                {"num": "sing"},
-                {"translation": "charges against"},
-                {"numopposite": "charge against"},
-                {"gender": ""}
-            ],
-            "charge against": [
-                {"num": "plural"},
-                {"translation": "charge against"},
-                {"numopposite": "charges against"},
-                {"gender": ""}
-            ]
-        },
-        "NOTHAVE": {
-            "doesn't have": [
-                {"num": "sing"},
-                {"translation": "doesn't have"},
-                {"numopposite": "don't have"},
-                {"gender": ""}
-            ],
-            "don't have": [
-                {"num": "plural"},
-                {"translation": "don't have"},
-                {"numopposite": "doesn't have"},
-                {"gender": ""}
-            ]
-        },
-        "SPELLS": {
-            "casts": [
-                {"num": "sing"},
-                {"translation": "casts"},
-                {"numopposite": "cast"},
-                {"gender": ""}
-            ],
-            "cast": [
-                {"num": "plural"},
-                {"translation": "cast"},
-                {"numopposite": "casts"},
-                {"gender": ""}
-            ]
-        },
-        "PICK": {
-            "picks": [
-                {"num": "sing"},
-                {"translation": "picks"},
-                {"numopposite": "pick"},
-                {"gender": ""}
-            ],
-            "pick": [
-                {"num": "plural"},
-                {"translation": "pick"},
-                {"numopposite": "picks"},
-                {"gender": ""}
-            ],
-            "gets": [
-                {"num": "sing"},
-                {"translation": "gets"},
-                {"numopposite": "get"},
-                {"gender": ""}
-            ],
-            "get": [
-                {"num": "plural"},
-                {"translation": "get"},
-                {"numopposite": "gets"},
-                {"gender": ""}
-            ],
-            "takes": [
-                {"num": "sing"},
-                {"translation": "takes"},
-                {"numopposite": "take"},
-                {"gender": ""}
-            ],
-            "take": [
-                {"num": "plural"},
-                {"translation": "take"},
-                {"numopposite": "takes"},
-                {"gender": ""}
-            ]
-        },
-        "THROW": {
-            "throws": [
-                {"num": "sing"},
-                {"translation": "throws"},
-                {"numopposite": "throw"},
-                {"gender": ""}
-            ],
-            "throw": [
-                {"num": "plural"},
-                {"translation": "throw"},
-                {"numopposite": "throws"},
-                {"gender": ""}
-            ],
-            "gets rid of": [
-                {"num": "sing"},
-                {"translation": "gets rid of"},
-                {"numopposite": "get rid of"},
-                {"gender": ""}
-            ],
-            "get rid of": [
-                {"num": "plural"},
-                {"translation": "get rid of"},
-                {"numopposite": "gets rid of"},
-                {"gender": ""}
-            ],
-            "leaves": [
-                {"num": "sing"},
-                {"translation": "leaves"},
-                {"numopposite": "leave"},
-                {"gender": ""}
-            ],
-            "leave": [
-                {"num": "plural"},
-                {"translation": "leave"},
-                {"numopposite": "leaves"},
-                {"gender": ""}
-            ]
-        },
-        "EQUIP": {
-            "equips": [
-                {"num": "sing"},
-                {"translation": "equips"},
-                {"numopposite": "equip"},
-                {"gender": ""}
-            ],
-            "equip": [
-                {"num": "plural"},
-                {"translation": "equip"},
-                {"numopposite": "equips"},
-                {"gender": ""}
-            ]
-        },
-        "UNEQUIP": {
-            "unequips": [
-                {"num": "sing"},
-                {"translation": "unequips"},
-                {"numopposite": "unequip"},
-                {"gender": ""}
-            ],
-            "unequip": [
-                {"num": "plural"},
-                {"translation": "unequip"},
-                {"numopposite": "unequips"},
-                {"gender": ""}
-            ]
-        },
-        "DESCUNVALID": {
-            "can't do": [
-                {"num": "sing"},
-                {"translation": "can't do"},
-                {"numopposite": "can't do"},
-                {"gender": ""}
-            ],
-            "is not allowed to do": [
-                {"num": "sing"},
-                {"translation": "is not allowed to do"},
-                {"numopposite": "are not allowed to do"},
-                {"gender": ""}
-            ],
-            "are not allowed to do": [
-                {"num": "plural"},
-                {"translation": "are not allowed to do"},
-                {"numopposite": "is not allowed to do"},
-                {"gender": ""}
-            ]
-        },
-        "USE": {
-            "uses": [
-                {"num": "sing"},
-                {"translation": "uses"},
-                {"numopposite": "use"},
-                {"gender": ""}
-            ],
-            "use": [
-                {"num": "plural"},
-                {"translation": "use"},
-                {"numopposite": "uses"},
-                {"gender": ""}
-            ]
-        },
-        "MISS": {
-            "misses": [
-                {"num": "sing"},
-                {"translation": "misses"},
-                {"numopposite": "miss"},
-                {"gender": ""}
-            ],
-            "miss": [
-                {"num": "plural"},
-                {"translation": "miss"},
-                {"numopposite": "misses"},
-                {"gender": ""}
-            ]
-        },
-        "DESCITEM": {
-            "has": [
-                {"num": "sing"},
-                {"translation": "has"},
-                {"numopposite": "have"},
-                {"gender": ""}
-            ],
-            "have": [
-                {"num": "plural"},
-                {"translation": "have"},
-                {"numopposite": "has"},
-                {"gender": ""}
-            ]
-        },
-        "DESCPERSONAL": {
-            "has": [
-                {"num": "sing"},
-                {"translation": "has"},
-                {"numopposite": "have"},
-                {"gender": ""}
-            ],
-            "have": [
-                {"num": "plural"},
-                {"translation": "have"},
-                {"numopposite": "has"},
-                {"gender": ""}
-            ]
-        },
-        "DESCGENERAL": {
-            "is": [
-                {"num": "sing"},
-                {"translation": "is"},
-                {"numopposite": "are"},
-                {"gender": ""}
-            ],
-            "are": [
-                {"num": "plural"},
-                {"translation": "are"},
-                {"numopposite": "is"},
-                {"gender": ""}
-            ]
-        },
-        "DESCTOBE": {
-            "is": [
-                {"num": "sing"},
-                {"translation": "is"},
-                {"numopposite": "are"},
-                {"gender": ""}
-            ],
-            "are": [
-                {"num": "plural"},
-                {"translation": "are"},
-                {"numopposite": "is"},
-                {"gender": ""}
-            ]
-        },
-        "DESCWEARS": {
-            "wears": [
-                {"num": "sing"},
-                {"translation": "wears"},
-                {"numopposite": "wear"},
-                {"gender": ""}
-            ],
-            "wear": [
-                {"num": "plural"},
-                {"translation": "wear"},
-                {"numopposite": "wears"},
-                {"gender": ""}
-            ]
-        },
-        "DESCGOESTHROUGH": {
-            "goes through": [
-                {"num": "sing"},
-                {"translation": "goes through"},
-                {"numopposite": "go through"},
-                {"gender": ""}
-            ],
-            "go through": [
-                {"num": "plural"},
-                {"translation": "go through"},
-                {"numopposite": "goes through"},
-                {"gender": ""}
-            ]
-        }
+  "V": {
+    "ATTACK": {
+      "attacks": [
+        { "num": "sing" },
+        { "translation": "attacks" },
+        { "numopposite": "attack" },
+        { "gender": "" }
+      ],
+      "attack": [
+        { "num": "plural" },
+        { "translation": "attack" },
+        { "numopposite": "attacks" },
+        { "gender": "" }
+      ],
+      "hurts": [
+        { "num": "sing" },
+        { "translation": "hurts" },
+        { "numopposite": "hurt" },
+        { "gender": "" }
+      ],
+      "hurt": [
+        { "num": "plural" },
+        { "translation": "hurt" },
+        { "numopposite": "hurts" },
+        { "gender": "" }
+      ],
+      "charges against": [
+        { "num": "sing" },
+        { "translation": "charges against" },
+        { "numopposite": "charge against" },
+        { "gender": "" }
+      ],
+      "charge against": [
+        { "num": "plural" },
+        { "translation": "charge against" },
+        { "numopposite": "charges against" },
+        { "gender": "" }
+      ]
     },
-    "OTHERS": {
-        "and": [
-            {
-                "translation": "and",
-                "gender": ""
-            }
-        ],
-        "or": [
-            {
-                "translation": "or",
-                "gender": ""
-            }
-        ],
-        "reachable positions": [
-            {
-                "translation": "Reachable positions",
-                "gender": ""
-            }
-        ],
-        "out of": [
-            {
-                "translation": "out of",
-                "gender": ""
-            }
-        ],
-        "again": {
-            "again": [
-                {"translation": "again"},
-                {"gender": ""}
-            ],
-            "one more time": [
-                {"translation": "one more time"},
-                {"gender": ""}
-            ],
-            "once again": [
-                {"translation": "once again"},
-                {"gender": ""}
-            ]
-        },
-        "restart": [
-        	{"translation": "Restart the game to apply the changes"},
-        	{"gender": ""}
-        ]
+    "SELFHARM": {
+      "attacks": [
+        { "num": "sing" },
+        { "translation": "attacks" },
+        { "numopposite": "attack" },
+        { "gender": "" }
+      ],
+      "attack": [
+        { "num": "plural" },
+        { "translation": "attack" },
+        { "numopposite": "attacks" },
+        { "gender": "" }
+      ],
+      "hurts": [
+        { "num": "sing" },
+        { "translation": "hurts" },
+        { "numopposite": "hurt" },
+        { "gender": "" }
+      ],
+      "hurt": [
+        { "num": "plural" },
+        { "translation": "hurt" },
+        { "numopposite": "hurts" },
+        { "gender": "" }
+      ]
+    },
+    "NOTHAVE": {
+      "doesn't have": [
+        { "num": "sing" },
+        { "translation": "doesn't have" },
+        { "numopposite": "don't have" },
+        { "gender": "" }
+      ],
+      "don't have": [
+        { "num": "plural" },
+        { "translation": "don't have" },
+        { "numopposite": "doesn't have" },
+        { "gender": "" }
+      ]
+    },
+    "SPELLS": {
+      "casts": [
+        { "num": "sing" },
+        { "translation": "casts" },
+        { "numopposite": "cast" },
+        { "gender": "" }
+      ],
+      "cast": [
+        { "num": "plural" },
+        { "translation": "cast" },
+        { "numopposite": "casts" },
+        { "gender": "" }
+      ]
+    },
+    "PICK": {
+      "picks": [
+        { "num": "sing" },
+        { "translation": "picks" },
+        { "numopposite": "pick" },
+        { "gender": "" }
+      ],
+      "pick": [
+        { "num": "plural" },
+        { "translation": "pick" },
+        { "numopposite": "picks" },
+        { "gender": "" }
+      ],
+      "gets": [
+        { "num": "sing" },
+        { "translation": "gets" },
+        { "numopposite": "get" },
+        { "gender": "" }
+      ],
+      "get": [
+        { "num": "plural" },
+        { "translation": "get" },
+        { "numopposite": "gets" },
+        { "gender": "" }
+      ],
+      "takes": [
+        { "num": "sing" },
+        { "translation": "takes" },
+        { "numopposite": "take" },
+        { "gender": "" }
+      ],
+      "take": [
+        { "num": "plural" },
+        { "translation": "take" },
+        { "numopposite": "takes" },
+        { "gender": "" }
+      ]
+    },
+    "THROW": {
+      "throws": [
+        { "num": "sing" },
+        { "translation": "throws" },
+        { "numopposite": "throw" },
+        { "gender": "" }
+      ],
+      "throw": [
+        { "num": "plural" },
+        { "translation": "throw" },
+        { "numopposite": "throws" },
+        { "gender": "" }
+      ],
+      "gets rid of": [
+        { "num": "sing" },
+        { "translation": "gets rid of" },
+        { "numopposite": "get rid of" },
+        { "gender": "" }
+      ],
+      "get rid of": [
+        { "num": "plural" },
+        { "translation": "get rid of" },
+        { "numopposite": "gets rid of" },
+        { "gender": "" }
+      ],
+      "leaves": [
+        { "num": "sing" },
+        { "translation": "leaves" },
+        { "numopposite": "leave" },
+        { "gender": "" }
+      ],
+      "leave": [
+        { "num": "plural" },
+        { "translation": "leave" },
+        { "numopposite": "leaves" },
+        { "gender": "" }
+      ]
+    },
+    "EQUIP": {
+      "equips": [
+        { "num": "sing" },
+        { "translation": "equips" },
+        { "numopposite": "equip" },
+        { "gender": "" }
+      ],
+      "equip": [
+        { "num": "plural" },
+        { "translation": "equip" },
+        { "numopposite": "equips" },
+        { "gender": "" }
+      ]
+    },
+    "UNEQUIP": {
+      "unequips": [
+        { "num": "sing" },
+        { "translation": "unequips" },
+        { "numopposite": "unequip" },
+        { "gender": "" }
+      ],
+      "unequip": [
+        { "num": "plural" },
+        { "translation": "unequip" },
+        { "numopposite": "unequips" },
+        { "gender": "" }
+      ]
+    },
+    "DESCUNVALID": {
+      "can't do": [
+        { "num": "sing" },
+        { "translation": "can't do" },
+        { "numopposite": "can't do" },
+        { "gender": "" }
+      ],
+      "is not allowed to do": [
+        { "num": "sing" },
+        { "translation": "is not allowed to do" },
+        { "numopposite": "are not allowed to do" },
+        { "gender": "" }
+      ],
+      "are not allowed to do": [
+        { "num": "plural" },
+        { "translation": "are not allowed to do" },
+        { "numopposite": "is not allowed to do" },
+        { "gender": "" }
+      ]
+    },
+    "USE": {
+      "uses": [
+        { "num": "sing" },
+        { "translation": "uses" },
+        { "numopposite": "use" },
+        { "gender": "" }
+      ],
+      "use": [
+        { "num": "plural" },
+        { "translation": "use" },
+        { "numopposite": "uses" },
+        { "gender": "" }
+      ]
+    },
+    "MISS": {
+      "misses": [
+        { "num": "sing" },
+        { "translation": "misses" },
+        { "numopposite": "miss" },
+        { "gender": "" }
+      ],
+      "miss": [
+        { "num": "plural" },
+        { "translation": "miss" },
+        { "numopposite": "misses" },
+        { "gender": "" }
+      ]
+    },
+    "DESCITEM": {
+      "has": [
+        { "num": "sing" },
+        { "translation": "has" },
+        { "numopposite": "have" },
+        { "gender": "" }
+      ],
+      "have": [
+        { "num": "plural" },
+        { "translation": "have" },
+        { "numopposite": "has" },
+        { "gender": "" }
+      ]
+    },
+    "DESCPERSONAL": {
+      "has": [
+        { "num": "sing" },
+        { "translation": "has" },
+        { "numopposite": "have" },
+        { "gender": "" }
+      ],
+      "have": [
+        { "num": "plural" },
+        { "translation": "have" },
+        { "numopposite": "has" },
+        { "gender": "" }
+      ]
+    },
+    "DESCGENERAL": {
+      "is": [
+        { "num": "sing" },
+        { "translation": "is" },
+        { "numopposite": "are" },
+        { "gender": "" }
+      ],
+      "are": [
+        { "num": "plural" },
+        { "translation": "are" },
+        { "numopposite": "is" },
+        { "gender": "" }
+      ]
+    },
+    "DESCTOBE": {
+      "is": [
+        { "num": "sing" },
+        { "translation": "is" },
+        { "numopposite": "are" },
+        { "gender": "" }
+      ],
+      "are": [
+        { "num": "plural" },
+        { "translation": "are" },
+        { "numopposite": "is" },
+        { "gender": "" }
+      ]
+    },
+    "DESCWEARS": {
+      "wears": [
+        { "num": "sing" },
+        { "translation": "wears" },
+        { "numopposite": "wear" },
+        { "gender": "" }
+      ],
+      "wear": [
+        { "num": "plural" },
+        { "translation": "wear" },
+        { "numopposite": "wears" },
+        { "gender": "" }
+      ]
+    },
+    "DESCGOESTHROUGH": {
+      "goes through": [
+        { "num": "sing" },
+        { "translation": "goes through" },
+        { "numopposite": "go through" },
+        { "gender": "" }
+      ],
+      "go through": [
+        { "num": "plural" },
+        { "translation": "go through" },
+        { "numopposite": "goes through" },
+        { "gender": "" }
+      ]
     }
+  },
+  "OTHERS": {
+    "and": [
+      {
+        "translation": "and",
+        "gender": ""
+      }
+    ],
+    "or": [
+      {
+        "translation": "or",
+        "gender": ""
+      }
+    ],
+    "reachable positions": [
+      {
+        "translation": "Reachable positions",
+        "gender": ""
+      }
+    ],
+    "out of": [
+      {
+        "translation": "out of",
+        "gender": ""
+      }
+    ],
+    "again": {
+      "again": [
+        { "translation": "again" },
+        { "gender": "" }
+      ],
+      "one more time": [
+        { "translation": "one more time" },
+        { "gender": "" }
+      ],
+      "once again": [
+        { "translation": "once again" },
+        { "gender": "" }
+      ]
+    },
+    "restart": [
+      { "translation": "Restart the game to apply the changes" },
+      { "gender": "" }
+    ]
+  }
 }

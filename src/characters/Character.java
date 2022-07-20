@@ -140,7 +140,7 @@ public abstract class Character extends PrintableObject {
 	
 	public static Mood getRandomMood() {
 		Mood mood;
-		int value = Util.rand(0, 10);
+		int value = Util.rand(1, 10);
 		switch(value) {
 		case 6: {
 			mood = Mood.ENCOURAGED;
