@@ -247,20 +247,16 @@ public class GrammarSelectorS extends GrammarSelector {
 			if (values.contains(i) && (values.get(values.size() - 2)) == i) {
 				String translationAnd = GrammarsOperational.getAndTranslation(this.getWordsGrammar());
 				sentence += " " + translationAnd + " " + JSONParsing.getElement(pair.getB(), "translation");
-				System.out.println("PARTEA" + sentence);
 				changed = false;
 			} else {
 				if (values.contains(i)) {
 					sentence += ", " + JSONParsing.getElement(pair.getB(), "translation") + " ";
-					System.out.println("PARTEB" + sentence);
 					changed = true;
 				} else {
 					if (changed) {
 						sentence += JSONParsing.getElement(pair.getB(), "translation");
-						System.out.println("PARTEC" + sentence);
 					} else {
 						sentence += " " + JSONParsing.getElement(pair.getB(), "translation");
-						System.out.println("PARTED" + sentence);
 					}
 					changed = false;
 				}
@@ -292,9 +288,10 @@ public class GrammarSelectorS extends GrammarSelector {
 		}
 		
 		if (isConfused) {
-			String nameToGetPronounFrom = this.getGrammarsNP().get(0).getName().getName();
+			String nameToGetPronounFrom = this.getGrammarsNP().get(0).getName().getName();;
 			String toChangeFor = "";
 			String reflexive = JSONParsing.getElement(WordsGrammar.getName(this.getWordsGrammar(), nameToGetPronounFrom).get(0).getB(), "pronoun_ref");
+			System.out.println("CONFUSO: " + nameToGetPronounFrom + " " + reflexive);
 			if (useAnd) {
 				String translationAnd = GrammarsOperational.getAndTranslation(this.getWordsGrammar());
 				toChangeFor += translationAnd;
@@ -309,12 +306,27 @@ public class GrammarSelectorS extends GrammarSelector {
 					NPToDelete += JSONParsing.getElement(word.getB(), "translation") + " ";
 				}
 			}
+			if (!sentence.contains(NPToDelete) && usePronoun)
+				NPToDelete = JSONParsing.getElement(WordsGrammar.getName(this.getWordsGrammar(), nameToGetPronounFrom).get(0).getB(), "pronoun");
+			System.out.println("NPToDelete: " + NPToDelete);
 			if (Main.debug) {
 				System.out.println("NPToDelete: " + NPToDelete);
 			}
-			sentence = sentence.replaceAll(NPToDelete, toChangeFor);
+			String[] subsentence = sentence.split(NPToDelete);
+			for (String a : subsentence)
+				System.out.println(a);
+			sentence = "";
+			for (int i = 0; i < subsentence.length; i++) {
+				if (i == subsentence.length-2)
+					sentence = sentence.concat(subsentence[i] + toChangeFor);
+				else if (i == 0)
+					sentence = sentence.concat(subsentence[i] + NPToDelete);
+				else
+					sentence = sentence.concat(subsentence[i]);
+			}
 		}
-		
+		sentence = sentence.replaceAll("\\s+", " ").trim();
+		System.out.println("Final sentence: " + sentence);
 		return sentence;
 	}
 	
@@ -326,6 +338,7 @@ public class GrammarSelectorS extends GrammarSelector {
 	private ArrayList<Pair<String, JsonArray>> applyRestrictionsSNP(ArrayList<Pair<String, JsonArray>> sentenceArray) {
 		ArrayList<Pair<String, JsonArray>> newSentenceArray = new ArrayList<Pair<String, JsonArray>>();
 		ArrayList<String> getGrammarTypes = this.getGrammarTypes();
+		//numItems specifies the amount of elements in each structure (example: SIMPLE has 2-> DET and N)
 		ArrayList<Integer> numItems = new ArrayList<Integer>();
 		int iteration = 0;
 		for(Pair<String, String> restriction : this.getGrammar().getRestrictions()) {
@@ -363,6 +376,8 @@ public class GrammarSelectorS extends GrammarSelector {
 							break;
 						default : 
 							numItems.add(this.getGrammarsNPPair().get(NPgrammarCount).size());
+							System.out.println("elemento: " + getGrammarTypes.get(selectElement));
+							System.out.println("numItems added: " + numItems.get(numItems.size()-1));
 							for (Pair<String, JsonArray> pair : this.getGrammarsNPPair().get(NPgrammarCount)) {
 								newSentenceArray.add(pair);
 							}
@@ -384,6 +399,7 @@ public class GrammarSelectorS extends GrammarSelector {
 			String elementA = "";
 			String elementB = "";
 			Pair<String, String> pair = null;
+			System.out.println("++++++++++TIPO RESTRICCIÓN: " + restrictionType);
 			switch (restrictionType) {
 				case "num": 
 					elementA = restriction.getA().substring(0, dotPointA);

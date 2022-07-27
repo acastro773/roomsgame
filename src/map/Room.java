@@ -407,6 +407,23 @@ public class Room {
 		}
 	}
 	
+	public Tuple<Integer, Integer> getDivisionRate(int userLvl) {
+		switch(userLvl) {
+		case 1:
+			return new Tuple<Integer, Integer>(1,4);
+		case 2:
+			return new Tuple<Integer, Integer>(1,5);
+		case 3:
+			return new Tuple<Integer, Integer>(1,9);
+		case 4:
+			return new Tuple<Integer, Integer>(4,9);
+		case 5:
+			return new Tuple<Integer, Integer>(10,9);
+		default:
+			return new Tuple<Integer, Integer>(15,9);
+		}
+	}
+	
 	public void generateRandomEnemies(ActiveCharacter user) {
 		if (RandUtil.RandomNumber(0, 2) == 1 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
 			int positionNumber = RandUtil.RandomNumber(0, this.checkFreePositions().size());
@@ -428,6 +445,65 @@ public class Room {
 					break;
 			}
 		}
+		/*if (RandUtil.RandomNumber(0, 4) > 2 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
+			int userLvl = user.getLevel();
+			//tuple of the division probabilities in rate apparition of monsters and
+			//type of apparition (one monster, two monsters, three monsters or wave)
+			//first value of the tuple: div rate of type of apparition
+			//second value of the tuple: div rate of type of monster
+			Tuple<Integer, Integer> divRate = getDivisionRate(userLvl);
+			int positionNumber = RandUtil.RandomNumber(0, this.checkFreePositions().size());
+			Tuple<Integer, Integer> position = this.getFreePositions().get(positionNumber);
+			int level = RandUtil.RandomNumber(userLvl, userLvl + 2);
+			int percApType = RandUtil.RandomNumber(1,divRate.x);
+			int percApMon = RandUtil.RandomNumber(1,divRate.y);
+			ArrayList<Integer> numberPercType
+			switch(percApType) {
+			default:
+			}
+			switch(number) {
+				case 0: 
+					Rat rat = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
+					this.getMonsters().add(rat);
+					break;
+				case 1: 
+					Goblin goblin = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
+					this.getMonsters().add(goblin);
+					break;
+				case 3: 
+					Dragon dragon = new Dragon(this.getMap(), this, position, new ArrayList<String>(), level);
+					this.getMonsters().add(dragon);
+					break;
+				case 4:
+					int rand = RandUtil.RandomNumber(0,2);
+					Rat rat3;
+					Rat rat4;
+					Goblin goblin2;
+					Goblin goblin3;
+					switch(rand) {
+					case 0:
+						rat3 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
+						rat4 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
+						this.getMonsters().add(rat3);
+						this.getMonsters().add(rat4);
+					case 1:
+						rat3 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
+						goblin2 = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
+						this.getMonsters().add(rat3);
+						this.getMonsters().add(goblin2);
+					case 2:
+						goblin2 = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
+						goblin3 = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
+						this.getMonsters().add(goblin2);
+						this.getMonsters().add(goblin3);
+					}
+					break;	
+				default:
+					Rat rat2 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
+					this.getMonsters().add(rat2);
+					break;
+			}
+		}*/
 	}
 	
 	public Tuple<Integer, Integer> getRandomPosition(){

@@ -49,33 +49,75 @@ public abstract class GrammarSelector {
 		JsonArray restrictions2 = null;
 		String restrictions1Value = "";
 		String restrictions2Value = "";
+		if (type.equals("gen")) {
+			System.out.println("gen restriction: " + firstType + " " + secondType);
+			System.out.println("grammar: ");
+			for (String a : grammar)
+				System.out.print(a + " ");
+			System.out.println();
+			for (int a : numItems)
+				System.out.println(a + " ");
+			System.out.println();
+		}
 		if (numItems == null) {
 			restrictions1Value = sentenceArray.get(grammar.indexOf(firstType)).getA();
 			restrictions2Value = sentenceArray.get(grammar.indexOf(secondType)).getA();
 			restrictions1 = sentenceArray.get(grammar.indexOf(firstType)).getB();
 			restrictions2 = sentenceArray.get(grammar.indexOf(secondType)).getB();
+			System.out.println("numitems null: " + restrictions1Value + ":" + restrictions1
+					+ restrictions2Value + ":" + restrictions2);
 		} else {
+			int wordPos = 0;
+			String type2nd = secondType.split("_")[0];
+			System.out.println("2nd type: " + type2nd);
+			//if the structure is SIMPLEPREP, the word to consider in comparing to the first type should be N
+			//if the structure is SIMPLEPREPPOS, the word to consider in comparing to the first type should be POS
+			//if not, the word position doesn't matter
+			switch(type2nd) {
+			case "SIMPLEPREP":
+				wordPos = 2;
+				break;
+			case "SIMPLEPREPPOS":
+				wordPos = 1;
+				System.out.println("Valor ahora: " + wordPos);
+				break;
+			default:
+				wordPos = 0;
+				break;
+			}
+			System.out.println("Valor fuera del case: " + wordPos);
 			int totalFirstItem = 0;
 			int totalSecondItem = 0;
+			System.out.println("///////////// firstItem get values: /////////////" + grammar.indexOf(firstType));
 			for (int i = 0; i <= grammar.indexOf(firstType); i++) {
 				totalFirstItem += numItems.get(i);
-				restrictions1 = sentenceArray.get(totalFirstItem - 1).getB();
-				restrictions1Value = sentenceArray.get(totalFirstItem - 1).getA();
 			}
+			restrictions1 = sentenceArray.get(totalFirstItem - 1).getB();
+			restrictions1Value = sentenceArray.get(totalFirstItem - 1).getA();
+			System.out.println(restrictions1);
+			System.out.println(restrictions1Value);
+			System.out.println("totalFirstItem:: " + totalFirstItem);
+			System.out.println("///////////// secondItem get values: /////////////" + grammar.indexOf(secondType));
 			for (int i = 0; i < grammar.indexOf(secondType); i++) {
 				totalSecondItem += numItems.get(i);
-				restrictions2 = sentenceArray.get(totalSecondItem).getB();
-				restrictions2Value = sentenceArray.get(totalSecondItem).getA();
 			}
+			restrictions2 = sentenceArray.get(totalSecondItem + wordPos).getB();
+			restrictions2Value = sentenceArray.get(totalSecondItem + wordPos).getA();
+			System.out.println(restrictions2);
+			System.out.println(restrictions2Value);
+			System.out.println("totalSecondItem:: " + totalSecondItem);
 			if (grammar.indexOf(secondType) == 0) {
 				restrictions2 = sentenceArray.get(0).getB();
 				restrictions2Value = sentenceArray.get(0).getA();
 			}
+			System.out.println("numitems: " + restrictions1Value + ":" + restrictions1
+					+ restrictions2Value + ":" + restrictions2);
 		}
 		String value1 = restrictions1Value;
 		String value2 = restrictions2Value;
 		String value1Num = JSONParsing.getElement(restrictions1, type);
 		String value2Num = JSONParsing.getElement(restrictions2, type);
+		System.out.println("value1Num: " + value1Num + "--" + value2Num);
 		if (value1Num != null && value2Num != null && !value1Num.equals(value2Num) 
 				&& value1Num.length() > 0 && value2Num.length() > 0) {
 			String changeToValue = "";
@@ -91,6 +133,8 @@ public abstract class GrammarSelector {
 				changeToValue = JSONParsing.getElement(restrictions2, type + "opposite");
 				typeChangeToValue = typeSecondRestriction;
 			}
+			System.out.println("changetovalue: " + changeToValue + " - type1st: " + typeFirstRestriction
+					+ " - type2nd: " + typeSecondRestriction + " ::: toChange: " + toChange);
 			this.changeValue(sentenceArray, toChange, changeToValue, typeChangeToValue);
 		}
 		return sentenceArray;
@@ -119,6 +163,7 @@ public abstract class GrammarSelector {
 				case "gen": 
 					elementA = restriction.getA().substring(0, dotPointA);
 					elementB = restriction.getB().substring(0, dotPointB);
+					System.out.println("ACÁ ENTRÓ: " + elementA + " --- " + elementB);
 					pair = new Pair<String, String>(elementA, elementB);
 					sentenceArray = applyRestrictions(pair, sentenceArray, null, "gen");
 					break;

@@ -740,63 +740,101 @@ public class ActiveCharacter extends Character {
 		return false;
 	}
 	
-	public Pair<Boolean, String> doTurn(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords){
-		if (this.getRoom().equals(user.getRoom()) && !this.isDead()){
-			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
-			names.add(this);
-			for (int i = 0; i < this.getSpells().size(); i++) {
-				Spell spell = this.getSpells().get(i);
-					if (RandUtil.containsTuple(user.getPosition(), spell.getDamagedPositions(this))
-							&& spell.getManaCost() <= this.getMagic()) {
-						names.add(spell);
-						names.add(user);
-						GrammarSelectorS selector = null;
-						try {
-							selector = new GrammarSelectorS(grammarAttack, rootObjWords, names, "SPELLS", "SPELLS");
-						} catch (JsonIOException | JsonSyntaxException | FileNotFoundException | InstantiationException
-								| IllegalAccessException e) {
-							e.printStackTrace();
-						}
-						boolean hasWorked = false; 
-						if (this.attackSpell(i, user).size() > 0) hasWorked = true;
-						String message = selector.getRandomSentence();
-						if (spell.isHasBeenUsed() && RandUtil.RandomNumber(0, 2) == 1) {
-							message += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
-						} else {
-							spell.setHasBeenUsed(true);
-						}
-						Pair<Boolean, String> returnValue = new Pair<Boolean, String>(hasWorked, message);
-						return returnValue;
-					}
-			}
-			if (this.getWeaponsEquipped().size() > 0 && RandUtil.sameTuple(this.getPosition(), user.getPosition())) {
+	public Pair<Boolean, String> spellAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
+		for (int i = 0; i < this.getSpells().size(); i++) {
+			Spell spell = this.getSpells().get(i);
+			if (RandUtil.containsTuple(user.getPosition(), spell.getDamagedPositions(this))
+					&& spell.getManaCost() <= this.getMagic()) {
+				names.add(spell);
 				names.add(user);
-				names.add(this.getWeaponsEquipped().get(0));
 				GrammarSelectorS selector = null;
 				try {
-					selector = new GrammarSelectorS(grammarAttack, rootObjWords, names, "ATTACK", "ATTACK");
+					selector = new GrammarSelectorS(grammarAttack, rootObjWords, names, "SPELLS", "SPELLS");
 				} catch (JsonIOException | JsonSyntaxException | FileNotFoundException | InstantiationException
 						| IllegalAccessException e) {
 					e.printStackTrace();
 				}
+				boolean hasWorked = false; 
+				if (this.attackSpell(i, user).size() > 0) hasWorked = true;
 				String message = selector.getRandomSentence();
-				if (hasAttackedHeroe && RandUtil.RandomNumber(0, 2) == 1) {
+				if (spell.isHasBeenUsed() && RandUtil.RandomNumber(0, 2) == 1) {
 					message += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
 				} else {
-					hasAttackedHeroe = true;
+					spell.setHasBeenUsed(true);
 				}
-				Pair<Boolean, String> returnValue = new Pair<Boolean, String>(this.attack(user).x, message);
+				Pair<Boolean, String> returnValue = new Pair<Boolean, String>(hasWorked, message);
 				return returnValue;
-			} else {
-				if (this.tirenessTotal <= 0 || this.tirenessCurrent != this.tirenessTotal) {
-					Tuple<Integer, Integer> pos = this.movementType.moveCharacter(this, user);
-					if (pos != null) {
-						this.move(pos);
-						this.tirenessCurrent++;
-					}
-				} else {
-					this.tirenessCurrent = 0;
-				}
+			}
+		}
+		return new Pair<Boolean, String>(false,"");
+		
+	}
+	
+	public Pair<Boolean, String> weaponAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
+		names.add(user);
+		names.add(this.getWeaponsEquipped().get(0));
+		GrammarSelectorS selector = null;
+		try {
+			selector = new GrammarSelectorS(grammarAttack, rootObjWords, names, "ATTACK", "ATTACK");
+		} catch (JsonIOException | JsonSyntaxException | FileNotFoundException | InstantiationException
+				| IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		String message = selector.getRandomSentence();
+		if (hasAttackedHeroe && RandUtil.RandomNumber(0, 2) == 1) {
+			message += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
+		} else {
+			hasAttackedHeroe = true;
+		}
+		Pair<Boolean, String> returnValue = new Pair<Boolean, String>(this.attack(user).x, message);
+		return returnValue;
+	}
+	
+	public void makeMoves(ActiveCharacter user) {
+		if (this.tirenessTotal <= 0 || this.tirenessCurrent != this.tirenessTotal) {
+			Tuple<Integer, Integer> pos = this.movementType.moveCharacter(this, user);
+			if (pos != null) {
+				this.move(pos);
+				this.tirenessCurrent++;
+			}
+		} else {
+			this.tirenessCurrent = 0;
+		}
+	}
+	
+	public Pair<Boolean, String> doTurn(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords){
+		if (this.getRoom().equals(user.getRoom()) && !this.isDead()){
+			Pair<Boolean, String> result;
+			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+			boolean spellAt = false;
+			boolean weaponAt = false;
+			boolean move = false;
+			names.add(this);
+			switch(this.getMood()) {
+			case TERRIFIED:
+				move = true;
+				break;
+			case ANGRY:
+				weaponAt = true;
+				move = true;
+				break;
+			default:
+				spellAt = true;
+				weaponAt = true;
+				move = true;
+				break;
+			}
+			if (spellAt) {
+				result = spellAttack(user, grammarAttack, rootObjWords, names);
+				if (result.getA())
+					return result;
+			}
+			if (this.getWeaponsEquipped().size() > 0 && RandUtil.sameTuple(this.getPosition(), user.getPosition()) && weaponAt) {
+				result = weaponAttack(user, grammarAttack, rootObjWords, names);
+				if (result.getA())
+					return result;
+			} else if (move) {
+				makeMoves(user);
 			}
 		}
 		return new Pair<Boolean, String>(false, "");	

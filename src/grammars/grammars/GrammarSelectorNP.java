@@ -83,12 +83,6 @@ public class GrammarSelectorNP extends GrammarSelector {
 				case "POS" : resultArray.add(getRandomPossesive());
 					break;
 				case "PREP" : resultArray.add(getRandomPreposition());
-					/*System.out.println("**************");
-					System.out.println("current_prep: " + GrammarSelectorS.getCurrentPrep());
-					GrammarSelectorS.setCurrentPrep(GrammarSelectorS.getCurrentPrep()+1);
-					if (GrammarSelectorS.getCurrentPrep() >= this.getPrepositions().size())
-						GrammarSelectorS.setCurrentPrep(0);
-					System.out.println("current_prep: " + GrammarSelectorS.getCurrentPrep());*/
 					break;
 				case "ADJ" : resultArray.add(getRandomAdjective());
 					break;
@@ -105,11 +99,13 @@ public class GrammarSelectorNP extends GrammarSelector {
 			System.out.println("Value to change: " + valueToChange);
 			System.out.println("Change to: " + changeToValue);
 		}
+		System.out.println("typeChangeToValue: " + typeChangeToValue);
 		ArrayList<Pair<String, JsonArray>> selectedTypeWord = new ArrayList<Pair<String, JsonArray>>();
 		switch (typeChangeToValue) {
 			case "DET" :
 				selectedTypeWord = this.getDeterminants();
 				break;
+			case "SIMPLEPREPPOS" :
 			case "POS" :
 				selectedTypeWord = this.getPossesives();
 				break;
