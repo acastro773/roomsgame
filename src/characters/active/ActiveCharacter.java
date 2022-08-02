@@ -13,7 +13,10 @@ import net.slashie.util.Util;
 import map.Map;
 import map.Room;
 import characters.Character;
+import characters.active.enemies.FollowingMove;
+import characters.active.enemies.FollowingMoveDumb;
 import characters.active.enemies.Movement;
+import characters.active.enemies.RandomMove;
 import grammars.grammars.GrammarIndividual;
 import grammars.grammars.GrammarSelectorNP;
 import grammars.grammars.GrammarSelectorS;
@@ -182,6 +185,24 @@ public class ActiveCharacter extends Character {
 		}
 		return walkablePositions;
 	}
+	
+	public Movement getMovementTypeFromMood() {
+		Movement move;
+		switch(this.getMood()) {
+		case SLEEPY:
+		case TERRIFIED:
+			move = new RandomMove();
+			break;
+		case ANGRY:
+		case ENCOURAGED:
+			move = new FollowingMove();
+			break;
+		default:
+			move = new FollowingMoveDumb();
+			break;
+		}
+		return move;
+	}
 
 	public Tuple<Integer,Integer> getDamageLuckMood(ActiveCharacter character, int damage) {
 		int luck = character.getLuck();
@@ -302,13 +323,13 @@ public class ActiveCharacter extends Character {
 		}
 	}
 
-	//duple of 2 booleans, the first one returns true if the user has inflict damage on the foe
+	//tuple of 2 booleans, the first one returns true if the user has inflicted damage on the foe
 	//and the second value returns true if the user has damaged itself
 	private Tuple<Boolean, Boolean> attack(ActiveCharacter defender){
 		if (this.getMood().name().equals(Mood.CONFUSED.name())) {
 			int randLuck = Util.rand(0, 100);
 			int luck = this.getLuck();
-			luck -= (int)(Math.ceil(luck*1));
+			luck -= (int)(Math.ceil(luck*0.2));
 			System.out.println("Self attack? luck: " + luck + "rand: " + randLuck);
 			if (luck <= randLuck) {
 				int selfDamage = (int)(Math.ceil(this.getFullAttackNumbers(this, this)*0.5));
@@ -357,8 +378,26 @@ public class ActiveCharacter extends Character {
 		this.setCharacterDead(defender);
 	}
 	
-	public ArrayList<ActiveCharacter> attackSpell(int itemNumber, ActiveCharacter user) {
+	public Tuple<Boolean, ArrayList<ActiveCharacter>> attackSpell(int itemNumber, ActiveCharacter user) {
+		//if selfhurt, the boolean value of the tuple returns true
 		ArrayList<ActiveCharacter> hurtCharacters = new ArrayList<ActiveCharacter>();
+		if (this.getMood().name().equals(Mood.CONFUSED.name())) {
+			Spell spell = this.getSpells().get(itemNumber);
+			int randLuck = Util.rand(0, 100);
+			int luck = this.getLuck();
+			luck -= (int)(Math.ceil(luck*1));
+			System.out.println("Self attack? luck: " + luck + "rand: " + randLuck);
+			if (luck <= randLuck && this.generateSpell(spell)) {
+				int selfDamage = (int)(Math.ceil(this.getDamageLuckMood(this, spell.getDamage()).y*0.5));
+				int attackerLife = this.getLife() - selfDamage;
+				attackerLife = attackerLife < 0 ? 0 : attackerLife;
+				this.setLife(attackerLife);
+				this.setCharacterDead(this);
+				System.out.println("selfDamage:" + selfDamage);
+				hurtCharacters.add(this);
+				return new Tuple<Boolean, ArrayList<ActiveCharacter>> (true, hurtCharacters);
+			}
+		}
 		if (this.getSpells().size() > itemNumber) {
 			Spell spell = this.getSpells().get(itemNumber);
 			Room room = this.getRoom();
@@ -382,7 +421,7 @@ public class ActiveCharacter extends Character {
 				}
 			}
 		}
-		return hurtCharacters;
+		return new Tuple<Boolean, ArrayList<ActiveCharacter>> (false, hurtCharacters);
 	}
 	
 	private boolean generateSpell(Spell spell) {
@@ -740,13 +779,17 @@ public class ActiveCharacter extends Character {
 		return false;
 	}
 	
-	public Pair<Boolean, String> spellAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
+	public Pair<Tuple<Boolean, Boolean>, String> spellAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
 		for (int i = 0; i < this.getSpells().size(); i++) {
 			Spell spell = this.getSpells().get(i);
 			if (RandUtil.containsTuple(user.getPosition(), spell.getDamagedPositions(this))
 					&& spell.getManaCost() <= this.getMagic()) {
+				ArrayList<String> prep = new ArrayList<>();
+				prep.add("against");
+				user.setPrepositions(prep);
 				names.add(spell);
 				names.add(user);
+				
 				GrammarSelectorS selector = null;
 				try {
 					selector = new GrammarSelectorS(grammarAttack, rootObjWords, names, "SPELLS", "SPELLS");
@@ -755,22 +798,23 @@ public class ActiveCharacter extends Character {
 					e.printStackTrace();
 				}
 				boolean hasWorked = false; 
-				if (this.attackSpell(i, user).size() > 0) hasWorked = true;
+				Tuple<Boolean, ArrayList<ActiveCharacter>> spellAt = this.attackSpell(i, user);
+				if (spellAt.y.size() > 0) hasWorked = true;
 				String message = selector.getRandomSentence();
 				if (spell.isHasBeenUsed() && RandUtil.RandomNumber(0, 2) == 1) {
 					message += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
 				} else {
 					spell.setHasBeenUsed(true);
 				}
-				Pair<Boolean, String> returnValue = new Pair<Boolean, String>(hasWorked, message);
+				Pair<Tuple<Boolean, Boolean>, String> returnValue = new Pair<Tuple<Boolean, Boolean>, String>(new Tuple<Boolean,Boolean>(hasWorked, spellAt.x), message);
 				return returnValue;
 			}
 		}
-		return new Pair<Boolean, String>(false,"");
+		return new Pair<Tuple<Boolean, Boolean>, String>(new Tuple<Boolean, Boolean>(false,false),"");
 		
 	}
 	
-	public Pair<Boolean, String> weaponAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
+	public Pair<Tuple<Boolean, Boolean>, String> weaponAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
 		names.add(user);
 		names.add(this.getWeaponsEquipped().get(0));
 		GrammarSelectorS selector = null;
@@ -786,7 +830,7 @@ public class ActiveCharacter extends Character {
 		} else {
 			hasAttackedHeroe = true;
 		}
-		Pair<Boolean, String> returnValue = new Pair<Boolean, String>(this.attack(user).x, message);
+		Pair<Tuple<Boolean, Boolean>, String> returnValue = new Pair<Tuple<Boolean, Boolean>, String>(this.attack(user), message);
 		return returnValue;
 	}
 	
@@ -802,9 +846,10 @@ public class ActiveCharacter extends Character {
 		}
 	}
 	
-	public Pair<Boolean, String> doTurn(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords){
+	public Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> doTurn(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords){
 		if (this.getRoom().equals(user.getRoom()) && !this.isDead()){
-			Pair<Boolean, String> result;
+			System.out.println("MONSTRO: " + this.getName() + " ANIMO: " + this.getMood().name());
+			Pair<Tuple<Boolean, Boolean>, String> result;
 			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
 			boolean spellAt = false;
 			boolean weaponAt = false;
@@ -825,19 +870,33 @@ public class ActiveCharacter extends Character {
 				break;
 			}
 			if (spellAt) {
+				//first boolean defines if it has dealed damage
+				//the second one defines if it has hit itself
+				//the ActiveCharacter variable returns the instance of the enemy if it has damaged himself bc confusion
 				result = spellAttack(user, grammarAttack, rootObjWords, names);
-				if (result.getA())
-					return result;
+				if (result.getA().y)
+					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
+				else if (result.getA().x) {
+					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
+				}
 			}
 			if (this.getWeaponsEquipped().size() > 0 && RandUtil.sameTuple(this.getPosition(), user.getPosition()) && weaponAt) {
+				System.out.println("MONSTRO ATACA CON ARMA");
 				result = weaponAttack(user, grammarAttack, rootObjWords, names);
-				if (result.getA())
-					return result;
+				System.out.println("DEVUELVE:::: " + result.getA().x + " -- " + result.getA().y + " MSG : " + result.getB());
+				if (result.getA().y)
+					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
+				else if (result.getA().x) {
+					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
+				}
 			} else if (move) {
+				System.out.println("MONSTRO: " + this.getName() + " CON ANIMO: " + this.getMood().name());
+				System.out.println("SE MUEVE");
 				makeMoves(user);
 			}
 		}
-		return new Pair<Boolean, String>(false, "");	
+		return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>
+		(new Pair<Tuple<Boolean, Boolean>, String>(new Tuple<Boolean, Boolean> (false, false), ""),null);	
 	}
 	
 	public String getLifeAdjective() {

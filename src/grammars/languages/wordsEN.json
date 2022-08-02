@@ -49,14 +49,23 @@
     "his": [
       { "num": "sing" },
       { "translation": "his" },
-      { "genopposite": "her" },
+      { "genoppositefem": "her" },
+      { "genoppositeneutral": "its" },
       { "gen": "masc" }
     ],
     "her": [
       { "num": "sing" },
       { "translation": "her" },
-      { "genopposite": "his" },
+      { "genoppositemasc": "his" },
+      { "genoppositeneutral": "its" },
       { "gen": "fem" }
+    ],
+    "its": [
+      { "num": "sing" },
+      { "translation": "its" },
+      { "genoppositefem": "her" },
+      { "genoppositemasc": "his" },
+      { "gen": "neutral" }
     ]
   },
   "ADJ": {
@@ -325,7 +334,7 @@
       { "num": "plural" },
       { "translation": "heroes" },
       { "numopposite": "hero" },
-      { "gen": "" },
+      { "gen": "masc" },
       { "pronoun": "they" },
       { "pronoun_ref": "theirselves" }
     ],
@@ -333,43 +342,49 @@
       { "num": "sing" },
       { "translation": "dragon" },
       { "numopposite": "dragons" },
-      { "gen": "" },
-      { "pronoun": "it" }
+      { "gen": "neutral" },
+      { "pronoun": "it" },
+      { "pronoun_ref": "itself" }
     ],
     "dragons": [
       { "num": "plural" },
       { "translation": "dragons" },
       { "numopposite": "dragon" },
-      { "gen": "" },
-      { "pronoun": "it" }
+      { "gen": "neutral" },
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
     ],
     "goblin": [
       { "num": "sing" },
       { "translation": "goblin" },
       { "numopposite": "goblins" },
-      { "gen": "" },
-      { "pronoun": "it" }
+      { "gen": "neutral" },
+      { "pronoun": "it" },
+      { "pronoun_ref": "itself" }
     ],
     "goblins": [
       { "num": "plural" },
       { "translation": "goblins" },
       { "numopposite": "goblin" },
-      { "gen": "" },
-      { "pronoun": "it" }
+      { "gen": "neutral" },
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
     ],
     "rat": [
       { "num": "sing" },
       { "translation": "rat" },
       { "numopposite": "rats" },
-      { "gen": "" },
-      { "pronoun": "it" }
+      { "gen": "neutral" },
+      { "pronoun": "it" },
+      { "pronoun_ref": "itself" }
     ],
     "rats": [
       { "num": "plural" },
       { "translation": "rats" },
       { "numopposite": "rat" },
-      { "gen": "" },
-      { "pronoun": "it" }
+      { "gen": "neutral" },
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
     ],
     "life": [
       { "num": "sing" },
@@ -686,18 +701,6 @@
         { "numopposite": "attacks" },
         { "gen": "" }
       ],
-      "hurts": [
-        { "num": "sing" },
-        { "translation": "hurts" },
-        { "numopposite": "hurt" },
-        { "gen": "" }
-      ],
-      "hurt": [
-        { "num": "plural" },
-        { "translation": "hurt" },
-        { "numopposite": "hurts" },
-        { "gen": "" }
-      ],
       "charges against": [
         { "num": "sing" },
         { "translation": "charges against" },
@@ -712,16 +715,16 @@
       ]
     },
     "SELFHARM": {
-      "attacks": [
+      "hits": [
         { "num": "sing" },
-        { "translation": "attacks" },
-        { "numopposite": "attack" },
+        { "translation": "hits" },
+        { "numopposite": "hit" },
         { "gen": "" }
       ],
-      "attack": [
+      "hit": [
         { "num": "plural" },
-        { "translation": "attack" },
-        { "numopposite": "attacks" },
+        { "translation": "hit" },
+        { "numopposite": "hits" },
         { "gen": "" }
       ],
       "hurts": [

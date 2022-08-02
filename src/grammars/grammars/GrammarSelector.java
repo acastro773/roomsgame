@@ -125,12 +125,16 @@ public abstract class GrammarSelector {
 			String typeSecondRestriction = secondType.substring(0, secondType.indexOf("_"));
 			String toChange = getImportantRestriction(typeFirstRestriction, value1, typeSecondRestriction, value2);
 			String typeChangeToValue = "";
+			String typeGen = "";
+			if (type.equals("gen")) {
+				typeGen = value1Num;
+			}
 			if (toChange.equals(value1)) {
 				changeToValue = JSONParsing.getElement(restrictions1, type + "opposite");
 				typeChangeToValue = typeFirstRestriction; 
 				 
 			} else {
-				changeToValue = JSONParsing.getElement(restrictions2, type + "opposite");
+				changeToValue = JSONParsing.getElement(restrictions2, type + "opposite" + typeGen);
 				typeChangeToValue = typeSecondRestriction;
 			}
 			System.out.println("changetovalue: " + changeToValue + " - type1st: " + typeFirstRestriction

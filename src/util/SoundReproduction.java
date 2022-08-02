@@ -33,13 +33,11 @@ public class SoundReproduction implements Runnable {
 	int BUFFER_SIZE = 4096;
 	
 	public SoundReproduction(String pathFile) {
-		pathFile = pathFile.replace("\\", "/");
 		this.audiofile = new File(pathFile);
 		String fileName = this.audiofile.getName();
 		this.typeSound = fileName.substring(0, fileName.lastIndexOf("."));
 	}
 	public SoundReproduction(String pathFile, ActiveCharacter origin, ActiveCharacter player) {
-		pathFile = pathFile.replace("\\", "/");
 		this.audiofile = new File(pathFile);
 		String fileName = this.audiofile.getName();
 		this.typeSound = fileName.substring(0, fileName.lastIndexOf("."));

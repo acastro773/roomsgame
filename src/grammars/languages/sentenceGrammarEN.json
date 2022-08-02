@@ -134,7 +134,8 @@
       ],
       "restrictions": [
         { "SIMPLEPREP_1.num": "V_1.num" },
-        { "SIMPLEPREP_1.gen": "SIMPLEPREPPOS_1.gen" }
+        { "SIMPLEPREP_1.gen": "SIMPLEPREPPOS_1.gen" },
+        { "SIMPLEPREP_1.num": "SIMPLEPREPPOS_1.num" }
       ]
     }
   },

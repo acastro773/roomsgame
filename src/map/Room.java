@@ -28,7 +28,7 @@ import util.Tuple;
  * @author Dario
  *
  */
-public class Room {
+public class Room{
 	
 	/**
 	 *  individual_x and individual_y represent the length of the room
@@ -184,11 +184,9 @@ public class Room {
 		return false;
 	}
 	
-	public Pair<Boolean, String> monsterTurn(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords){
-		for (ActiveCharacter monster : this.getMonsters()){
-			return monster.doTurn(user, grammarAttack, rootObjWords);
-		}
-		return new Pair<Boolean, String>(false, "");
+	public Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> monsterTurn(ActiveCharacter user, ActiveCharacter monster, GrammarIndividual grammarAttack, JsonObject rootObjWords){
+		System.out.println("COMIENZA TURNO DE: " + monster.getName());
+		return monster.doTurn(user, grammarAttack, rootObjWords);		
 	}
 	
 	public String getSymbolPosition(Tuple<Integer, Integer> tuple){
@@ -407,103 +405,32 @@ public class Room {
 		}
 	}
 	
-	public Tuple<Integer, Integer> getDivisionRate(int userLvl) {
-		switch(userLvl) {
-		case 1:
-			return new Tuple<Integer, Integer>(1,4);
-		case 2:
-			return new Tuple<Integer, Integer>(1,5);
-		case 3:
-			return new Tuple<Integer, Integer>(1,9);
-		case 4:
-			return new Tuple<Integer, Integer>(4,9);
-		case 5:
-			return new Tuple<Integer, Integer>(10,9);
-		default:
-			return new Tuple<Integer, Integer>(15,9);
-		}
-	}
-	
 	public void generateRandomEnemies(ActiveCharacter user) {
-		if (RandUtil.RandomNumber(0, 2) == 1 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
-			int positionNumber = RandUtil.RandomNumber(0, this.checkFreePositions().size());
-			Tuple<Integer, Integer> position = this.getFreePositions().get(positionNumber);
-			int number = RandUtil.RandomNumber(0, 3);
-			int level = RandUtil.RandomNumber(user.getLevel(), user.getLevel() + 2);
-			switch(number) {
-				case 0: 
-					Rat rat = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
-					this.getMonsters().add(rat);
-					break;
-				case 1: 
+		if (RandUtil.RandomNumber(0, 2) != 0 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
+			int userLvl = user.getLevel();
+			int number = RandUtil.RandomNumber(15, 30);
+			int level = RandUtil.RandomNumber(userLvl, userLvl + 2);
+			System.out.println("ENEMIGO GENERADO: " + number);
+			while(number > 0 && this.checkFreePositions().size() > 0) {
+				int positionNumber = RandUtil.RandomNumber(0, this.checkFreePositions().size());
+				Tuple<Integer, Integer> position = this.getFreePositions().get(positionNumber);
+				if (number >= 15) {
+					Dragon dragon = new Dragon(this.getMap(), this, position, new ArrayList<String>(), level);
+					this.getMonsters().add(dragon);	
+					number -= 15;
+				} else if (number >= 5) {
 					Goblin goblin = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
 					this.getMonsters().add(goblin);
-					break;
-				case 2: 
-					Dragon dragon = new Dragon(this.getMap(), this, position, new ArrayList<String>(), level);
-					this.getMonsters().add(dragon);
-					break;
+					number -= 5;
+				} else if (number >= 3) {
+					Rat rat = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
+					this.getMonsters().add(rat);
+					number -= 3;
+				} else
+					number = 0;
+				number -= (int)Math.ceil(number*0.3);
 			}
 		}
-		/*if (RandUtil.RandomNumber(0, 4) > 2 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
-			int userLvl = user.getLevel();
-			//tuple of the division probabilities in rate apparition of monsters and
-			//type of apparition (one monster, two monsters, three monsters or wave)
-			//first value of the tuple: div rate of type of apparition
-			//second value of the tuple: div rate of type of monster
-			Tuple<Integer, Integer> divRate = getDivisionRate(userLvl);
-			int positionNumber = RandUtil.RandomNumber(0, this.checkFreePositions().size());
-			Tuple<Integer, Integer> position = this.getFreePositions().get(positionNumber);
-			int level = RandUtil.RandomNumber(userLvl, userLvl + 2);
-			int percApType = RandUtil.RandomNumber(1,divRate.x);
-			int percApMon = RandUtil.RandomNumber(1,divRate.y);
-			ArrayList<Integer> numberPercType
-			switch(percApType) {
-			default:
-			}
-			switch(number) {
-				case 0: 
-					Rat rat = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
-					this.getMonsters().add(rat);
-					break;
-				case 1: 
-					Goblin goblin = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
-					this.getMonsters().add(goblin);
-					break;
-				case 3: 
-					Dragon dragon = new Dragon(this.getMap(), this, position, new ArrayList<String>(), level);
-					this.getMonsters().add(dragon);
-					break;
-				case 4:
-					int rand = RandUtil.RandomNumber(0,2);
-					Rat rat3;
-					Rat rat4;
-					Goblin goblin2;
-					Goblin goblin3;
-					switch(rand) {
-					case 0:
-						rat3 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
-						rat4 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
-						this.getMonsters().add(rat3);
-						this.getMonsters().add(rat4);
-					case 1:
-						rat3 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
-						goblin2 = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
-						this.getMonsters().add(rat3);
-						this.getMonsters().add(goblin2);
-					case 2:
-						goblin2 = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
-						goblin3 = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
-						this.getMonsters().add(goblin2);
-						this.getMonsters().add(goblin3);
-					}
-					break;	
-				default:
-					Rat rat2 = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
-					this.getMonsters().add(rat2);
-					break;
-			}
-		}*/
 	}
 	
 	public Tuple<Integer, Integer> getRandomPosition(){

@@ -131,6 +131,7 @@ public class Main {
 	static GrammarsGeneral grammarGeneralDescription;
 	static GrammarsGeneral grammarSimpleVerb;
 	static GrammarsGeneral grammarGeneralObj;
+	static GrammarsGeneral grammarSelfharmDescription;
 	static SoundReproduction walkSound;
 	static SoundReproduction beepSound;
 	static SoundReproduction hitSwordSound;
@@ -289,7 +290,7 @@ public class Main {
 			adjectives.add("brave");
 			adjectives.add("glorious");
 			user = new ActiveCharacter("hero", "", null, null, null, 
-					40, 0, 20, 100, 100, 100, Mood.CONFUSED, new ArrayList<WereableWeapon>(),
+					40, 0, 20, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 					new ArrayList<WereableArmor>(), 100, 100, 0,
 					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 1);
 			user.setNextLevelExperience();
@@ -608,24 +609,43 @@ public class Main {
 			if (user.getLife() > 0) {
 				GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
 				if (doMonstersTurn) {
-					Pair<Boolean, String> message = user.getRoom().monsterTurn(user, grammarIndividual, rootObjWords);
-					printEverything(true);
-					if (message.getA() && !message.getB().isEmpty()) {
-						printMessage(message.getB());
-					} else if (!message.getB().isEmpty()){
-						GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
-						ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
-						ArrayList<String> preposition = new ArrayList<String>();
-						ArrayList<String> prepositionBefore = user.getPrepositions();
-						preposition.add("but");
-						user.setPrepositions(preposition);
-						namesMiss.add(user);
-						String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
-						user.setPrepositions(prepositionBefore);
-						String[] words = messageMiss.split("\\s+");
-						messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
-						printMessage(message.getB() + messageMiss);
-					}	
+					for (ActiveCharacter monster : user.getRoom().getMonsters()) {
+						if (!monster.isDead()) {
+							Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> message = user.getRoom().monsterTurn(user, monster, grammarIndividual, rootObjWords);
+							printEverything(true);
+							if (message.getA().getA().y && message.getB() != null) {
+								GrammarIndividual grammarIndividualSh = grammarSelfharmDescription.getRandomGrammar();
+								ArrayList<PrintableObject> namesSh = new ArrayList<PrintableObject>();
+								ArrayList<String> prepositionUser = new ArrayList<String>();
+								ArrayList<String> prepositionConf = new ArrayList<String>();
+								PrintableObject confusion = new PrintableObject("confusion", "", null, null);
+								prepositionUser.add("but");
+								prepositionConf.add("in");
+								message.getB().setPrepositions(prepositionUser);
+								confusion.setPrepositions(prepositionConf);
+								namesSh.add(message.getB());
+								namesSh.add(message.getB());
+								namesSh.add(confusion);
+								String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
+								main.Main.printMessage(message.getA().getB() + messageMiss);
+							} else if (message.getA().getA().x && !message.getA().getB().isEmpty()) {
+								printMessage(message.getA().getB());
+							} else if (!message.getA().getB().isEmpty()){
+								GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
+								ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
+								ArrayList<String> preposition = new ArrayList<String>();
+								ArrayList<String> prepositionBefore = user.getPrepositions();
+								preposition.add("but");
+								user.setPrepositions(preposition);
+								namesMiss.add(user);
+								String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
+								user.setPrepositions(prepositionBefore);
+								String[] words = messageMiss.split("\\s+");
+								messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
+								printMessage(message.getA().getB() + messageMiss);
+							}	
+						}
+					}
 				}
 				int i = j.inkey().code;
 				
@@ -722,6 +742,7 @@ public class Main {
 		grammarMissDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "ATTACKMISS").getAsJsonObject());
 		grammarSimpleVerb = new GrammarsGeneral(JSONParsing.getElement(rootObj, "SIMPLEVERB").getAsJsonObject());
 		grammarGeneralObj = new GrammarsGeneral(JSONParsing.getElement(rootObjGrammar, "GENERAL").getAsJsonObject());
+		grammarSelfharmDescription = new GrammarsGeneral(JSONParsing.getElement(rootObj, "SELFHARM").getAsJsonObject());
 		Map.sndObj = parser.parse(new FileReader("./src/sounds/soundsLoc.json")).getAsJsonObject();
 		beepSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "BEEP"));
 		waterdropSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "WATERDROP"));

@@ -76,7 +76,6 @@ public class GrammarSelectorNP extends GrammarSelector {
 			if (Main.debug) {
 				System.out.println("Value: " + value);
 			}
-			System.out.println("VALOR ACTUAL GRAMMAR" + value);
 			switch (value) {
 				case "DET" : resultArray.add(getRandomDeterminant());
 					break;

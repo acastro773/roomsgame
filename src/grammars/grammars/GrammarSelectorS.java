@@ -312,15 +312,18 @@ public class GrammarSelectorS extends GrammarSelector {
 			if (Main.debug) {
 				System.out.println("NPToDelete: " + NPToDelete);
 			}
-			String[] subsentence = sentence.split(NPToDelete);
-			for (String a : subsentence)
+			System.out.println("SE ELIMINA?: " + sentence.contains(NPToDelete));
+			String[] subsentence = sentence.split(" " + NPToDelete + " ");
+			for (String a : subsentence) {
+				a = a.replaceAll("\\s+", " ").trim();
 				System.out.println(a);
+			}
 			sentence = "";
 			for (int i = 0; i < subsentence.length; i++) {
 				if (i == subsentence.length-2)
 					sentence = sentence.concat(subsentence[i] + toChangeFor);
 				else if (i == 0)
-					sentence = sentence.concat(subsentence[i] + NPToDelete);
+					sentence = sentence.concat(subsentence[i] + NPToDelete + " ");
 				else
 					sentence = sentence.concat(subsentence[i]);
 			}

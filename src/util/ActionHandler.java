@@ -90,11 +90,6 @@ public class ActionHandler {
 				GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
 				String message = main.Main._getMessage(grammarIndividual, names, "ATTACK", "ATTACK", usePronoun, false, false);
 				//obtains tuple of (didDamage, selfDamage), check values and form the phrase
-				/*
-				 * 
-				 * CHANGE CODE HERE
-				 * 
-				 */
 				if (monster.getA().x) {
 					if (monster.getB().getLife() <= 0) {
 						user.addNewExperience(monster.getB().getExperienceGiven());
@@ -199,17 +194,54 @@ public class ActionHandler {
 	
 	public void _spellAction(int keyPressed, boolean usePronoun){
 		int itemNumber = keyPressed % keysMap.get("item1");
-		for (ActiveCharacter monsterAffected : user.attackSpell(itemNumber, user)) {
-			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+		ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+		Tuple<Boolean, ArrayList <ActiveCharacter>> spellAt = user.attackSpell(itemNumber, user);
+		if (spellAt.x) {
 			names.add(user);
 			names.add(user.getSpells().get(itemNumber));
-			names.add(monsterAffected);
-			main.Main.generatePrintMessage(names, grammarAttack, "SPELLS", "SPELLS", usePronoun, false, false);
-			if (monsterAffected.isDead()) {
-				user.addNewExperience(monsterAffected.getExperienceGiven());
-				monsterAffected.setExperienceGiven(0);
-				MessageDescriptionsUtil._messageDescriptionDead(monsterAffected, false, grammarAdjectiveDescription);
+			GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
+			String message = main.Main._getMessage(grammarIndividual, names, "SPELLS", "SPELLS", usePronoun, false, false);
+			GrammarIndividual grammarIndividualSh = grammarSelfharmDescription.getRandomGrammar();
+			ArrayList<PrintableObject> namesSh = new ArrayList<PrintableObject>();
+			ArrayList<String> prepositionUser = new ArrayList<String>();
+			ArrayList<String> prepositionConf = new ArrayList<String>();
+			PrintableObject confusion = new PrintableObject("confusion", "", null, null);
+			prepositionUser.add("but");
+			prepositionConf.add("in");
+			user.setPrepositions(prepositionUser);
+			confusion.setPrepositions(prepositionConf);
+			namesSh.add(user);
+			namesSh.add(user);
+			namesSh.add(confusion);
+			String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
+			main.Main.printMessage(message + messageMiss);
+		} else if (spellAt.y.size() > 0) {
+			for (ActiveCharacter monsterAffected : spellAt.y) {
+				names.add(user);
+				names.add(user.getSpells().get(itemNumber));
+				names.add(monsterAffected);
+				main.Main.generatePrintMessage(names, grammarAttack, "SPELLS", "SPELLS", usePronoun, false, false);
+				if (monsterAffected.isDead()) {
+					user.addNewExperience(monsterAffected.getExperienceGiven());
+					monsterAffected.setExperienceGiven(0);
+					MessageDescriptionsUtil._messageDescriptionDead(monsterAffected, false, grammarAdjectiveDescription);
+				}
 			}
+		} else {
+			names.add(user);
+			names.add(user.getSpells().get(itemNumber));
+			GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
+			String message = main.Main._getMessage(grammarIndividual, names, "SPELLS", "SPELLS", usePronoun, false, false);
+			GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
+			ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
+			ArrayList<String> preposition = new ArrayList<String>();
+			preposition.add("but");
+			user.setPrepositions(preposition);
+			namesMiss.add(user);
+			String messageMiss = ", " + main.Main._getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
+			String[] words = messageMiss.split("\\s+");
+			messageMiss = messageMiss.replaceFirst(words[1] + " ", "");
+			main.Main.printMessage(message + messageMiss);
 		}
 	}
 	
