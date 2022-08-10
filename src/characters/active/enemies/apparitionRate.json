@@ -1,0 +1,31 @@
+{
+  "ENEMY1": {
+    "GOBLIN": [
+      { "RATE": 76 },
+      { "BASEDANGER": 5 },
+      { "NAME": "goblin" }
+    ],
+    "RAT": [
+      { "RATE": 1 },
+      { "BASEDANGER": 3 },
+      { "NAME": "rat" }
+    ]
+  },
+  "ENEMY2": {
+    "DRAGON": [
+      { "RATE": 91 },
+      { "BASEDANGER": 15 },
+      { "NAME": "dragon" }
+    ],
+    "GOBLIN": [
+      { "RATE": 61 },
+      { "BASEDANGER": 5 },
+      { "NAME": "goblin" }
+    ],
+    "RAT": [
+      { "RATE": 1 },
+      { "BASEDANGER": 3 },
+      { "NAME": "rat" }
+    ]
+  }
+}

@@ -293,7 +293,7 @@ public class ActiveCharacter extends Character {
 		int damage = 0;
 		if (attacker.getLuck() >= randNumber && defender.evasion <= randNumber){
 			if (attacker.equals(defender)) {
-				damage = this.getAttackFromWeapons(attacker) - this.getDefenseMood(defender);
+				damage = this.getAttackFromWeapons(attacker) + 1 - this.getDefenseMood(defender);
 			} else {
 				damage = this.getAttackFromWeapons(attacker) - this.getDefenseFromArmor(defender)
 						- this.getDefenseFromShields(defender) - this.getDefenseMood(defender);

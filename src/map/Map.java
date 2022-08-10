@@ -46,6 +46,7 @@ public class Map {
 	static public JsonObject sndObj;
 	static public GrammarsGeneral sndRat;
 	static SoundReproduction appearSound;
+	//static ArrayList<Tuple<String, Integer>> 
 
 	/**
 	 * Creates a random map, which is a collection of rooms

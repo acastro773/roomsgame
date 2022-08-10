@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.text.DefaultCaret;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -122,6 +123,7 @@ public class Main {
 	static boolean newMatch = true;
 	public static JsonObject rootObjWords;
 	public static JsonObject rootObjGrammar;
+	public static JsonObject rootApparitionRate;
 	static ActionHandler actionHandler;
 	static GrammarsGeneral grammarAttack;
 	static GrammarsGeneral grammarPickItem;
@@ -140,6 +142,16 @@ public class Main {
 	static SoundReproduction deathEnemySound;
 	static SoundReproduction collisionSound;
 	static SoundReproduction waterdropSound;
+	static JsonObject rateAppar1;
+	static JsonObject rateAppar2;
+	public static ArrayList<Integer> enemiesList1Rate = new ArrayList<Integer>();
+	public static ArrayList<Integer> enemiesList1Danger = new ArrayList<Integer>();
+	public static ArrayList<String> enemiesList1Name = new ArrayList<String>();
+	public static ArrayList<Integer> enemiesList2Rate = new ArrayList<Integer>();
+	public static ArrayList<Integer> enemiesList2Danger = new ArrayList<Integer>();
+	public static ArrayList<String> enemiesList2Name = new ArrayList<String>();
+	static ArrayList<JsonArray> enemiesJson1 = new ArrayList<JsonArray>();
+	static ArrayList<JsonArray> enemiesJson2 = new ArrayList<JsonArray>();
 	static int countAction = 0;
 	public static int possibleCry = 0;
 	
@@ -725,13 +737,37 @@ public class Main {
 	public static void activateDeactivateSound() {
 		isSoundActivated = !isSoundActivated;
 	}
+	
+	public static void configureApparitionRate() {
+		//getting base apparition rate, base danger level and the list of available enemies from json file
+		rateAppar1 = JSONParsing.getElement(Main.rootApparitionRate, "ENEMY1").getAsJsonObject();
+		enemiesJson1.add(JSONParsing.getElement(rateAppar1, "GOBLIN").getAsJsonArray());
+		enemiesJson1.add(JSONParsing.getElement(rateAppar1, "RAT").getAsJsonArray());
+		rateAppar2 = JSONParsing.getElement(Main.rootApparitionRate, "ENEMY2").getAsJsonObject();
+		enemiesJson2.add(JSONParsing.getElement(rateAppar2, "DRAGON").getAsJsonArray());
+		enemiesJson2.add(JSONParsing.getElement(rateAppar2, "GOBLIN").getAsJsonArray());
+		enemiesJson2.add(JSONParsing.getElement(rateAppar2, "RAT").getAsJsonArray());
+		
+		//storing values on each ArrayList so it can be available since the beginning
+		for (JsonArray enemy : enemiesJson1) {
+			enemiesList1Rate.add(Integer.valueOf(JSONParsing.getElement(enemy, "RATE").toString()));
+			enemiesList1Danger.add(Integer.valueOf(JSONParsing.getElement(enemy, "BASEDANGER").toString()));
+			enemiesList1Name.add(JSONParsing.getElement(enemy, "NAME").toString());
+		}
+		
+		for (JsonArray enemy : enemiesJson2) {
+			enemiesList2Rate.add(Integer.valueOf(JSONParsing.getElement(enemy, "RATE").toString()));
+			enemiesList2Danger.add(Integer.valueOf(JSONParsing.getElement(enemy, "BASEDANGER").toString()));
+			enemiesList2Name.add(JSONParsing.getElement(enemy, "NAME").toString());
+		}
+	}
 
 	public static void main(String[] args) throws IOException, JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		_setLanguage();
 		configureTextArea();
 		j.getTargetFrame().requestFocus();
 		rootObj = parser.parse(new FileReader("./src/grammars/languages/sentenceGrammar" + language + ".json")).getAsJsonObject();
-		rootObj = parser.parse(new FileReader("./src/grammars/languages/sentenceGrammar" + language + ".json")).getAsJsonObject();
+		rootApparitionRate = parser.parse(new FileReader("./src/characters/active/enemies/apparitionRate.json")).getAsJsonObject();
 		rootObjWords = parser.parse(new FileReader("./src/grammars/languages/words" + language + ".json")).getAsJsonObject();
 		rootObjGrammar = parser.parse(new FileReader("./src/grammars/languages/objectGrammar" + language + ".json")).getAsJsonObject();
 		grammarAttack = new GrammarsGeneral(JSONParsing.getElement(rootObj, "ATTACK").getAsJsonObject());
@@ -746,6 +782,7 @@ public class Main {
 		Map.sndObj = parser.parse(new FileReader("./src/sounds/soundsLoc.json")).getAsJsonObject();
 		beepSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "BEEP"));
 		waterdropSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "WATERDROP"));
+		configureApparitionRate();
 		countAction = Util.rand(12, 25);
 		possibleCry = Util.rand(3, 10);
 		System.out.println("countAction set: " + countAction);

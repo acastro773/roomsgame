@@ -6,9 +6,12 @@ import items.consumables.MagicPotion;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import org.omg.PortableInterceptor.USER_EXCEPTION;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import characters.active.ActiveCharacter;
@@ -16,6 +19,7 @@ import characters.active.enemies.Dragon;
 import characters.active.enemies.Goblin;
 import characters.active.enemies.Rat;
 import grammars.grammars.GrammarIndividual;
+import grammars.parsing.JSONParsing;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Pair;
 import main.Main;
@@ -405,30 +409,106 @@ public class Room{
 		}
 	}
 	
-	public void generateRandomEnemies(ActiveCharacter user) {
-		if (RandUtil.RandomNumber(0, 2) != 0 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
-			int userLvl = user.getLevel();
-			int number = RandUtil.RandomNumber(15, 30);
-			int level = RandUtil.RandomNumber(userLvl, userLvl + 2);
-			System.out.println("ENEMIGO GENERADO: " + number);
-			while(number > 0 && this.checkFreePositions().size() > 0) {
-				int positionNumber = RandUtil.RandomNumber(0, this.checkFreePositions().size());
-				Tuple<Integer, Integer> position = this.getFreePositions().get(positionNumber);
-				if (number >= 15) {
-					Dragon dragon = new Dragon(this.getMap(), this, position, new ArrayList<String>(), level);
+	public int chooseEnemy(int getAt, int numberList, int probability, int number, int extraDifficulty, int userLvl, Tuple<Integer, Integer> position) {
+		ArrayList<Integer> rateList;
+		ArrayList<Integer> dangerList;
+		ArrayList<String> nameList;
+		switch (numberList) {
+		case 1:
+			rateList = Main.enemiesList1Rate;
+			dangerList = Main.enemiesList1Danger;
+			nameList = Main.enemiesList1Name;
+			break;
+		case 2:
+			rateList = Main.enemiesList2Rate;
+			dangerList = Main.enemiesList2Danger;
+			nameList = Main.enemiesList2Name;
+			break;
+		default:
+			rateList = Main.enemiesList1Rate;
+			dangerList = Main.enemiesList1Danger;
+			nameList = Main.enemiesList1Name;
+			break;
+		}
+		int res = number;
+		int dangerLvl = dangerList.get(getAt) + extraDifficulty;
+		int probMin = 0;
+		int probMax = 100;
+		if (getAt > 0) {
+			probMax = rateList.get(getAt-1);
+			probMin = rateList.get(getAt);
+		} else {
+			probMin = rateList.get(getAt);
+			
+		}
+		System.out.println("Probability: " + probability + " - probMin: " + probMin + " - probMax: " + probMax);
+		System.out.println("numberList: " + numberList + " - getAt: " + getAt + " - number: " + number + " - dangerLvl: " + dangerLvl);
+		if (probability >= probMin && probability <= probMax) {
+			if (res >= (dangerLvl)) {
+				System.out.println("Creating: " + nameList.get(getAt));
+				switch(nameList.get(getAt)) {
+				case "dragon":
+					Dragon dragon = new Dragon(this.getMap(), this, position, new ArrayList<String>(), userLvl + extraDifficulty);
 					this.getMonsters().add(dragon);	
-					number -= 15;
-				} else if (number >= 5) {
-					Goblin goblin = new Goblin(this.getMap(), this, position, new ArrayList<String>(), level);
+					res -= dangerLvl;
+					break;
+				case "goblin":
+					Goblin goblin = new Goblin(this.getMap(), this, position, new ArrayList<String>(), userLvl + extraDifficulty);
 					this.getMonsters().add(goblin);
-					number -= 5;
-				} else if (number >= 3) {
-					Rat rat = new Rat(this.getMap(), this, position, new ArrayList<String>(), level);
+					res -= dangerLvl;
+					break;
+				case "rat":
+					Rat rat = new Rat(this.getMap(), this, position, new ArrayList<String>(), userLvl + extraDifficulty);
 					this.getMonsters().add(rat);
-					number -= 3;
-				} else
-					number = 0;
-				number -= (int)Math.ceil(number*0.3);
+					res -= dangerLvl;
+					break;
+				default:
+					Rat rat2 = new Rat(this.getMap(), this, position, new ArrayList<String>(), userLvl + extraDifficulty);
+					this.getMonsters().add(rat2);
+					res -= dangerLvl;
+					break;
+				}
+			} else {
+				if (("rat").equals(nameList.get(getAt))) {
+					return 0;
+				}
+			}
+		}
+		
+		return res;
+	}
+	
+	public void generateRandomEnemies(ActiveCharacter user) {
+		//check if we have enough space in the room
+		if (RandUtil.RandomNumber(0, 2) != 0 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
+			ArrayList<Pair<Integer, Integer>> probAndDanger = new ArrayList<Pair<Integer, Integer>>();
+			int userLvl = user.getLevel();
+			int extraDifficulty = RandUtil.RandomNumber(0, 2);
+			int number = RandUtil.RandomNumber(3 + extraDifficulty, userLvl*5);
+			probAndDanger.add(new Pair<Integer, Integer>(100, 0));
+			ArrayList<Integer> enemiesList;
+			int getFromList = 1;	
+			if (userLvl < 3) {
+				enemiesList = Main.enemiesList1Rate;
+			} else {
+				enemiesList = Main.enemiesList2Rate;
+				getFromList = 2;
+			}
+			while(number > 0 && this.checkFreePositions().size() > 0 && this.getMonsters().size() <= 10) {
+				int positionNumber = RandUtil.RandomNumber(0, this.checkFreePositions().size());
+				Tuple<Integer, Integer> position = this.getFreePositions().get(positionNumber);		
+				int probability = RandUtil.RandomNumber(1, 100);
+				int getAt = 0;
+				boolean valueChanged = false;
+				int prevValue = number;
+				while (getAt < enemiesList.size() && !valueChanged) {
+					number = chooseEnemy(getAt, getFromList, probability, number, extraDifficulty, userLvl, position);
+					valueChanged = (number != prevValue);
+					getAt++;
+				}
+				if (valueChanged) {
+					number -= (int)Math.ceil(number*0.2);
+				}
 			}
 		}
 	}
