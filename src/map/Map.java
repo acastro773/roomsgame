@@ -34,7 +34,7 @@ import util.Tuple;
 public class Map {
 
 	private Tuple<Integer, Integer> global_init;
-	private Tuple<Integer, Integer> global_fin;
+	public Tuple<Integer, Integer> global_fin;
 	private int real_x;
 	private int real_y;
 	byte[][] free_room;
@@ -78,8 +78,12 @@ public class Map {
 				user.setPosition(roomCharacter.getFreePositions().get(number));
 				user.setVisiblePositions();
 				for (Room room: this.getRooms()) {
-					room.putRandomPotions();
-					room.generateRandomEnemies(user);
+					if (RandUtil.RandomNumber(0, 2) != 0)
+						room.generateRandomEnemies(user);
+					else
+						room.putRandomPotions();
+					if (room.getMonsters().size() > 0)
+						room.setListOfTurns(user);
 				}
 				notDone = false;
 			}
@@ -685,21 +689,67 @@ public class Map {
 		}
 	}
 	
+	public void printInformationTurns(WSwingConsoleInterface j, Room room, int initPos_i, int initPos_j) {
+		String translation = JSONParsing.getTranslationWord("current turn", "OTHERS", Main.rootObjWords);
+		String turn = translation + ": " + room.printTurn(0);
+		j.print(initPos_i - 2, initPos_j, turn);
+		translation = JSONParsing.getTranslationWord("next turns", "OTHERS", Main.rootObjWords) + ":";
+		j.print(initPos_i, initPos_j + 1, translation);
+		for (int i = 1; i < 4; i++) {
+			turn = room.printTurn(i);
+			j.print(initPos_i + 12, initPos_j + 1 + i, turn);
+		}
+	}
+	
+	public boolean allEnemiesRoomDead(Room room) {
+		for (ActiveCharacter enemy: room.getMonsters()) {
+			if (!enemy.isDead())
+				return false;
+		}
+		return true;
+	}
+	
+	public boolean enemiesOnSight(ActiveCharacter user, Room room) {
+		for (ActiveCharacter enemy: room.getMonsters()) {
+			if (RandUtil.containsTuple(enemy.getPosition(), user.getVisiblePositions()) && !enemy.isDead())
+				return true;
+		}
+		return false;
+	}
+	
 	public void printMonsters(WSwingConsoleInterface j, ActiveCharacter user){	
 		for (Room room : getRooms()){
 			if (user.getRoom().equals(room)){
-				for (ActiveCharacter enemy: room.getMonsters()){
-					if (RandUtil.containsTuple(enemy.getPosition(), user.getVisiblePositions())){
-						Main.possibleCry--;
-						room.printMonsters(j, user.getVisiblePositions());
-						if (Main.possibleCry <= 0 && enemy.getLife() > 0 && Main.isSoundActivated) {
-							String loc = JSONParsing.getSoundSource(sndObj, enemy, "IDLE");
-							appearSound = new SoundReproduction(loc, enemy, user);
-							appearSound.reproduce();
-							Main.possibleCry = Util.rand(8, 20);
-						}						
-					}
-				}
+				if (!room.allEnemiesDead) {
+					if (!allEnemiesRoomDead(room)) {
+						//prints the order of the first turns on the ArrayList
+						//checks if the the list is already printing
+						if (enemiesOnSight(user, room)) {
+							if (!room.turnMes)
+								room.turnMes = true;
+						} else
+							room.turnMes = false;
+						for (ActiveCharacter enemy: room.getMonsters()) {
+							if(room.getTurnsList().contains(enemy) && enemy.isDead()) {
+								System.out.println("ENTRA ACÁ ====================");
+								room.clearTurnList();
+								room.setListOfTurns(user);	
+							}
+							if (RandUtil.containsTuple(enemy.getPosition(), user.getVisiblePositions()) && !enemy.isDead()) {
+								Main.possibleCry--;
+								room.printMonsters(j, user.getVisiblePositions());
+								if (Main.possibleCry <= 0 && enemy.getLife() > 0 && Main.isSoundActivated) {
+									String loc = JSONParsing.getSoundSource(sndObj, enemy, "IDLE");
+									appearSound = new SoundReproduction(loc, enemy, user);
+									appearSound.reproduce();
+									Main.possibleCry = Util.rand(8, 20);
+								}		
+							}
+						}
+					} else
+						room.allEnemiesDead = true;
+				} else
+					room.turnMes = false;
 			}
 		}
 	}
@@ -724,19 +774,21 @@ public class Map {
 	
 	public void _printInformationMonsters(WSwingConsoleInterface j, ActiveCharacter user, JsonObject rootObjWords) {
 		int count = 0;
+		int countNum = 0;
 		for (ActiveCharacter monster : user.getRoom().getMonstersPosition(user.getPosition())) {
 			if (!monster.isDead() && count == 0) {
+				countNum++;
 				main.Main.countElements += 1;
-				j.print(user.getMap().global_fin().y + 1, main.Main.countElements, JSONParsing.getTranslationWord("monsters", "N", rootObjWords) + ": ");
+				j.print(user.getMap().global_fin().y + 1, main.Main.countElements+3, JSONParsing.getTranslationWord("monsters", "N", rootObjWords) + ": ");
 				count++;
 			}
-			if (!monster.isDead()) {
+			if (!monster.isDead() && countNum < 3) {
+				countNum++;
 				main.Main.countElements += 1;
-				monster.printMonstersInformation(rootObjWords, j, user.getMap().global_fin().y + 1, main.Main.countElements);
+				monster.printMonstersInformation(rootObjWords, j, user.getMap().global_fin().y + 1, main.Main.countElements+3);
 			}
 		}
 	}
-	
 	public Room getRandomRoom() {
 		int number = RandUtil.RandomNumber(0, this.getRooms().size());
 		return this.getRooms().get(number);

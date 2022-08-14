@@ -52,7 +52,7 @@ public class GrammarSelectorSTest {
 		grammarDescribeCharacterWears = new GrammarsGeneral(objectCharacterWears);
 		ArrayList<String> adjectives = new ArrayList<String>();
 		adjectives.add("small");
-		user = new ActiveCharacter("hero", "", map, room, position, 40, 10,
+		user = new ActiveCharacter("hero", "", map, room, position, 40, 10, 10,
 				100, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
 				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);

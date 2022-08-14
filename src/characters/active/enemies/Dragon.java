@@ -19,18 +19,19 @@ import util.Tuple;
 public class Dragon extends ActiveCharacter {
 	
 	public Dragon(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
-		super("dragon", "", map, room, position, 8+level, 3+level, 80+(level*5),
+		super("dragon", "", map, room, position, 8+level, 3+level, 15+(3*level), 80+(level*5),
 				100, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
 				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "D", 2, null, adjectives, level);
 		this.setMovementType(getMovementTypeFromMood());
 		this.setTirenessTotal(7);
 		this.setExperienceGiven(100+level*10);
-		WereableWeapon oneHandSword = new ShortSword(this, null, null, null, level, true);
 		this.addSpell(new Fireball());
 		this.addSpell(new FireRing());
-		this.putItemInventory(oneHandSword);
-		this.equipWeapon(oneHandSword);
-		if (RandUtil.RandomNumber(0, 5) == 1) {
+		this.getRandomEquip();
+		int randNum = 50 - this.getLevel()*3;
+		if (randNum < 2)
+			randNum = 2;
+		if (RandUtil.RandomNumber(0, randNum) == 0) {
 			this.putRandomItemInventory();
 		}
 	}

@@ -57,6 +57,7 @@ public class ActiveCharacter extends Character {
 	private int damage;
 	private int defense;
 	private int totalLife; // TotalLife
+	private int speed;
 	private int life;
 	private int magic;
 	private int totalMagic;
@@ -85,7 +86,7 @@ public class ActiveCharacter extends Character {
 
 	public ActiveCharacter(String name, String description,
 			Map map, Room room, Tuple<Integer, Integer> position, int damage,
-			int defense, int life, int luck, int weight, int length, Mood mood,
+			int defense, int speed, int life, int luck, int weight, int length, Mood mood,
 			ArrayList<WereableWeapon> weaponsEquipped,
 			ArrayList<WereableArmor> armorsEquipped, int inventorySpace, int carryWeight,
 			int actualCarryWeight, ArrayList<Item> inventory, int actualInventorySpace, int evasion,
@@ -97,6 +98,7 @@ public class ActiveCharacter extends Character {
 		this.totalMagic = totalMagic;
 		this.magic = magic;
 		this.defense = defense;
+		this.speed = speed;
 		this.life = life;
 		this.limLifeLevel = life;
 		this.luck = luck; // number between 0 and 100
@@ -138,7 +140,7 @@ public class ActiveCharacter extends Character {
 	}
 	
 	public void putRandomItemInventory() {
-		int itemRandom = RandUtil.RandomNumber(0, 7);
+		int itemRandom = RandUtil.RandomNumber(0, 6);
 		int itemLevel = RandUtil.RandomNumber(this.getLevel(), this.getLevel() + 3);
 		boolean isMagic = RandUtil.RandomNumber(0, 2) > 0 ? true : false; 
 		Item item = null;
@@ -254,7 +256,7 @@ public class ActiveCharacter extends Character {
 				if (statsMood.x <= randNumber){
 					w.setDurability(w.getDurability() - w.getErosion());
 				}
-				damage += statsMood.y + this.getLevel();
+				damage += statsMood.y;
 			}
 		}
 		return damage;
@@ -268,7 +270,7 @@ public class ActiveCharacter extends Character {
 				if (character.getLuck() <= randNumber){
 					w.setDurability(w.getDurability() - w.getErosion());
 				}
-				defense += w.getDefense() + this.getLevel();
+				defense += w.getDefense();
 			}
 		}
 		return defense;
@@ -291,16 +293,26 @@ public class ActiveCharacter extends Character {
 	public int getFullAttackNumbers(ActiveCharacter attacker, ActiveCharacter defender){
 		int randNumber = RandUtil.RandomNumber(0, 100);
 		int damage = 0;
-		if (attacker.getLuck() >= randNumber && defender.evasion <= randNumber){
-			if (attacker.equals(defender)) {
-				damage = this.getAttackFromWeapons(attacker) + 1 - this.getDefenseMood(defender);
-			} else {
+		System.out.println("STARTING ATTACK: defender evasion -> " + defender.evasion + " vs " + randNumber);
+		System.out.println("attacker luck -> " + attacker.getLuck() + " vs " + randNumber);
+		if (attacker.equals(defender)) {
+			System.out.println("SELFATTACK");
+			System.out.println("MAX DAMAGE: " + this.getAttackFromWeapons(attacker));
+			System.out.println("DEFENSE MOOD: " + this.getDefenseMood(defender));
+			damage = this.getAttackFromWeapons(attacker) - this.getDefenseMood(defender);
+		} else if (attacker.getLuck() >= randNumber && defender.evasion <= randNumber){
+				System.out.println("ATTACKING ENEMY");
+				System.out.println("MAX DAMAGE: " + this.getAttackFromWeapons(attacker));
+				System.out.println("DEFENSE ARMOR: " + this.getDefenseFromArmor(defender));
+				System.out.println("DEFENSE SHIELD: " + this.getDefenseFromShields(defender));
+				System.out.println("DEFENSE MOOD: " + this.getDefenseMood(defender));
 				damage = this.getAttackFromWeapons(attacker) - this.getDefenseFromArmor(defender)
 						- this.getDefenseFromShields(defender) - this.getDefenseMood(defender);
-			}
-			if (damage > 0){
-				return damage;
-			}
+				if (damage < 1)
+					damage = 200;
+		}
+		if (damage > 0){
+			return damage;
 		}
 		return 0;
 	}
@@ -527,6 +539,7 @@ public class ActiveCharacter extends Character {
 		ArrayList<WeaponType> freeSlots = new ArrayList<WeaponType>(this.getFreeWeaponSlots());
 		ArrayList<WeaponType> weaponType = weapon.getWeaponType();
 		if (freeSlots.containsAll(weaponType) || (weapon.getIsSingleHand() && !freeSlots.isEmpty())){
+			System.out.println("ENTRA ACÁ");
 			if (this.getInventory().contains(weapon)){
 				if (weapon.getIsSingleHand()){
 					ArrayList<WeaponType> type = new ArrayList<WeaponType>();
@@ -589,6 +602,12 @@ public class ActiveCharacter extends Character {
 		j.print(initPos_j, initPos_i, magic);
 	}
 	
+	public void _printSpeed(JsonObject rootObjWords, WSwingConsoleInterface j, int initPos_i, int initPos_j){
+		String translation = JSONParsing.getTranslationWord("speed", "N", rootObjWords);
+		String speed = translation + ": " + this.getSpeed();
+		j.print(initPos_j, initPos_i, speed);
+	}
+	
 	public void _printMood(JsonObject rootObjWords, WSwingConsoleInterface j, int initPos_i, int initPos_j){
 		String translation = JSONParsing.getTranslationWord("mood", "N", rootObjWords);
 		String mood = translation + ": " + JSONParsing.getTranslationWord(this.getMood().name().toLowerCase(), "ADJ", rootObjWords);
@@ -605,17 +624,19 @@ public class ActiveCharacter extends Character {
 		Main.countElements++;
 		_printLife(rootObjWords, j, initPos_j + 1, initPos_i);
 		Main.countElements++;
-		_printMood(rootObjWords, j, initPos_j + 2, initPos_i);
+		_printSpeed(rootObjWords, j, initPos_j + 2, initPos_i);
+		Main.countElements++;
+		_printMood(rootObjWords, j, initPos_j + 3, initPos_i);
 	}
 	
 	public void _printGroundObjects(WSwingConsoleInterface j, JsonObject rootObjWords){
 		if (this.getRoom().getItemsPosition(this.getPosition()).size() > 0) {
 			main.Main.countElements += 2;
-			j.print(this.getMap().global_fin().y + 1, main.Main.countElements, JSONParsing.getTranslationWord("items", "N", rootObjWords) + ": ");
+			j.print(this.getMap().global_fin().y + 1, main.Main.countElements+2, JSONParsing.getTranslationWord("items", "N", rootObjWords) + ": ");
 		}
 		for (Item item : this.getRoom().getItemsPosition(this.getPosition())) {
 			main.Main.countElements += 1;
-			item.printItemsInformation(j, this.getMap().global_fin().y + 1, main.Main.countElements);
+			item.printItemsInformation(j, this.getMap().global_fin().y + 1, main.Main.countElements+2);
 		}
 	}
 	
@@ -851,10 +872,13 @@ public class ActiveCharacter extends Character {
 			System.out.println("MONSTRO: " + this.getName() + " ANIMO: " + this.getMood().name());
 			Pair<Tuple<Boolean, Boolean>, String> result;
 			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+			//checks monster's mood: current status, the number of turns remaining in the current status, etc
+			//this.checkMood();
 			boolean spellAt = false;
 			boolean weaponAt = false;
 			boolean move = false;
 			names.add(this);
+			//monster's behavior depends on its mood
 			switch(this.getMood()) {
 			case TERRIFIED:
 				move = true;
@@ -872,26 +896,24 @@ public class ActiveCharacter extends Character {
 			if (spellAt) {
 				//first boolean defines if it has dealed damage
 				//the second one defines if it has hit itself
-				//the ActiveCharacter variable returns the instance of the enemy if it has damaged himself bc confusion
+				//the ActiveCharacter variable returns the instance of the enemy if it has damaged itself bc of confusion
 				result = spellAttack(user, grammarAttack, rootObjWords, names);
 				if (result.getA().y)
+					//if it hits itself
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
 				else if (result.getA().x) {
+					//if not
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
 				}
 			}
 			if (this.getWeaponsEquipped().size() > 0 && RandUtil.sameTuple(this.getPosition(), user.getPosition()) && weaponAt) {
-				System.out.println("MONSTRO ATACA CON ARMA");
 				result = weaponAttack(user, grammarAttack, rootObjWords, names);
-				System.out.println("DEVUELVE:::: " + result.getA().x + " -- " + result.getA().y + " MSG : " + result.getB());
 				if (result.getA().y)
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
 				else if (result.getA().x) {
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
 				}
 			} else if (move) {
-				System.out.println("MONSTRO: " + this.getName() + " CON ANIMO: " + this.getMood().name());
-				System.out.println("SE MUEVE");
 				makeMoves(user);
 			}
 		}
@@ -942,10 +964,82 @@ public class ActiveCharacter extends Character {
 		if (this.getExperience() + addExperience >= this.getNextLevelExperience()) {
 			int experienceToNextLevel = this.getNextLevelExperience() - this.getExperience();
 			this.setExperience(addExperience - experienceToNextLevel);
+			this.setSpeed(this.getSpeed()+2);
+			this.setDamage(this.getDamage()+1);
+			this.setDefense(this.getDefense()+1);
 			this.setNewLevel(this.getLevel() + 1);
 			this.setNewLimLife(this.getTotalLife() + 5);
 		} else {
 			this.setExperience(this.getExperience() + addExperience);
+		}
+	}
+	
+	public void getRandomEquip() {
+		WereableWeapon oneHandSword;
+		int number;
+		int numberArmor = RandUtil.RandomNumber(0, this.getLevel()*5);;
+		if (this.getLevel() < 3) {
+			number = RandUtil.RandomNumber(0, 7);
+			if (number == 0) {
+				oneHandSword = new LongSword(this, null, null, null, level, false);
+			} else
+				oneHandSword = new ShortSword(this, null, null, null, level, false);
+		} else if (this.getLevel() < 6) {
+			if (RandUtil.RandomNumber(0, 5) == 0) {
+				oneHandSword = new LongSword(this, null, null, null, level, false);
+			} else
+				oneHandSword = new ShortSword(this, null, null, null, level, false);
+		} else {
+			if (RandUtil.RandomNumber(0, 2) == 0) {
+				oneHandSword = new LongSword(this, null, null, null, level, false);
+			} else
+				oneHandSword = new ShortSword(this, null, null, null, level, false);
+		}
+		this.putItemInventory(oneHandSword);
+		this.equipWeapon(oneHandSword);
+		System.out.println("AÑADIDA ARMA: " + this.getWeaponsEquipped() + " - " + oneHandSword.getName());
+		while (numberArmor > 2) {
+			int randNum = 20 - this.getLevel();
+			if (randNum < 7)
+				randNum = 7;
+			int n = RandUtil.RandomNumber(0, randNum);
+			int numberMagic = RandUtil.RandomNumber(0, 6);
+			boolean isMagic = (numberMagic < 2);
+			WereableArmor armor = null;
+			switch(n) {
+			//choose armor
+			case 0:
+				armor = new NormalArmor(this, null, null, null, this.getLevel(), isMagic);
+				break;
+			//choose gloves
+			case 1:
+			case 2:
+			case 3:
+				armor = new NormalGloves(this, null, null, null, this.getLevel(), isMagic);
+				break;
+			//choose helmet
+			case 4:
+			case 5:
+				armor = new NormalHelmet(this, null, null, null, this.getLevel(), isMagic);
+				break;
+			//choose pants
+			case 6:
+				armor = new NormalPants(this, null, null, null, this.getLevel(), isMagic);
+				break;
+			default:
+				break;
+			}
+			
+			if (armor != null) {
+				if (!this.getArmorsEquipped().contains(armor)) {
+					this.putItemInventory(armor);
+					this.equipArmor(armor);
+					System.out.println("Adding armor: " + armor.getName());
+					numberArmor -= 3;
+				} else
+					numberArmor--;
+			} else
+				numberArmor--;
 		}
 	}
 	
@@ -1019,6 +1113,14 @@ public class ActiveCharacter extends Character {
 
 	public void setEvasion(int evasion){
 		this.evasion = evasion;
+	}
+	
+	public Integer getSpeed(){
+		return this.speed;
+	}
+
+	public void setSpeed(int speed){
+		this.speed = speed;
 	}
 
 	public int getTotalLife() {

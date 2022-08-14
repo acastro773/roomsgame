@@ -98,7 +98,6 @@ public class GrammarSelectorNP extends GrammarSelector {
 			System.out.println("Value to change: " + valueToChange);
 			System.out.println("Change to: " + changeToValue);
 		}
-		System.out.println("typeChangeToValue: " + typeChangeToValue);
 		ArrayList<Pair<String, JsonArray>> selectedTypeWord = new ArrayList<Pair<String, JsonArray>>();
 		switch (typeChangeToValue) {
 			case "DET" :

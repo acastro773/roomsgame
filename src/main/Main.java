@@ -1,6 +1,8 @@
 package main;
 
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,6 +10,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
@@ -17,6 +21,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+import javax.swing.Timer;
 import javax.swing.text.DefaultCaret;
 
 import com.google.gson.JsonArray;
@@ -235,12 +240,13 @@ public class Main {
 		user._printInventory(j, rootObjGrammar, rootObjWords);
 		user._printLife(rootObjWords, j, 0, map.global_fin().y + 1);
 		user._printMana(rootObjWords, j, 1, map.global_fin().y + 1);
-		user._printMood(rootObjWords, j, 2, map.global_fin().y + 1);
-		j.print(map.global_fin().y + 1, 3, JSONParsing.getTranslationWord("score", "N", rootObjWords) + ": " + 
+		user._printSpeed(rootObjWords, j, 2, map.global_fin().y + 1);
+		user._printMood(rootObjWords, j, 3, map.global_fin().y + 1);
+		j.print(map.global_fin().y + 1, 4, JSONParsing.getTranslationWord("score", "N", rootObjWords) + ": " + 
 				Integer.toString(deepnessScore));
-		j.print(map.global_fin().y + 1, 4, JSONParsing.getTranslationWord("level", "N", rootObjWords) + ": " + 
+		j.print(map.global_fin().y + 1, 5, JSONParsing.getTranslationWord("level", "N", rootObjWords) + ": " + 
 				Integer.toString(user.getLevel()));
-		j.print(map.global_fin().y + 1, 5, "exp" + ": " + 
+		j.print(map.global_fin().y + 1, 6, "exp" + ": " + 
 				Integer.toString(user.getExperience()) + "/" + user.getNextLevelExperience());
 	}
 	
@@ -251,6 +257,8 @@ public class Main {
 		map.printInside(j, user);
 		map.printItems(j, user);
 		map.printMonsters(j, user);
+		if (user.getRoom().turnMes)
+			map.printInformationTurns(j, user.getRoom(), user.getMap().global_fin.x-1, user.getMap().global_fin.y+1);
 		printUserInformation();
 		map._printInformationMonsters(j, user, rootObjWords);
 		if (needsToPrintGroundObjects) {
@@ -302,22 +310,12 @@ public class Main {
 			adjectives.add("brave");
 			adjectives.add("glorious");
 			user = new ActiveCharacter("hero", "", null, null, null, 
-					40, 0, 20, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
+					40, 0, 20, 1110, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 					new ArrayList<WereableArmor>(), 100, 100, 0,
-					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 1);
+					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 8);
 			user.setNextLevelExperience();
 			WereableWeapon oneHandSword = new ShortSword(user, null, null, null, user.getLevel(), true);
-			WereableWeapon oneHandSword2 = new ShortSword(user, null, null, null, user.getLevel(), true);
-			NormalHelmet helmet = new NormalHelmet(user, null, null, null, user.getLevel(), true);
-			NormalArmor chest = new NormalArmor(user, null, null, null, user.getLevel(), true);
-			NormalPants pants = new NormalPants(user, null, null, null, user.getLevel(), true);
-			NormalGloves gloves = new NormalGloves(user, null, null, null, user.getLevel(), true);
 			user.putItemInventory(oneHandSword);
-			user.putItemInventory(oneHandSword2);
-			user.putItemInventory(helmet);
-			user.putItemInventory(chest);
-			user.putItemInventory(pants);
-			user.putItemInventory(gloves);
 			FireRing fireRing = new FireRing();
 			user.addSpell(fireRing);
 		}
@@ -474,8 +472,11 @@ public class Main {
 	}
 	
 	public static void makeMovement(int i) throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
+		boolean actionDone = false;
+		boolean attackDone = false;
 		if (isInputType(movementInput, i)){
-        	doMonstersTurn = true;
+			attackDone = true;
+        	actionDone = true;
         	_moveCharacterAction(i);
         	setFlagsToFalse();
         	if (countAction > 0) {
@@ -484,115 +485,95 @@ public class Main {
         	}
         }
         else if (isInputType(inventoryInput, i)) {
-        	doMonstersTurn = true;
+        	attackDone = true;
+        	actionDone = true;
         	actionHandler._inventoryAction(i, usePronoun());
         	canUsePronoun = true;
         	printEverything(false);
         	hasUnequipedItem = false;
         	hasThrownItem = false;
         	hasPickedItem = false;
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         }
         else if (isInputType(pickItemInput, i)) {
-        	doMonstersTurn = true;
+        	actionDone = true;
         	actionHandler._pickItemAction(usePronoun(), hasPickedItem);
         	canUsePronoun = true;
         	printEverything(true);
         	hasEquipedItem = false;
         	hasUnequipedItem = false;
         	hasThrownItem = false;
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         }
         else if (isInputType(attackInput, i)) {
-        	doMonstersTurn = true;
+        	actionDone = true;
+        	attackDone = true;
         	actionHandler._attackAction(usePronoun());
         	canUsePronoun = true;
         	printEverything(true);
         	setFlagsToFalse();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } 
         else if (isInputType(spellInput, i)) {
+        	actionDone = true;
+        	attackDone = true;
         	spellsPressed = true;
         	setFlagsToFalse();
         	messageLabel.requestFocus();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(descriptionInput, i) || isInputType(descriptionWereableInput, i)) {
+        	actionDone = true;
         	setFlagsToFalse();
-        	doMonstersTurn = false;
         	actionHandler._descriptionAction(i, usePronoun(), isNumericDescription);
         	canUsePronoun = true;
         	printEverything(false);
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(throwItemInput, i)) {
+        	actionDone = true;
         	hasUnequipedItem = false;
         	hasEquipedItem = false;
         	hasPickedItem = false;
         	throwPressed = true;
         	messageLabel.requestFocus();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(changeNumericDescInput, i)) {
+        	actionDone = true;
         	isNumericDescription = !isNumericDescription;
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(changeColorsInput, i)) {
+        	actionDone = true;
         	if (selectedColor == arrayColors.length - 1) {
         		selectedColor = 0;
         	} else {
         		selectedColor++;
         	}
         	printEverything(true);
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(unequipItemInput, i)) {
+        	actionDone = true;
         	hasEquipedItem = false;
         	hasPickedItem = false;
         	hasThrownItem = false;
         	unequipPressed = true;
         	messageLabel.requestFocus();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(rebindKeysInput, i)) {
+        	actionDone = true;
         	rebindKeys();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(descriptionSpellInput, i)) {
+        	actionDone = true;
         	MessageDescriptionsUtil.describeSpells(user, rootObjWords, grammarSimpleVerb);
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(activateSoundInput, i)) {
+        	actionDone = true;
         	activateDeactivateSound();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(increaseFontInput, i)) {
+        	actionDone = true;
         	increaseFontSize();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         } else if (isInputType(decreaseFontInput, i)) {
+        	actionDone = true;
         	decreaseFontSize();
-        	if (isSoundActivated) {
-        		beepSound.reproduce();
-        	}
         }
-		
+		if (actionDone) {
+			if (attackDone) {
+				if (user.getRoom().getTurnsList().size() > 0)
+					user.getRoom().removeCurrentTurn();
+			} else {
+				if (isSoundActivated) {
+	        		beepSound.reproduce();
+	        	}
+			}
+		}
 	}
 	
 	public static void gameFlow() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
@@ -613,65 +594,89 @@ public class Main {
 			deepnessScore++;
 			hasUsedPortal = false;
 		}
+		
 		for (;;) {
 			for (ActiveCharacter monster : user.getRoom().getMonsters()) {
 				monster.setAdjectivesMonster(user);
 			}
 			user.setAdjectivesUser();
 			if (user.getLife() > 0) {
-				GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
-				if (doMonstersTurn) {
-					for (ActiveCharacter monster : user.getRoom().getMonsters()) {
-						if (!monster.isDead()) {
-							Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> message = user.getRoom().monsterTurn(user, monster, grammarIndividual, rootObjWords);
-							printEverything(true);
-							if (message.getA().getA().y && message.getB() != null) {
-								GrammarIndividual grammarIndividualSh = grammarSelfharmDescription.getRandomGrammar();
-								ArrayList<PrintableObject> namesSh = new ArrayList<PrintableObject>();
-								ArrayList<String> prepositionUser = new ArrayList<String>();
-								ArrayList<String> prepositionConf = new ArrayList<String>();
-								PrintableObject confusion = new PrintableObject("confusion", "", null, null);
-								prepositionUser.add("but");
-								prepositionConf.add("in");
-								message.getB().setPrepositions(prepositionUser);
-								confusion.setPrepositions(prepositionConf);
-								namesSh.add(message.getB());
-								namesSh.add(message.getB());
-								namesSh.add(confusion);
-								String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
-								main.Main.printMessage(message.getA().getB() + messageMiss);
-							} else if (message.getA().getA().x && !message.getA().getB().isEmpty()) {
-								printMessage(message.getA().getB());
-							} else if (!message.getA().getB().isEmpty()){
-								GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
-								ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
-								ArrayList<String> preposition = new ArrayList<String>();
-								ArrayList<String> prepositionBefore = user.getPrepositions();
-								preposition.add("but");
-								user.setPrepositions(preposition);
-								namesMiss.add(user);
-								String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
-								user.setPrepositions(prepositionBefore);
-								String[] words = messageMiss.split("\\s+");
-								messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
-								printMessage(message.getA().getB() + messageMiss);
-							}	
-						}
+				final GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
+				if (user.getRoom().getTurnsList() != null && user.getRoom().getTurnsList().size() > 0) {
+					final ActiveCharacter thing = user.getRoom().getTurnsList().get(0);
+					if (thing != null)
+						System.out.println("***** CURRENT TURN ***** -> " + thing.getName());
+					if (thing != user && !thing.isDead()) {
+						Timer timer = new Timer(100, new ActionListener()
+						{
+						    @Override
+						    public void actionPerformed(ActionEvent e)
+						    {
+						    	Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> message = user.getRoom().monsterTurn(user, thing, grammarIndividual, rootObjWords);
+						    	printEverything(true);
+								//confusion message
+								if (message.getA().getA().y && message.getB() != null) {
+									GrammarIndividual grammarIndividualSh = grammarSelfharmDescription.getRandomGrammar();
+									ArrayList<PrintableObject> namesSh = new ArrayList<PrintableObject>();
+									ArrayList<String> prepositionUser = new ArrayList<String>();
+									ArrayList<String> prepositionConf = new ArrayList<String>();
+									PrintableObject confusion = new PrintableObject("confusion", "", null, null);
+									prepositionUser.add("but");
+									prepositionConf.add("in");
+									message.getB().setPrepositions(prepositionUser);
+									confusion.setPrepositions(prepositionConf);
+									namesSh.add(message.getB());
+									namesSh.add(message.getB());
+									namesSh.add(confusion);
+									String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
+									main.Main.printMessage(message.getA().getB() + messageMiss);
+								} else if (message.getA().getA().x && !message.getA().getB().isEmpty()) {
+									//if it has dealt damage and receives the "x attacks y with z weapon" prints the message
+									printMessage(message.getA().getB());
+								} else if (!message.getA().getB().isEmpty()){
+									GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
+									ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
+									ArrayList<String> preposition = new ArrayList<String>();
+									ArrayList<String> prepositionBefore = user.getPrepositions();
+									preposition.add("but");
+									user.setPrepositions(preposition);
+									namesMiss.add(user);
+									String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
+									user.setPrepositions(prepositionBefore);
+									String[] words = messageMiss.split("\\s+");
+									messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
+									printMessage(message.getA().getB() + messageMiss);
+								}
+						    }
+						});
+						timer.setRepeats(false);
+						timer.start();
+						user.getRoom().removeCurrentTurn();
+					} else if (thing == user) {
+						int i = j.inkey().code;
+						
+						System.out.println("Code" + i);
+						
+						makeMovement(i);
+					} else
+						user.getRoom().removeCurrentTurn();
+				} else {
+					if (user.getRoom().getMonsters().size() > 0)
+						user.getRoom().setListOfTurns(user);
+					else {
+						int i = j.inkey().code;
+						
+						System.out.println("Code" + i);
+						
+						makeMovement(i);
 					}
 				}
-				int i = j.inkey().code;
-				
-				System.out.println("Code" + i);
-				
-				makeMovement(i);
-				
 				if (countAction == 0) {
 					if (isSoundActivated)
 						waterdropSound.reproduce();
 					countAction = Util.rand(25, 50);
 					System.out.println("countAction set: " + countAction);
 				}
-				
 			}
 			else {
 				if (isSoundActivated)

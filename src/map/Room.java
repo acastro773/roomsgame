@@ -6,6 +6,8 @@ import items.consumables.MagicPotion;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import org.omg.PortableInterceptor.USER_EXCEPTION;
@@ -55,10 +57,14 @@ public class Room{
 	private ArrayList<Tuple<Integer, Integer>> insidecolumns = new ArrayList<Tuple<Integer, Integer>>();
 	private ArrayList<Tuple<Integer, Integer>> portals = new ArrayList<Tuple<Integer, Integer>>();
 	private ArrayList<Tuple<Integer, Integer>> freePositions = new ArrayList<Tuple<Integer, Integer>>();
+	//if an enemy is nearby, checks user's speed and enemy's speed and sets an order for turns up to 10
+	private ArrayList<ActiveCharacter> turnsList = new ArrayList<ActiveCharacter>();
 	int ini_x;
 	int ini_y;
 	int fin_x;
 	int fin_y;
+	public boolean turnMes = false;
+	public boolean allEnemiesDead = false;
 	
 	public Room(Map map, Tuple<Integer, Integer> global_initial, Tuple<Integer, Integer> global_final){
 		this.map = map;
@@ -76,6 +82,78 @@ public class Room{
 		this.initializeCorners();
 		this.initializeInsidePositions();
 		this.checkFreePositions();
+	}
+	
+	public void removeCurrentTurn() {
+		ArrayList<ActiveCharacter> turnList = getTurnsList();
+		System.out.println("REMOVING: " + turnList.get(0).getName());
+		turnList.remove(0);
+		setTurnsList(turnList);
+	}
+	
+	public void setListOfTurns(ActiveCharacter user) {
+		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA CREANDO LISTAAAAAAAAAAAAAAAAAAAAAAa");
+		int userSpeed = user.getSpeed();
+		int userCount = 0;
+		ArrayList<ActiveCharacter> aliveMonsters = new ArrayList<>();
+		for (ActiveCharacter monster : getMonsters()) {
+			System.out.println("SE MIRA MONSTRO " + monster.getName() + " ID: " + monster + "- vivo? " + !monster.isDead());
+			if (!monster.isDead()) {
+				System.out.println("ESTE SE AÑADE");
+				aliveMonsters.add(monster);
+			}
+		}		
+		ArrayList<ActiveCharacter> monsters = aliveMonsters;
+		if (monsters.size() > 0) {
+			//orders list by speed descending
+			Collections.sort(monsters, new Comparator<ActiveCharacter>() {
+				public int compare(ActiveCharacter o1, ActiveCharacter o2) {
+					return o2.getSpeed().compareTo(o1.getSpeed());
+				}
+			});
+			ArrayList<Pair<Pair<Integer, Integer>, ActiveCharacter>> monstersSpeed = new ArrayList<Pair<Pair<Integer, Integer>, ActiveCharacter>>();
+			//sets an array with a pair that contains a counter (of times that the monster has been selected for the turnsList array)
+			//and the other one with the speed of the monster
+			for (ActiveCharacter monster : monsters) {
+				monstersSpeed.add(new Pair<Pair<Integer, Integer>, ActiveCharacter>(new Pair<Integer, Integer>(0, monster.getSpeed()), monster));
+			}
+			while(getTurnsList().size() < 500) {
+				ArrayList<ActiveCharacter> currentIter = new ArrayList<>();
+				for (Pair<Pair<Integer, Integer>, ActiveCharacter> monster : monstersSpeed) {
+					boolean bothSelected = false;
+					while (userCount < 2 && monster.getA().getA() < 2 && !bothSelected) {
+						if (userCount == 1 && monster.getA().getA() == 1) {
+							bothSelected = true;
+						} else {
+							if (userSpeed >= monster.getB().getSpeed()) {
+								userCount++;
+								userSpeed = (int)Math.ceil(userSpeed*0.5);
+								currentIter.add(user);
+							} else {
+								monster.setA(new Pair<Integer, Integer>(monster.getA().getA()+1, (int)Math.ceil(monster.getA().getB()*0.5)));;
+								currentIter.add(monster.getB());
+							}
+						}
+					}
+					if (userCount == 2) {
+						currentIter.add(monster.getB());
+					}
+					userCount = 0;
+					userSpeed = user.getSpeed();
+					monster.setA(new Pair<Integer, Integer>(0, monster.getB().getSpeed()));
+				}
+				if (!currentIter.contains(user)) {
+					currentIter.add(user);
+					for (ActiveCharacter chars : currentIter) {
+						turnsList.add(chars);
+					}
+				}
+			}
+		}
+	}
+	
+	public void clearTurnList() {
+		setTurnsList(new ArrayList<ActiveCharacter>());
 	}
 	
 	public ArrayList<Tuple<Integer, Integer>> checkFreePositions() {
@@ -480,11 +558,11 @@ public class Room{
 	
 	public void generateRandomEnemies(ActiveCharacter user) {
 		//check if we have enough space in the room
-		if (RandUtil.RandomNumber(0, 2) != 0 && this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
+		if (this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
 			ArrayList<Pair<Integer, Integer>> probAndDanger = new ArrayList<Pair<Integer, Integer>>();
 			int userLvl = user.getLevel();
 			int extraDifficulty = RandUtil.RandomNumber(0, 2);
-			int number = RandUtil.RandomNumber(3 + extraDifficulty, userLvl*5);
+			int number = RandUtil.RandomNumber(3 + extraDifficulty, userLvl*6);
 			probAndDanger.add(new Pair<Integer, Integer>(100, 0));
 			ArrayList<Integer> enemiesList;
 			int getFromList = 1;	
@@ -517,6 +595,13 @@ public class Room{
 		this.checkFreePositions();
 		int value = RandUtil.RandomNumber(0, this.getInsidePositions().size());
 		return this.getInsidePositions().get(value);
+	}
+	
+	public String printTurn(int turn) {
+		if (turnsList.size() > turn)
+			return turnsList.get(turn).getName();
+		else
+			return "";
 	}
 
 	public ArrayList<Tuple<Integer, Integer>> getInsidecolumns() {
@@ -637,6 +722,14 @@ public class Room{
 
 	public void setFreePositions(ArrayList<Tuple<Integer, Integer>> freePositions) {
 		this.freePositions = freePositions;
+	}
+	
+	public ArrayList<ActiveCharacter> getTurnsList() {
+		return turnsList;
+	}
+
+	public void setTurnsList(ArrayList<ActiveCharacter> turnsList) {
+		this.turnsList = turnsList;
 	}
 
 	public Map getMap() {

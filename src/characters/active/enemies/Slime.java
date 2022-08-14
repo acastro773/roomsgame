@@ -13,14 +13,14 @@ import map.Room;
 import util.RandUtil;
 import util.Tuple;
 
-public class Rat extends ActiveCharacter {
+public class Slime extends ActiveCharacter {
 	
-	public Rat(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
-		super("rat", "", map, room, position, 2+level, 1+(int)Math.ceil(level*0.5), 8+(3*level), 30,
+	public Slime(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
+		super("slime", "", map, room, position, 2+level, 1+(int)Math.ceil(level*0.5), 6+(2*level), 100+(level*15),
 				70, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
-				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "R", 3, null, adjectives, level);
+				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "S", 3, null, adjectives, level);
 		this.setMovementType(getMovementTypeFromMood());
-		this.setExperienceGiven(20+level*10);
+		this.setExperienceGiven(40+level*10);
 		this.getRandomEquip();
 		int randNum = 50 - this.getLevel()*3;
 		if (randNum < 2)

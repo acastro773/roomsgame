@@ -30,10 +30,6 @@ public class GrammarSelectorS extends GrammarSelector {
 		this.type = type;
 		this.verbs = WordsGrammar.getVerbs(wordsGrammar, verbsType);
 		this.names = names;
-		System.out.println("NOMBRES:");
-		for (PrintableObject a : names) {
-			System.out.println(a.getName());
-		}
 		current_prep = 0;
 		this.analyseGrammar();
 	}
@@ -43,7 +39,6 @@ public class GrammarSelectorS extends GrammarSelector {
 		this.setGrammarsNP(new ArrayList<GrammarSelectorNP>());
 		this.setGrammarsNPPair(new ArrayList<ArrayList<Pair<String, JsonArray>>>());
 		int endIteration;
-		System.out.println("ANALYSE:");
 		if (type == "DESCITEM") {
 			endIteration = this.getNames().size() + 1;
 		} else {
@@ -56,7 +51,6 @@ public class GrammarSelectorS extends GrammarSelector {
 			}
 			String value = this.getGrammar().getGrammar().get("keys").get(selectedValue);
 			String typeValue = this.returnParseString(value, "_");
-			System.out.println("value: " + value + " typeValue: " + typeValue + " namePos: ");
 			if (!typeValue.equals("V")) {
 				this.getRandomNP(typeValue, namePos);
 				namePos++;
@@ -308,15 +302,14 @@ public class GrammarSelectorS extends GrammarSelector {
 			}
 			if (!sentence.contains(NPToDelete) && usePronoun)
 				NPToDelete = JSONParsing.getElement(WordsGrammar.getName(this.getWordsGrammar(), nameToGetPronounFrom).get(0).getB(), "pronoun");
-			System.out.println("NPToDelete: " + NPToDelete);
+			//System.out.println("NPToDelete: " + NPToDelete);
 			if (Main.debug) {
 				System.out.println("NPToDelete: " + NPToDelete);
 			}
-			System.out.println("SE ELIMINA?: " + sentence.contains(NPToDelete));
+			//System.out.println("SE ELIMINA?: " + sentence.contains(NPToDelete));
 			String[] subsentence = sentence.split(" " + NPToDelete + " ");
 			for (String a : subsentence) {
 				a = a.replaceAll("\\s+", " ").trim();
-				System.out.println(a);
 			}
 			sentence = "";
 			for (int i = 0; i < subsentence.length; i++) {
@@ -329,7 +322,6 @@ public class GrammarSelectorS extends GrammarSelector {
 			}
 		}
 		sentence = sentence.replaceAll("\\s+", " ").trim();
-		System.out.println("Final sentence: " + sentence);
 		return sentence;
 	}
 	
@@ -379,8 +371,6 @@ public class GrammarSelectorS extends GrammarSelector {
 							break;
 						default : 
 							numItems.add(this.getGrammarsNPPair().get(NPgrammarCount).size());
-							System.out.println("elemento: " + getGrammarTypes.get(selectElement));
-							System.out.println("numItems added: " + numItems.get(numItems.size()-1));
 							for (Pair<String, JsonArray> pair : this.getGrammarsNPPair().get(NPgrammarCount)) {
 								newSentenceArray.add(pair);
 							}
@@ -391,18 +381,12 @@ public class GrammarSelectorS extends GrammarSelector {
 					}
 				}
 			}
-			System.out.println("FRASE FORMAA HASTA AHORA");
-			for (Pair<String, JsonArray> a : newSentenceArray) {
-				System.out.print(a.getA() + " ");
-			}
-			System.out.println();
 			int dotPointA = restriction.getA().indexOf(".");
 			int dotPointB = restriction.getB().indexOf(".");
 			String restrictionType = restriction.getA().substring(dotPointA + 1, restriction.getA().length());
 			String elementA = "";
 			String elementB = "";
 			Pair<String, String> pair = null;
-			System.out.println("++++++++++TIPO RESTRICCIÓN: " + restrictionType);
 			switch (restrictionType) {
 				case "num": 
 					elementA = restriction.getA().substring(0, dotPointA);

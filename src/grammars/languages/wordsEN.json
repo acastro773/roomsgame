@@ -407,6 +407,13 @@
       { "gen": "" },
       { "pronoun": "it" }
     ],
+    "speed": [
+      { "num": "sing" },
+      { "translation": "speed" },
+      { "numopposite": "speed" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
     "mood": [
       { "num": "sing" },
       { "translation": "mood" },
@@ -1021,6 +1028,18 @@
     "reachable positions": [
       {
         "translation": "Reachable positions",
+        "gen": ""
+      }
+    ],
+    "current turn": [
+      {
+        "translation": "Current turn",
+        "gen": ""
+      }
+    ],
+    "next turns": [
+      {
+        "translation": "Next turns",
         "gen": ""
       }
     ],
