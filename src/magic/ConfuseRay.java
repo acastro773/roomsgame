@@ -2,15 +2,17 @@ package magic;
 
 import java.util.ArrayList;
 
+import characters.Character.Mood;
 import characters.active.ActiveCharacter;
 import util.RandUtil;
 import util.Tuple;
 
-public class FireRing extends Spell {
+public class ConfuseRay extends Spell {
 
-	public FireRing() {
-		super(10, 10);
-		this.setName("firering");
+	public ConfuseRay() {
+		super(4, 10);
+		this.setName("confuse ray");
+		ArrayList<String> adjectives = new ArrayList<String>();
 		adjectives.add("magic");
 		this.setAdjectives(adjectives);
 	}
@@ -19,14 +21,8 @@ public class FireRing extends Spell {
 	public
 	ArrayList<Tuple<Integer, Integer>> getDamagedPositions(ActiveCharacter user) {
 		ArrayList<Tuple<Integer, Integer>> positionsToAdd = new ArrayList<Tuple<Integer, Integer>>();
-		positionsToAdd.add(new Tuple<Integer, Integer>(-1, 0));
-		positionsToAdd.add(new Tuple<Integer, Integer>(-1, -1));
 		positionsToAdd.add(new Tuple<Integer, Integer>(0, 1));
 		positionsToAdd.add(new Tuple<Integer, Integer>(0, -1));
-		positionsToAdd.add(new Tuple<Integer, Integer>(1, 1));
-		positionsToAdd.add(new Tuple<Integer, Integer>(1, -1));
-		positionsToAdd.add(new Tuple<Integer, Integer>(-1, 1));
-		positionsToAdd.add(new Tuple<Integer, Integer>(1, 0));
 		ArrayList<Tuple<Integer, Integer>> damagedPositions = new ArrayList<Tuple<Integer, Integer>>();
 		for(Tuple<Integer, Integer> tuple : positionsToAdd) {			
 			damagedPositions.add(RandUtil.add(user.getPosition(), tuple));
@@ -36,7 +32,17 @@ public class FireRing extends Spell {
 
 	@Override
 	public boolean checkEffect(ActiveCharacter userAffected) {
-		// TODO Auto-generated method stub
+		int probConfusion = RandUtil.RandomNumber(0, 100);
+		switch(userAffected.getMood()) {
+		case CONFUSED:
+			return false;
+		default:
+			if (probConfusion > 81) {
+				userAffected.confusionTurns = RandUtil.RandomNumber(1, 4);
+				userAffected.setMood(Mood.CONFUSED);
+				return true;
+			}
+		}
 		return false;
 	}
 

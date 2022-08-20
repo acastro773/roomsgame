@@ -2,7 +2,7 @@
   "ENEMY1": {
     "GOBLIN": [
       { "RATE": 76 },
-      { "BASEDANGER": 5 },
+      { "BASEDANGER": 10 },
       { "NAME": "goblin" }
     ],
     "RAT": [
@@ -12,15 +12,42 @@
     ]
   },
   "ENEMY2": {
+    "GOBLIN": [
+      { "RATE": 81 },
+      { "BASEDANGER": 10 },
+      { "NAME": "goblin" }
+    ],
+    "LITTLESLIME": [
+      { "RATE": 51 },
+      { "BASEDANGER": 5 },
+      { "NAME": "slimey" }
+    ],
+    "RAT": [
+      { "RATE": 1 },
+      { "BASEDANGER": 3 },
+      { "NAME": "rat" }
+    ]
+  },
+  "ENEMY3": {
+    "SLIME": [
+      { "RATE": 96 },
+      { "BASEDANGER": 20 },
+      { "NAME": "slime" }
+    ],
     "DRAGON": [
-      { "RATE": 91 },
+      { "RATE": 86 },
       { "BASEDANGER": 15 },
       { "NAME": "dragon" }
     ],
     "GOBLIN": [
-      { "RATE": 61 },
-      { "BASEDANGER": 5 },
+      { "RATE": 66 },
+      { "BASEDANGER": 10 },
       { "NAME": "goblin" }
+    ],
+    "LITTLESLIME": [
+      { "RATE": 41 },
+      { "BASEDANGER": 5 },
+      { "NAME": "slimey" }
     ],
     "RAT": [
       { "RATE": 1 },

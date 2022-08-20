@@ -16,8 +16,8 @@ ArrayList<String> attributes = new ArrayList<String>();
 	public NormalPants (Character character, Map map, Room room, Tuple<Integer, Integer> position,
 			int level, boolean isMagic) {
 		super("pants", null, "", "m", 
-				3, 3, new ArrayList<ArmorType>(), 100, character,
-				2+level, map, room, position, 0, level, isMagic);
+				5, 3, new ArrayList<ArmorType>(), 100, character,
+				3+level, map, room, position, 0, level, isMagic);
 		ArrayList<ArmorType> armorType = new ArrayList<ArmorType>();
 		armorType.add(ArmorType.PANTS);
 		this.setArmorType(armorType);

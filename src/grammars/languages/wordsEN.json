@@ -338,6 +338,38 @@
       { "pronoun": "they" },
       { "pronoun_ref": "theirselves" }
     ],
+    "slime": [
+      { "num": "sing" },
+      { "translation": "slime" },
+      { "numopposite": "slimes" },
+      { "gen": "neutral" },
+      { "pronoun": "it" },
+      { "pronoun_ref": "itself" }
+    ],
+    "slimes": [
+      { "num": "plural" },
+      { "translation": "slimes" },
+      { "numopposite": "slime" },
+      { "gen": "neutral" },
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
+    ],
+    "slimey": [
+      { "num": "sing" },
+      { "translation": "slimey" },
+      { "numopposite": "slimeys" },
+      { "gen": "neutral" },
+      { "pronoun": "it" },
+      { "pronoun_ref": "itself" }
+    ],
+    "slimeys": [
+      { "num": "plural" },
+      { "translation": "slimeys" },
+      { "numopposite": "slimey" },
+      { "gen": "neutral" },
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
+    ],
     "dragon": [
       { "num": "sing" },
       { "translation": "dragon" },

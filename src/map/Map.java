@@ -81,7 +81,9 @@ public class Map {
 					if (RandUtil.RandomNumber(0, 2) != 0)
 						room.generateRandomEnemies(user);
 					else
-						room.putRandomPotions();
+						room.generateEvents(user);
+					for (ActiveCharacter monster : room.getMonsters())
+						monster.setSpeedWeight();
 					if (room.getMonsters().size() > 0)
 						room.setListOfTurns(user);
 				}
@@ -730,11 +732,6 @@ public class Map {
 						} else
 							room.turnMes = false;
 						for (ActiveCharacter enemy: room.getMonsters()) {
-							if(room.getTurnsList().contains(enemy) && enemy.isDead()) {
-								System.out.println("ENTRA ACÁ ====================");
-								room.clearTurnList();
-								room.setListOfTurns(user);	
-							}
 							if (RandUtil.containsTuple(enemy.getPosition(), user.getVisiblePositions()) && !enemy.isDead()) {
 								Main.possibleCry--;
 								room.printMonsters(j, user.getVisiblePositions());

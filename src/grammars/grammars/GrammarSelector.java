@@ -45,6 +45,7 @@ public abstract class GrammarSelector {
 		ArrayList<String> grammar = this.getGrammar().getGrammar().get("keys");
 		String firstType = restriction.getA();
 		String secondType = restriction.getB();
+		System.out.println("Restricciones: " + firstType + " - " + secondType);
 		JsonArray restrictions1 = null;
 		JsonArray restrictions2 = null;
 		String restrictions1Value = "";

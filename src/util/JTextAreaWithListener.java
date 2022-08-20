@@ -48,7 +48,7 @@ public class JTextAreaWithListener extends JTextArea implements KeyListener{
 				main.Main.throwPressed = false;
 			}
 			else {
-				main.Main.makeMovement(code);
+				//main.Main.makeMovement(code);
 				lengthAfter = main.Main.messageLabel.getText().length();
 				if (lengthAfter == lengthBefore && !main.Main.isTwoKeysInput(code)) {
 					j.getTargetFrame().requestFocus();
@@ -61,7 +61,7 @@ public class JTextAreaWithListener extends JTextArea implements KeyListener{
 					useMousePosition2 = !useMousePosition2;
 				}
 			}
-		} catch (JsonIOException | JsonSyntaxException | InstantiationException | IllegalAccessException e) {
+		} catch (JsonIOException | JsonSyntaxException e) {
 			e.printStackTrace();
 		}
 		

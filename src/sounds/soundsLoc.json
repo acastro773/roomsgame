@@ -21,6 +21,16 @@
     "ATTACK": "",
     "DEAD": ""
   },
+  "SLIME": {
+    "IDLE": "./src/sounds/dragonappear.wav",
+    "ATTACK": "",
+    "DEAD": ""
+  },
+  "SLIMEY": {
+    "IDLE": "./src/sounds/dragonappear.wav",
+    "ATTACK": "",
+    "DEAD": ""
+  },
   "WATERDROP": "./src/sounds/waterdrop.wav",
   "BEEP": "./src/sounds/beep.wav"
 }

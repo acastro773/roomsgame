@@ -8,12 +8,12 @@ import util.Tuple;
 import characters.Character;
 import characters.active.ActiveCharacter;
 
-public class LifePotion extends Consumable {
+public class SuperLifePotion extends Consumable {
 	
-	int lifeEffect = 50;
+	int lifeEffect = 150;
 	ArrayList<String> attributes = new ArrayList<String>();
 
-	public LifePotion(Character character, Map map, Room room,
+	public SuperLifePotion(Character character, Map map, Room room,
 			Tuple<Integer, Integer> position) {
 		super("potion", null, null, 5, 1, "Cures the user",
 				character, map, room, position);

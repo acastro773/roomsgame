@@ -17,7 +17,7 @@ ArrayList<String> attributes = new ArrayList<String>();
 			int level, boolean isMagic) {
 		super("helmet", null, "", "m", 
 				3, 3, new ArrayList<ArmorType>(), 100, character,
-				1+level, map, room, position, 0, level, isMagic);
+				2+level, map, room, position, 0, level, isMagic);
 		ArrayList<ArmorType> armorType = new ArrayList<ArmorType>();
 		armorType.add(ArmorType.HEAD);
 		this.setArmorType(armorType);

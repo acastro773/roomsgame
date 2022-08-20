@@ -29,4 +29,10 @@ public class Fireball extends Spell {
 		return damagedPositions;
 	}
 
+	@Override
+	public boolean checkEffect(ActiveCharacter userAffected) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

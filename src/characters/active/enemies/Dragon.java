@@ -19,7 +19,7 @@ import util.Tuple;
 public class Dragon extends ActiveCharacter {
 	
 	public Dragon(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
-		super("dragon", "", map, room, position, 8+level, 3+level, 15+(3*level), 80+(level*5),
+		super("dragon", "", map, room, position, 8+level, 3+level, 15+(3*level), 80+(level*20),
 				100, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
 				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "D", 2, null, adjectives, level);
 		this.setMovementType(getMovementTypeFromMood());
@@ -34,6 +34,7 @@ public class Dragon extends ActiveCharacter {
 		if (RandUtil.RandomNumber(0, randNum) == 0) {
 			this.putRandomItemInventory();
 		}
+		//this.setSpeed(getSpeedWeight(this.getSpeed()));
 	}
 	
 	public ArrayList<String> getAdjectivesIndividual() {

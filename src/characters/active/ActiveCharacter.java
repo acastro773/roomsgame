@@ -28,6 +28,7 @@ import util.Tuple;
 import magic.Spell;
 import items.consumables.Consumable;
 import items.wereables.WereableWeapon;
+import items.wereables.Axe;
 import items.wereables.LongSword;
 import items.wereables.NormalArmor;
 import items.wereables.NormalGloves;
@@ -82,6 +83,7 @@ public class ActiveCharacter extends Character {
 	private int experience = 0;
 	private int nextLevelExperience = 0;
 	private int experienceGiven = 0;
+	public int confusionTurns = 0;
 	private boolean hasBeenAttackedByHeroe = false;
 
 	public ActiveCharacter(String name, String description,
@@ -98,7 +100,6 @@ public class ActiveCharacter extends Character {
 		this.totalMagic = totalMagic;
 		this.magic = magic;
 		this.defense = defense;
-		this.speed = speed;
 		this.life = life;
 		this.limLifeLevel = life;
 		this.luck = luck; // number between 0 and 100
@@ -115,6 +116,25 @@ public class ActiveCharacter extends Character {
 		this.spells = new ArrayList<Spell>();
 		this.maximumItemsInventory = 6;
 		this.level = level;
+		//every 5 units of weight subtracts 1 unit of speed
+		//minimum speed = 2
+		this.speed = speed;
+	}
+	
+	public void setSpeedWeight() {
+		int weight = this.getActualCarryWeight();
+		int res = this.getSpeed();
+		System.out.println("PESO ACTUAL: " + this.getActualCarryWeight());
+		
+		while (weight - 5 > 0) {
+			res--;
+			weight -= 5;
+		}
+		
+		if (res < 2)
+			res = 2;
+		
+		this.setSpeed(res);
 	}
 	
 	public void setVisiblePositions(){
@@ -139,8 +159,26 @@ public class ActiveCharacter extends Character {
 		}
 	}
 	
+	public boolean itemContainInventory(Item item) {
+		for (Item i : this.getInventory()) {
+			if (i.getName().equals(item.getName()))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	public boolean itemContainEquipment(Item item) {
+		for (WereableArmor i : this.getArmorsEquipped()) {
+			if (i.getName().equals(item.getName()))
+				return true;
+		}
+		
+		return false;
+	}
+	
 	public void putRandomItemInventory() {
-		int itemRandom = RandUtil.RandomNumber(0, 6);
+		int itemRandom = RandUtil.RandomNumber(0, 12);
 		int itemLevel = RandUtil.RandomNumber(this.getLevel(), this.getLevel() + 3);
 		boolean isMagic = RandUtil.RandomNumber(0, 2) > 0 ? true : false; 
 		Item item = null;
@@ -168,7 +206,7 @@ public class ActiveCharacter extends Character {
 			break;
 		}
 		
-		if (item != null) {
+		if (item != null && !this.itemContainInventory(item)) {
 			this.getInventory().add(item);
 		}
 	}
@@ -236,15 +274,15 @@ public class ActiveCharacter extends Character {
 		int defense = character.getDefense();
 		Mood actual = this.getMood();
 		if (actual.name().equals(Mood.ANGRY.name())) {
-			defense -= (int)(Math.ceil(defense*0.1));
+			return -(defense - (int)(Math.ceil(defense*0.1)));
 		} else if (actual.name().equals(Mood.TERRIFIED.name())) {
-			defense -= (int)(Math.ceil(defense*0.25));
+			return -(defense - (int)(Math.ceil(defense*0.25)));
 		} else if (actual.name().equals(Mood.SLEEPY.name())) {
-			defense -= (int)(Math.ceil(defense*0.2));
+			return -(defense - (int)(Math.ceil(defense*0.2)));
 		} else if (actual.name().equals(Mood.ENCOURAGED.name())) {
-			defense += (int)(Math.ceil(defense*0.1));
+			return defense + (int)(Math.ceil(defense*0.1));
 		}	
-		return defense;
+		return 0;
 	}
 	
 	public int getAttackFromWeapons(ActiveCharacter character){
@@ -328,10 +366,11 @@ public class ActiveCharacter extends Character {
 		character.setInventory(new ArrayList<Item>());
 	}
 	
-	private void setCharacterDead(ActiveCharacter character) {
+	public void setCharacterDead(ActiveCharacter character) {
 		if (character.getLife() <= 0){
 			character.setDead(true);
 			this.dropAllItems(character);
+			character.getRoom().removeTurnDead(character);
 		}
 	}
 
@@ -539,12 +578,13 @@ public class ActiveCharacter extends Character {
 		ArrayList<WeaponType> freeSlots = new ArrayList<WeaponType>(this.getFreeWeaponSlots());
 		ArrayList<WeaponType> weaponType = weapon.getWeaponType();
 		if (freeSlots.containsAll(weaponType) || (weapon.getIsSingleHand() && !freeSlots.isEmpty())){
-			System.out.println("ENTRA ACÁ");
 			if (this.getInventory().contains(weapon)){
 				if (weapon.getIsSingleHand()){
 					ArrayList<WeaponType> type = new ArrayList<WeaponType>();
-					type.add(freeSlots.get(0));
-					weapon.setWeaponType(type);
+					if (freeSlots.size() > 0) {
+						type.add(freeSlots.get(0));
+						weapon.setWeaponType(type);
+					}
 				}
 				this.getWeaponsEquipped().add(weapon);
 				weapon.setCharacter(this);
@@ -698,6 +738,8 @@ public class ActiveCharacter extends Character {
 			}
 			this.setActualCarryWeight(this.getActualCarryWeight() - item.getWeight());
 			this.setActualInventorySpace(this.getActualInventorySpace() - item.getSpace());
+			this.setSpeedWeight();
+			
 			return true;
 		}
 		return false;
@@ -734,7 +776,9 @@ public class ActiveCharacter extends Character {
 			for (Item item : room.getItemsRoom()){
 				if (pos.x == item.getPosition().x && pos.y == item.getPosition().y){
 					if (this.putItemInventory(item)){
+						this.setSpeedWeight();
 						room.getItemsRoom().remove(item);
+						
 						return item;
 					}
 				}
@@ -801,8 +845,10 @@ public class ActiveCharacter extends Character {
 	}
 	
 	public Pair<Tuple<Boolean, Boolean>, String> spellAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
-		for (int i = 0; i < this.getSpells().size(); i++) {
-			Spell spell = this.getSpells().get(i);
+		int nspells = this.getSpells().size();
+		if (nspells > 0) {
+			int getSpell = RandUtil.RandomNumber(0, nspells-1);
+			Spell spell = this.getSpells().get(getSpell);
 			if (RandUtil.containsTuple(user.getPosition(), spell.getDamagedPositions(this))
 					&& spell.getManaCost() <= this.getMagic()) {
 				ArrayList<String> prep = new ArrayList<>();
@@ -818,9 +864,12 @@ public class ActiveCharacter extends Character {
 						| IllegalAccessException e) {
 					e.printStackTrace();
 				}
-				boolean hasWorked = false; 
-				Tuple<Boolean, ArrayList<ActiveCharacter>> spellAt = this.attackSpell(i, user);
+				boolean hasWorked = false;
+				Tuple<Boolean, ArrayList<ActiveCharacter>> spellAt = this.attackSpell(getSpell, user);
 				if (spellAt.y.size() > 0) hasWorked = true;
+				if (hasWorked && spell.checkEffect(user)) {
+					
+				}
 				String message = selector.getRandomSentence();
 				if (spell.isHasBeenUsed() && RandUtil.RandomNumber(0, 2) == 1) {
 					message += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
@@ -893,11 +942,13 @@ public class ActiveCharacter extends Character {
 				move = true;
 				break;
 			}
+			System.out.println("ESTE BICHO PUEDE HACER: ");
 			if (spellAt) {
-				//first boolean defines if it has dealed damage
+				//first boolean defines if it has dealt damage
 				//the second one defines if it has hit itself
 				//the ActiveCharacter variable returns the instance of the enemy if it has damaged itself bc of confusion
 				result = spellAttack(user, grammarAttack, rootObjWords, names);
+				System.out.println("HACE MAGIA");
 				if (result.getA().y)
 					//if it hits itself
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
@@ -908,12 +959,14 @@ public class ActiveCharacter extends Character {
 			}
 			if (this.getWeaponsEquipped().size() > 0 && RandUtil.sameTuple(this.getPosition(), user.getPosition()) && weaponAt) {
 				result = weaponAttack(user, grammarAttack, rootObjWords, names);
+				System.out.println("ATACA");
 				if (result.getA().y)
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
 				else if (result.getA().x) {
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
 				}
 			} else if (move) {
+				System.out.println("SE MUEVE");
 				makeMoves(user);
 			}
 		}
@@ -965,7 +1018,7 @@ public class ActiveCharacter extends Character {
 			int experienceToNextLevel = this.getNextLevelExperience() - this.getExperience();
 			this.setExperience(addExperience - experienceToNextLevel);
 			this.setSpeed(this.getSpeed()+2);
-			this.setDamage(this.getDamage()+1);
+			this.setDamage(this.getDamage()+2);
 			this.setDefense(this.getDefense()+1);
 			this.setNewLevel(this.getLevel() + 1);
 			this.setNewLimLife(this.getTotalLife() + 5);
@@ -977,7 +1030,7 @@ public class ActiveCharacter extends Character {
 	public void getRandomEquip() {
 		WereableWeapon oneHandSword;
 		int number;
-		int numberArmor = RandUtil.RandomNumber(0, this.getLevel()*5);;
+		int numberArmor = RandUtil.RandomNumber(0, this.getLevel()*3);;
 		if (this.getLevel() < 3) {
 			number = RandUtil.RandomNumber(0, 7);
 			if (number == 0) {
@@ -990,56 +1043,58 @@ public class ActiveCharacter extends Character {
 			} else
 				oneHandSword = new ShortSword(this, null, null, null, level, false);
 		} else {
-			if (RandUtil.RandomNumber(0, 2) == 0) {
+			int possibility = RandUtil.RandomNumber(0, 8);
+			if (possibility == 0) {
+				oneHandSword = new Axe(this, null, null, null, level, false);
+			} else if (possibility < 4)
 				oneHandSword = new LongSword(this, null, null, null, level, false);
-			} else
+			else
 				oneHandSword = new ShortSword(this, null, null, null, level, false);
 		}
 		this.putItemInventory(oneHandSword);
 		this.equipWeapon(oneHandSword);
 		System.out.println("AÑADIDA ARMA: " + this.getWeaponsEquipped() + " - " + oneHandSword.getName());
-		while (numberArmor > 2) {
-			int randNum = 20 - this.getLevel();
-			if (randNum < 7)
-				randNum = 7;
-			int n = RandUtil.RandomNumber(0, randNum);
-			int numberMagic = RandUtil.RandomNumber(0, 6);
-			boolean isMagic = (numberMagic < 2);
-			WereableArmor armor = null;
-			switch(n) {
-			//choose armor
-			case 0:
-				armor = new NormalArmor(this, null, null, null, this.getLevel(), isMagic);
-				break;
-			//choose gloves
-			case 1:
-			case 2:
-			case 3:
-				armor = new NormalGloves(this, null, null, null, this.getLevel(), isMagic);
-				break;
-			//choose helmet
-			case 4:
-			case 5:
-				armor = new NormalHelmet(this, null, null, null, this.getLevel(), isMagic);
-				break;
-			//choose pants
-			case 6:
-				armor = new NormalPants(this, null, null, null, this.getLevel(), isMagic);
-				break;
-			default:
-				break;
-			}
-			
-			if (armor != null) {
-				if (!this.getArmorsEquipped().contains(armor)) {
+		if (this.getLevel() > 3) {
+			while (numberArmor > 2) {
+				int randNum = 20 - this.getLevel();
+				if (randNum < 7)
+					randNum = 7;
+				int n = RandUtil.RandomNumber(0, randNum);
+				int numberMagic = RandUtil.RandomNumber(0, 6);
+				boolean isMagic = (numberMagic < 2);
+				WereableArmor armor = null;
+				switch(n) {
+				//choose armor
+				case 0:
+					armor = new NormalArmor(this, null, null, null, this.getLevel(), isMagic);
+					break;
+				//choose gloves
+				case 1:
+				case 2:
+				case 3:
+					armor = new NormalGloves(this, null, null, null, this.getLevel(), isMagic);
+					break;
+				//choose helmet
+				case 4:
+				case 5:
+					armor = new NormalHelmet(this, null, null, null, this.getLevel(), isMagic);
+					break;
+				//choose pants
+				case 6:
+					armor = new NormalPants(this, null, null, null, this.getLevel(), isMagic);
+					break;
+				default:
+					break;
+				}
+				
+				if (armor != null && !this.itemContainEquipment(armor)) {
 					this.putItemInventory(armor);
 					this.equipArmor(armor);
 					System.out.println("Adding armor: " + armor.getName());
 					numberArmor -= 3;
 				} else
 					numberArmor--;
-			} else
-				numberArmor--;
+			}
 		}
 	}
 	

@@ -16,7 +16,7 @@ import util.Tuple;
 public class Slime extends ActiveCharacter {
 	
 	public Slime(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
-		super("slime", "", map, room, position, 2+level, 1+(int)Math.ceil(level*0.5), 6+(2*level), 100+(level*15),
+		super("slime", "", map, room, position, 2+(level*2), 2+level, 12+level, 100+(level*20),
 				70, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
 				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "S", 3, null, adjectives, level);
 		this.setMovementType(getMovementTypeFromMood());
@@ -30,9 +30,24 @@ public class Slime extends ActiveCharacter {
 		}
 	}
 	
+	@Override
+	public void setCharacterDead(ActiveCharacter character) {
+		if (character.getLife() <= 0) {
+			System.out.println("SE CREAN SLIMIES");
+			int characLvl = character.getLife();
+			character.setDead(true);
+			Tuple<Integer, Integer> position = character.getPosition();
+			LittleSlime lilSlime1 = new LittleSlime(character.getMap(), character.getRoom(), position, new ArrayList<String>(), characLvl);
+			character.getRoom().getMonsters().add(lilSlime1);
+			LittleSlime lilSlime2 = new LittleSlime(character.getMap(), character.getRoom(), position, new ArrayList<String>(), characLvl);
+			character.getRoom().getMonsters().add(lilSlime2);	
+			character.getRoom().removeTurnDead(character);
+		}
+	}
+	
 	public ArrayList<String> getAdjectivesIndividual() {
 		ArrayList<String> adjectives = new ArrayList<String>();
-		adjectives.add("small");
+		adjectives.add("big");
 		return adjectives;
 	}
 }

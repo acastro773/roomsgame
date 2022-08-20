@@ -22,6 +22,8 @@ public abstract class Spell extends PrintableObject{
 	}
 	
 	public abstract ArrayList<Tuple<Integer, Integer>> getDamagedPositions(ActiveCharacter user);
+	
+	public abstract boolean checkEffect(ActiveCharacter userAffected);
 
 	public int getDamage() {
 		return damage;

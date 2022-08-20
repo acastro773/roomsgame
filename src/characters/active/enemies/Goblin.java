@@ -18,7 +18,7 @@ import util.Tuple;
 public class Goblin extends ActiveCharacter {
 
 	public Goblin(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
-		super("goblin", "", map, room, position, 2+(2*level), 1+level, 7+(2*level), 80,
+		super("goblin", "", map, room, position, 2+(2*level), 1+level, 7+(2*level), 80+(level*10),
 				80, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
 				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "G", 3, null, adjectives, level);	
 		this.setMovementType(getMovementTypeFromMood());

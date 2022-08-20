@@ -99,7 +99,7 @@ public class Main {
 	static Room roomCharacter;
 	static DefaultCaret caret;
 	public static WSwingConsoleInterface j = new WSwingConsoleInterface("The Accessible Dungeon");
-	static ActiveCharacter user = null;
+	public static ActiveCharacter user = null;
 	static boolean firstTime = true;
 	public static boolean hasChanged = false;
 	static boolean hasMoved = false;
@@ -148,17 +148,28 @@ public class Main {
 	static SoundReproduction collisionSound;
 	static SoundReproduction waterdropSound;
 	static JsonObject rateAppar1;
-	static JsonObject rateAppar2;
 	public static ArrayList<Integer> enemiesList1Rate = new ArrayList<Integer>();
 	public static ArrayList<Integer> enemiesList1Danger = new ArrayList<Integer>();
 	public static ArrayList<String> enemiesList1Name = new ArrayList<String>();
+	static JsonObject rateAppar2;
 	public static ArrayList<Integer> enemiesList2Rate = new ArrayList<Integer>();
 	public static ArrayList<Integer> enemiesList2Danger = new ArrayList<Integer>();
 	public static ArrayList<String> enemiesList2Name = new ArrayList<String>();
+	static JsonObject rateAppar3;
+	public static ArrayList<Integer> enemiesList3Rate = new ArrayList<Integer>();
+	public static ArrayList<Integer> enemiesList3Danger = new ArrayList<Integer>();
+	public static ArrayList<String> enemiesList3Name = new ArrayList<String>();
 	static ArrayList<JsonArray> enemiesJson1 = new ArrayList<JsonArray>();
 	static ArrayList<JsonArray> enemiesJson2 = new ArrayList<JsonArray>();
+	static ArrayList<JsonArray> enemiesJson3 = new ArrayList<JsonArray>();
 	static int countAction = 0;
 	public static int possibleCry = 0;
+	public static double lastTime = 0;
+	public static double cooldPressKey = 50;
+	public static double lastTimeEnemy = 0;
+	public static double cooldTurnEnemy = 50;
+	public static Pair<Boolean, ActiveCharacter> monsterTurn = new Pair<Boolean, ActiveCharacter>(false, null);
+	
 	
 	public static boolean isInputType(Integer[] type, int key) {
 		return Arrays.asList(type).contains(key);
@@ -257,8 +268,8 @@ public class Main {
 		map.printInside(j, user);
 		map.printItems(j, user);
 		map.printMonsters(j, user);
-		if (user.getRoom().turnMes)
-			map.printInformationTurns(j, user.getRoom(), user.getMap().global_fin.x-1, user.getMap().global_fin.y+1);
+		//if (user.getRoom().turnMes)
+			//map.printInformationTurns(j, user.getRoom(), user.getMap().global_fin.x-1, user.getMap().global_fin.y+1);
 		printUserInformation();
 		map._printInformationMonsters(j, user, rootObjWords);
 		if (needsToPrintGroundObjects) {
@@ -310,9 +321,9 @@ public class Main {
 			adjectives.add("brave");
 			adjectives.add("glorious");
 			user = new ActiveCharacter("hero", "", null, null, null, 
-					40, 0, 20, 1110, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
+					40, 2, 20, 200000, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 					new ArrayList<WereableArmor>(), 100, 100, 0,
-					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 8);
+					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 20);
 			user.setNextLevelExperience();
 			WereableWeapon oneHandSword = new ShortSword(user, null, null, null, user.getLevel(), true);
 			user.putItemInventory(oneHandSword);
@@ -474,201 +485,193 @@ public class Main {
 	public static void makeMovement(int i) throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		boolean actionDone = false;
 		boolean attackDone = false;
-		if (isInputType(movementInput, i)){
-			attackDone = true;
-        	actionDone = true;
-        	_moveCharacterAction(i);
-        	setFlagsToFalse();
-        	if (countAction > 0) {
-        		countAction--;
-        		System.out.println("countAction: " + countAction);
-        	}
-        }
-        else if (isInputType(inventoryInput, i)) {
-        	attackDone = true;
-        	actionDone = true;
-        	actionHandler._inventoryAction(i, usePronoun());
-        	canUsePronoun = true;
-        	printEverything(false);
-        	hasUnequipedItem = false;
-        	hasThrownItem = false;
-        	hasPickedItem = false;
-        }
-        else if (isInputType(pickItemInput, i)) {
-        	actionDone = true;
-        	actionHandler._pickItemAction(usePronoun(), hasPickedItem);
-        	canUsePronoun = true;
-        	printEverything(true);
-        	hasEquipedItem = false;
-        	hasUnequipedItem = false;
-        	hasThrownItem = false;
-        }
-        else if (isInputType(attackInput, i)) {
-        	actionDone = true;
-        	attackDone = true;
-        	actionHandler._attackAction(usePronoun());
-        	canUsePronoun = true;
-        	printEverything(true);
-        	setFlagsToFalse();
-        } 
-        else if (isInputType(spellInput, i)) {
-        	actionDone = true;
-        	attackDone = true;
-        	spellsPressed = true;
-        	setFlagsToFalse();
-        	messageLabel.requestFocus();
-        } else if (isInputType(descriptionInput, i) || isInputType(descriptionWereableInput, i)) {
-        	actionDone = true;
-        	setFlagsToFalse();
-        	actionHandler._descriptionAction(i, usePronoun(), isNumericDescription);
-        	canUsePronoun = true;
-        	printEverything(false);
-        } else if (isInputType(throwItemInput, i)) {
-        	actionDone = true;
-        	hasUnequipedItem = false;
-        	hasEquipedItem = false;
-        	hasPickedItem = false;
-        	throwPressed = true;
-        	messageLabel.requestFocus();
-        } else if (isInputType(changeNumericDescInput, i)) {
-        	actionDone = true;
-        	isNumericDescription = !isNumericDescription;
-        } else if (isInputType(changeColorsInput, i)) {
-        	actionDone = true;
-        	if (selectedColor == arrayColors.length - 1) {
-        		selectedColor = 0;
-        	} else {
-        		selectedColor++;
-        	}
-        	printEverything(true);
-        } else if (isInputType(unequipItemInput, i)) {
-        	actionDone = true;
-        	hasEquipedItem = false;
-        	hasPickedItem = false;
-        	hasThrownItem = false;
-        	unequipPressed = true;
-        	messageLabel.requestFocus();
-        } else if (isInputType(rebindKeysInput, i)) {
-        	actionDone = true;
-        	rebindKeys();
-        } else if (isInputType(descriptionSpellInput, i)) {
-        	actionDone = true;
-        	MessageDescriptionsUtil.describeSpells(user, rootObjWords, grammarSimpleVerb);
-        } else if (isInputType(activateSoundInput, i)) {
-        	actionDone = true;
-        	activateDeactivateSound();
-        } else if (isInputType(increaseFontInput, i)) {
-        	actionDone = true;
-        	increaseFontSize();
-        } else if (isInputType(decreaseFontInput, i)) {
-        	actionDone = true;
-        	decreaseFontSize();
-        }
-		if (actionDone) {
-			if (attackDone) {
-				if (user.getRoom().getTurnsList().size() > 0)
-					user.getRoom().removeCurrentTurn();
-			} else {
-				if (isSoundActivated) {
-	        		beepSound.reproduce();
+		double now = System.currentTimeMillis();
+		
+			if(now - lastTime > cooldPressKey && isInputType(movementInput, i)){
+				attackDone = true;
+	        	actionDone = true;
+	        	_moveCharacterAction(i);
+	        	setFlagsToFalse();
+	        	if (countAction > 0) {
+	        		countAction--;
+	        		System.out.println("countAction: " + countAction);
 	        	}
+	        }
+	        else if (now - lastTime > cooldPressKey && isInputType(inventoryInput, i)) {
+	        	attackDone = true;
+	        	actionDone = true;
+	        	actionHandler._inventoryAction(i, usePronoun());
+	        	canUsePronoun = true;
+	        	printEverything(false);
+	        	hasUnequipedItem = false;
+	        	hasThrownItem = false;
+	        	hasPickedItem = false;
+	        }
+	        else if (now - lastTime > cooldPressKey && isInputType(pickItemInput, i)) {
+	        	actionDone = true;
+	        	actionHandler._pickItemAction(usePronoun(), hasPickedItem);
+	        	canUsePronoun = true;
+	        	printEverything(true);
+	        	hasEquipedItem = false;
+	        	hasUnequipedItem = false;
+	        	hasThrownItem = false;
+	        }
+	        else if (now - lastTime > cooldPressKey && isInputType(attackInput, i)) {
+	        	actionDone = true;
+	        	attackDone = true;
+	        	actionHandler._attackAction(usePronoun());
+	        	canUsePronoun = true;
+	        	printEverything(true);
+	        	setFlagsToFalse();
+	        } 
+	        else if (now - lastTime > cooldPressKey && isInputType(spellInput, i)) {
+	        	actionDone = true;
+	        	attackDone = true;
+	        	spellsPressed = true;
+	        	setFlagsToFalse();
+	        	messageLabel.requestFocus();
+	        } else if (now - lastTime > cooldPressKey && (isInputType(descriptionInput, i) || isInputType(descriptionWereableInput, i))) {
+	        	actionDone = true;
+	        	setFlagsToFalse();
+	        	actionHandler._descriptionAction(i, usePronoun(), isNumericDescription);
+	        	canUsePronoun = true;
+	        	printEverything(false);
+	        } else if (now - lastTime > cooldPressKey && isInputType(throwItemInput, i)) {
+	        	actionDone = true;
+	        	hasUnequipedItem = false;
+	        	hasEquipedItem = false;
+	        	hasPickedItem = false;
+	        	throwPressed = true;
+	        	messageLabel.requestFocus();
+	        } else if (now - lastTime > cooldPressKey && isInputType(changeNumericDescInput, i)) {
+	        	actionDone = true;
+	        	isNumericDescription = !isNumericDescription;
+	        } else if (now - lastTime > cooldPressKey && isInputType(changeColorsInput, i)) {
+	        	actionDone = true;
+	        	if (selectedColor == arrayColors.length - 1) {
+	        		selectedColor = 0;
+	        	} else {
+	        		selectedColor++;
+	        	}
+	        	printEverything(true);
+	        } else if (now - lastTime > cooldPressKey && isInputType(unequipItemInput, i)) {
+	        	actionDone = true;
+	        	hasEquipedItem = false;
+	        	hasPickedItem = false;
+	        	hasThrownItem = false;
+	        	unequipPressed = true;
+	        	messageLabel.requestFocus();
+	        } else if (now - lastTime > cooldPressKey && isInputType(rebindKeysInput, i)) {
+	        	actionDone = true;
+	        	rebindKeys();
+	        } else if (now - lastTime > cooldPressKey && isInputType(descriptionSpellInput, i)) {
+	        	actionDone = true;
+	        	MessageDescriptionsUtil.describeSpells(user, rootObjWords, grammarSimpleVerb);
+	        } else if (now - lastTime > cooldPressKey && isInputType(activateSoundInput, i)) {
+	        	actionDone = true;
+	        	activateDeactivateSound();
+	        } else if (now - lastTime > cooldPressKey && isInputType(increaseFontInput, i)) {
+	        	actionDone = true;
+	        	increaseFontSize();
+	        } else if (now - lastTime > cooldPressKey && isInputType(decreaseFontInput, i)) {
+	        	actionDone = true;
+	        	decreaseFontSize();
+	        }
+			if (actionDone) {
+				if (attackDone) {
+					if (user.getRoom().getTurnsList().size() > 0)
+						user.getRoom().removeCurrentTurn();
+				} else {
+					if (isSoundActivated) {
+		        		beepSound.reproduce();
+		        	}
+				}
+				lastTime = System.currentTimeMillis();
 			}
+
+	}
+	
+	public static void enemyTurn(ActiveCharacter thing, GrammarIndividual grammarIndividual) {
+		double now = System.currentTimeMillis();
+		if (now - lastTimeEnemy > cooldTurnEnemy ) {
+			lastTimeEnemy = System.currentTimeMillis();
+			Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> message = user.getRoom().monsterTurn(user, thing, grammarIndividual, rootObjWords);
+	    	printEverything(true);
+			//confusion message
+			if (message.getA().getA().y && message.getB() != null) {
+				GrammarIndividual grammarIndividualSh = grammarSelfharmDescription.getRandomGrammar();
+				ArrayList<PrintableObject> namesSh = new ArrayList<PrintableObject>();
+				ArrayList<String> prepositionUser = new ArrayList<String>();
+				ArrayList<String> prepositionConf = new ArrayList<String>();
+				PrintableObject confusion = new PrintableObject("confusion", "", null, null);
+				prepositionUser.add("but");
+				prepositionConf.add("in");
+				message.getB().setPrepositions(prepositionUser);
+				confusion.setPrepositions(prepositionConf);
+				namesSh.add(message.getB());
+				namesSh.add(message.getB());
+				namesSh.add(confusion);
+				String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
+				main.Main.printMessage(message.getA().getB() + messageMiss);
+			} else if (message.getA().getA().x && !message.getA().getB().isEmpty()) {
+				//if it has dealt damage and receives the "x attacks y with z weapon" prints the message
+				printMessage(message.getA().getB());
+			} else if (!message.getA().getB().isEmpty()){
+				GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
+				ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
+				ArrayList<String> preposition = new ArrayList<String>();
+				ArrayList<String> prepositionBefore = user.getPrepositions();
+				preposition.add("but");
+				user.setPrepositions(preposition);
+				namesMiss.add(user);
+				String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
+				user.setPrepositions(prepositionBefore);
+				String[] words = messageMiss.split("\\s+");
+				messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
+				printMessage(message.getA().getB() + messageMiss);
+			}
+			user.getRoom().removeCurrentTurn();
+			monsterTurn = new Pair<Boolean, ActiveCharacter>(false, null);
 		}
 	}
 	
-	public static void gameFlow() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
-		messagesWereables = ResourceBundle.getBundle("translations.files.MessagesWereable");
-		if (deepnessScore == 0){
-			_initialize();
-		} else {
-			_initializeMap();
-		}
-		if (hasUsedPortal) {
-			printEverything(true);
-			PrintableObject portal = new PrintableObject("portal", "", null, null);
-			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
-			names.add(user);
-			names.add(portal);
-			GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
-			printMessage(_getMessage(grammarIndividual, names, "DESCGOESTHROUGH", "DESCGOESTHROUGH", false, false, false));
-			deepnessScore++;
-			hasUsedPortal = false;
-		}
+	public static void playerTurn() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
+    	int i = j.inkey().code;
 		
+		System.out.println("Code" + i);
+		
+		makeMovement(i);
+	}
+	
+	public static void turnLoop() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		for (;;) {
 			for (ActiveCharacter monster : user.getRoom().getMonsters()) {
 				monster.setAdjectivesMonster(user);
 			}
 			user.setAdjectivesUser();
 			if (user.getLife() > 0) {
-				final GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
-				if (user.getRoom().getTurnsList() != null && user.getRoom().getTurnsList().size() > 0) {
-					final ActiveCharacter thing = user.getRoom().getTurnsList().get(0);
-					if (thing != null)
-						System.out.println("***** CURRENT TURN ***** -> " + thing.getName());
-					if (thing != user && !thing.isDead()) {
-						Timer timer = new Timer(100, new ActionListener()
-						{
-						    @Override
-						    public void actionPerformed(ActionEvent e)
-						    {
-						    	Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> message = user.getRoom().monsterTurn(user, thing, grammarIndividual, rootObjWords);
-						    	printEverything(true);
-								//confusion message
-								if (message.getA().getA().y && message.getB() != null) {
-									GrammarIndividual grammarIndividualSh = grammarSelfharmDescription.getRandomGrammar();
-									ArrayList<PrintableObject> namesSh = new ArrayList<PrintableObject>();
-									ArrayList<String> prepositionUser = new ArrayList<String>();
-									ArrayList<String> prepositionConf = new ArrayList<String>();
-									PrintableObject confusion = new PrintableObject("confusion", "", null, null);
-									prepositionUser.add("but");
-									prepositionConf.add("in");
-									message.getB().setPrepositions(prepositionUser);
-									confusion.setPrepositions(prepositionConf);
-									namesSh.add(message.getB());
-									namesSh.add(message.getB());
-									namesSh.add(confusion);
-									String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
-									main.Main.printMessage(message.getA().getB() + messageMiss);
-								} else if (message.getA().getA().x && !message.getA().getB().isEmpty()) {
-									//if it has dealt damage and receives the "x attacks y with z weapon" prints the message
-									printMessage(message.getA().getB());
-								} else if (!message.getA().getB().isEmpty()){
-									GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
-									ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
-									ArrayList<String> preposition = new ArrayList<String>();
-									ArrayList<String> prepositionBefore = user.getPrepositions();
-									preposition.add("but");
-									user.setPrepositions(preposition);
-									namesMiss.add(user);
-									String messageMiss = ", " + _getMessage(grammarIndividualMiss, namesMiss, "MISS", "MISS", true, false, false);
-									user.setPrepositions(prepositionBefore);
-									String[] words = messageMiss.split("\\s+");
-									messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
-									printMessage(message.getA().getB() + messageMiss);
-								}
-						    }
-						});
-						timer.setRepeats(false);
-						timer.start();
-						user.getRoom().removeCurrentTurn();
-					} else if (thing == user) {
-						int i = j.inkey().code;
-						
-						System.out.println("Code" + i);
-						
-						makeMovement(i);
-					} else
-						user.getRoom().removeCurrentTurn();
-				} else {
-					if (user.getRoom().getMonsters().size() > 0)
+				GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
+				if (monsterTurn.getA())
+					enemyTurn(monsterTurn.getB(), grammarIndividual);
+				else {
+					if (user.getRoom().getTurnsList().size() > 0) {
+						ActiveCharacter thing = user.getRoom().getTurnsList().get(0);
+						if (thing != null && !thing.isDead())
+							System.out.println("***** CURRENT TURN ***** -> " + thing.getName());
+						if (thing != user && !thing.isDead()) {
+							monsterTurn = new Pair<Boolean, ActiveCharacter>(true, thing);
+						} else if (thing == user && !thing.isDead()) {
+							System.out.println("HAY ENEMIGOS Y TURNO USER");		
+							playerTurn();	
+						}
+						if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
+							user.getRoom().setListOfTurns(user);
+						}
+					} else if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
 						user.getRoom().setListOfTurns(user);
-					else {
-						int i = j.inkey().code;
-						
-						System.out.println("Code" + i);
-						
-						makeMovement(i);
+					} else if (user.getRoom().getMonsters().size() < 1 || user.getMap().allEnemiesRoomDead(user.getRoom())){
+						System.out.println("SIN MONSTROS");
+						playerTurn();
 					}
 				}
 				if (countAction == 0) {
@@ -692,6 +695,29 @@ public class Main {
 				}
 			}
 		}
+	}
+	
+	public static void gameFlow() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
+		messagesWereables = ResourceBundle.getBundle("translations.files.MessagesWereable");
+		if (deepnessScore == 0){
+			_initialize();
+		} else {
+			_initializeMap();
+		}
+		if (hasUsedPortal) {
+			printEverything(true);
+			PrintableObject portal = new PrintableObject("portal", "", null, null);
+			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+			names.add(user);
+			names.add(portal);
+			GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
+			printMessage(_getMessage(grammarIndividual, names, "DESCGOESTHROUGH", "DESCGOESTHROUGH", false, false, false));
+			deepnessScore++;
+			hasUsedPortal = false;
+		}
+		
+		turnLoop();
+		
 	}
 	
 	public static void increaseFontSize() {
@@ -749,9 +775,15 @@ public class Main {
 		enemiesJson1.add(JSONParsing.getElement(rateAppar1, "GOBLIN").getAsJsonArray());
 		enemiesJson1.add(JSONParsing.getElement(rateAppar1, "RAT").getAsJsonArray());
 		rateAppar2 = JSONParsing.getElement(Main.rootApparitionRate, "ENEMY2").getAsJsonObject();
-		enemiesJson2.add(JSONParsing.getElement(rateAppar2, "DRAGON").getAsJsonArray());
 		enemiesJson2.add(JSONParsing.getElement(rateAppar2, "GOBLIN").getAsJsonArray());
+		enemiesJson2.add(JSONParsing.getElement(rateAppar2, "LITTLESLIME").getAsJsonArray());
 		enemiesJson2.add(JSONParsing.getElement(rateAppar2, "RAT").getAsJsonArray());
+		rateAppar3 = JSONParsing.getElement(Main.rootApparitionRate, "ENEMY3").getAsJsonObject();
+		enemiesJson3.add(JSONParsing.getElement(rateAppar3, "SLIME").getAsJsonArray());
+		enemiesJson3.add(JSONParsing.getElement(rateAppar3, "DRAGON").getAsJsonArray());
+		enemiesJson3.add(JSONParsing.getElement(rateAppar3, "GOBLIN").getAsJsonArray());
+		enemiesJson3.add(JSONParsing.getElement(rateAppar3, "LITTLESLIME").getAsJsonArray());
+		enemiesJson3.add(JSONParsing.getElement(rateAppar3, "RAT").getAsJsonArray());
 		
 		//storing values on each ArrayList so it can be available since the beginning
 		for (JsonArray enemy : enemiesJson1) {
@@ -764,6 +796,12 @@ public class Main {
 			enemiesList2Rate.add(Integer.valueOf(JSONParsing.getElement(enemy, "RATE").toString()));
 			enemiesList2Danger.add(Integer.valueOf(JSONParsing.getElement(enemy, "BASEDANGER").toString()));
 			enemiesList2Name.add(JSONParsing.getElement(enemy, "NAME").toString());
+		}
+		
+		for (JsonArray enemy : enemiesJson3) {
+			enemiesList3Rate.add(Integer.valueOf(JSONParsing.getElement(enemy, "RATE").toString()));
+			enemiesList3Danger.add(Integer.valueOf(JSONParsing.getElement(enemy, "BASEDANGER").toString()));
+			enemiesList3Name.add(JSONParsing.getElement(enemy, "NAME").toString());
 		}
 	}
 
