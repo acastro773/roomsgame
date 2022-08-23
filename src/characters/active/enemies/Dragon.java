@@ -25,8 +25,7 @@ public class Dragon extends ActiveCharacter {
 		this.setMovementType(getMovementTypeFromMood());
 		this.setTirenessTotal(7);
 		this.setExperienceGiven(100+level*10);
-		this.addSpell(new Fireball());
-		this.addSpell(new FireRing());
+		this.setRandomSpells();
 		this.getRandomEquip();
 		int randNum = 50 - this.getLevel()*3;
 		if (randNum < 2)

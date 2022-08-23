@@ -73,6 +73,9 @@ public class Main {
 	static Tuple<Integer, Integer> initial_point = new Tuple<Integer, Integer>(0, 0);
 	static Tuple<Integer, Integer> final_point = new Tuple<Integer, Integer>(35, 35);
 	static ArrayList<Tuple<Integer, Integer>> portals = new ArrayList<Tuple<Integer, Integer>>(); 
+	static Integer[] upkeyMenuInput;
+	static Integer[] downkeyMenuInput;
+	static Integer[] enterMenuInput;
 	static Integer[] movementInput;
 	static Integer[] inventoryInput;
 	static Integer[] pickItemInput;
@@ -168,7 +171,13 @@ public class Main {
 	public static double cooldPressKey = 50;
 	public static double lastTimeEnemy = 0;
 	public static double cooldTurnEnemy = 50;
+	public static double lastTimeMenu = 0;
+	public static double cooldMenu = 150;
 	public static Pair<Boolean, ActiveCharacter> monsterTurn = new Pair<Boolean, ActiveCharacter>(false, null);
+	public static boolean menu = true;
+	public static boolean chooseOptions = false;
+	private static int pointerMenu = 0;
+	private static ArrayList<String> eleMenu = new ArrayList<>();
 	
 	
 	public static boolean isInputType(Integer[] type, int key) {
@@ -199,9 +208,11 @@ public class Main {
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement();
 			String value = keyBinding.getString(key);
+			System.out.println("Cogido: " + key + " - " + value);
 			keysMap.put(key, Integer.parseInt(value));
 		}
 		_bindKeys();
+		_bindKeysMenu();
 	}
 	
 	public static void _setLanguage() {
@@ -225,7 +236,14 @@ public class Main {
 		messageLabel.requestFocus();
 	}
 	
+	public static void _bindKeysMenu() {
+		upkeyMenuInput = new Integer[] {keysMap.get("up")};
+		downkeyMenuInput = new Integer[] {keysMap.get("down")};
+		enterMenuInput = new Integer[] {keysMap.get("enter")};
+	}
+	
 	public static void _bindKeys() {
+		movementInput = new Integer[] {keysMap.get("left"), keysMap.get("right"), keysMap.get("down"), keysMap.get("up")};
 		movementInput = new Integer[] {keysMap.get("left"), keysMap.get("right"), keysMap.get("down"), keysMap.get("up")};
 		inventoryInput = new Integer[] {keysMap.get("item1"), keysMap.get("item2"), keysMap.get("item3"), keysMap.get("item4"),
 				keysMap.get("item5"), keysMap.get("item6")};
@@ -336,7 +354,6 @@ public class Main {
 		heroHitSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "HURT"));
 		newMatch = false;
 		_initializeMap();
-		_setKeyMap();
 		j.print(user.getPosition().y, user.getPosition().x, user.getSymbolRepresentation(), arrayColors[selectedColor][0]);
 		actionHandler = new ActionHandler(keysMap, user, rootObj, rootObjWords);
 	}
@@ -579,6 +596,17 @@ public class Main {
 	        }
 			if (actionDone) {
 				if (attackDone) {
+					if (("CONFUSED").equals(user.getMood().toString())) {
+						if (user.getConfusionTurns() > 0) {
+							System.out.println("CONFUSION TURNS: " + user.getConfusionTurns());
+							if (user.getConfusionTurns() == 1) {
+								user.setConfusionTurns(0);
+								user.setMood(Mood.NEUTRAL);
+							} else
+								user.setConfusionTurns(user.getConfusionTurns()-1);
+						}
+					}
+						
 					if (user.getRoom().getTurnsList().size() > 0)
 						user.getRoom().removeCurrentTurn();
 				} else {
@@ -613,9 +641,29 @@ public class Main {
 				namesSh.add(confusion);
 				String messageMiss = ", " + main.Main._getMessage(grammarIndividualSh, namesSh, "SELFHARM", "SELFHARM", true, false, true);
 				main.Main.printMessage(message.getA().getB() + messageMiss);
+				if (("CONFUSED").equals(user.getMood().toString())) {
+					if (user.getConfusionTurns() > 0) {
+						System.out.println("CONFUSION TURNS: " + user.getConfusionTurns());
+						if (user.getConfusionTurns() == 1) {
+							user.setConfusionTurns(0);
+							user.setMood(Mood.NEUTRAL);
+						} else
+							user.setConfusionTurns(user.getConfusionTurns()-1);
+					}
+				}
 			} else if (message.getA().getA().x && !message.getA().getB().isEmpty()) {
 				//if it has dealt damage and receives the "x attacks y with z weapon" prints the message
 				printMessage(message.getA().getB());
+				if (("CONFUSED").equals(user.getMood().toString())) {
+					if (user.getConfusionTurns() > 0) {
+						System.out.println("CONFUSION TURNS: " + user.getConfusionTurns());
+						if (user.getConfusionTurns() == 1) {
+							user.setConfusionTurns(0);
+							user.setMood(Mood.NEUTRAL);
+						} else
+							user.setConfusionTurns(user.getConfusionTurns()-1);
+					}
+				}
 			} else if (!message.getA().getB().isEmpty()){
 				GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
 				ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
@@ -629,9 +677,26 @@ public class Main {
 				String[] words = messageMiss.split("\\s+");
 				messageMiss = messageMiss.replaceFirst(words[2] + " ", "");
 				printMessage(message.getA().getB() + messageMiss);
+				if (("CONFUSED").equals(user.getMood().toString())) {
+					if (user.getConfusionTurns() > 0) {
+						System.out.println("CONFUSION TURNS: " + user.getConfusionTurns());
+						if (user.getConfusionTurns() == 1) {
+							user.setConfusionTurns(0);
+							user.setMood(Mood.NEUTRAL);
+						} else
+							user.setConfusionTurns(user.getConfusionTurns()-1);
+					}
+				}
 			}
 			user.getRoom().removeCurrentTurn();
 			monsterTurn = new Pair<Boolean, ActiveCharacter>(false, null);
+			if (thing.getConfusionTurns() > 0) {
+				if (thing.getConfusionTurns() == 1) {
+					thing.setConfusionTurns(0);
+					thing.setMood(Mood.NEUTRAL);
+				} else
+					thing.setConfusionTurns(thing.getConfusionTurns()-1);
+			}
 		}
 	}
 	
@@ -804,11 +869,92 @@ public class Main {
 			enemiesList3Name.add(JSONParsing.getElement(enemy, "NAME").toString());
 		}
 	}
+	
+	public static void configureMenu() {
+		String gamestart = JSONParsing.getTranslationWord("start game", "OTHERS", rootObjWords);
+		eleMenu.add(gamestart);
+		gamestart = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
+		eleMenu.add(gamestart);
+		gamestart = JSONParsing.getTranslationWord("exit game", "OTHERS", rootObjWords);
+		eleMenu.add(gamestart);
+	}
+	
+	public static void printMenu() {
+		j.cls();
+		for (int i = 0; i < eleMenu.size(); i++) {
+			j.print(22, 12+i, eleMenu.get(i));
+		}
+		j.print(20, 12 + pointerMenu, ">");
+		j.refresh();
+	}
+	
+	public static void printOptions() {
+		
+	}
+	
+	public static void optionsMenuLoop() {
+		while(chooseOptions) {
+			printOptions();
+		}
+	}
+	
+	public static void menuLoopInputs(int i) {
+		Long now = System.currentTimeMillis();
+		if (now - lastTimeMenu > cooldMenu && isInputType(enterMenuInput,i)) {
+			String chosen = eleMenu.get(pointerMenu);
+			System.out.println("Escogido: " + chosen);
+			String start = JSONParsing.getTranslationWord("start game", "OTHERS", rootObjWords);
+			String options = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
+			String exit = JSONParsing.getTranslationWord("exit game", "OTHERS", rootObjWords);
+			if (chosen.equals(start)) {
+				menu = false;
+			} else if (chosen.equals(options)) {
+				chooseOptions = true;
+			} else if (chosen.equals(exit)) {
+				System.exit(0);
+			}
+			lastTimeMenu = now;
+			System.out.println("pointer: " + pointerMenu);
+		}
+		if (now - lastTimeMenu > cooldMenu && isInputType(downkeyMenuInput,i)) {
+			if (pointerMenu >= eleMenu.size()-1)
+				pointerMenu = 0;
+			else
+				pointerMenu++;
+			lastTimeMenu = now;
+			System.out.println("pointer: " + pointerMenu);
+		}
+		if (now - lastTimeMenu > cooldMenu && isInputType(upkeyMenuInput,i)) {
+			if (pointerMenu <= 0)
+				pointerMenu = eleMenu.size()-1;
+			else
+				pointerMenu--;
+			lastTimeMenu = now;
+			System.out.println("pointer: " + pointerMenu);
+		}
+	}
+	
+	public static void menuLoop() {
+		configureMenu();
+		while(menu) {
+			if (!chooseOptions) {
+				printMenu();
+				int i = j.inkey().code;
+				menuLoopInputs(i);
+			} else {
+				optionsMenuLoop();
+			}
+			
+		}
+	}
 
 	public static void main(String[] args) throws IOException, JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		_setLanguage();
+		//configuring the game window and the text-description window
 		configureTextArea();
 		j.getTargetFrame().requestFocus();
+		//getting json objects from the json files
+		//they will be used to retrieve words when forming sentences
 		rootObj = parser.parse(new FileReader("./src/grammars/languages/sentenceGrammar" + language + ".json")).getAsJsonObject();
 		rootApparitionRate = parser.parse(new FileReader("./src/characters/active/enemies/apparitionRate.json")).getAsJsonObject();
 		rootObjWords = parser.parse(new FileReader("./src/grammars/languages/words" + language + ".json")).getAsJsonObject();
@@ -828,7 +974,10 @@ public class Main {
 		configureApparitionRate();
 		countAction = Util.rand(12, 25);
 		possibleCry = Util.rand(3, 10);
-		System.out.println("countAction set: " + countAction);
+		
+		_setKeyMap();
+		menuLoop();
+		
 		if (!testMode){
 			gameFlow();
 		}

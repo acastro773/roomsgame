@@ -24,7 +24,7 @@ public class Goblin extends ActiveCharacter {
 		this.setMovementType(getMovementTypeFromMood());
 		this.setTirenessTotal(8+level);
 		this.setExperienceGiven(35+level*10);
-		this.addSpell(new Fireball());
+		this.setRandomSpells();
 		this.getRandomEquip();
 		int randNum = 50 - this.getLevel()*3;
 		if (randNum < 2)

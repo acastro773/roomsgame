@@ -308,6 +308,20 @@
       { "gen": "" },
       { "pronoun": "it" }
     ],
+    "axe": [
+      { "num": "sing" },
+      { "translation": "axe" },
+      { "numopposite": "axes" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
+    "axes": [
+      { "num": "plural" },
+      { "translation": "axes" },
+      { "numopposite": "axe" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
     "potion": [
       { "num": "sing" },
       { "translation": "potion" },
@@ -663,6 +677,12 @@
       { "num": "sing" },
       { "translation": "firering" },
       { "numopposite": "firering" },
+      { "gen": "" }
+    ],
+    "confuse ray": [
+      { "num": "sing" },
+      { "translation": "confuse ray" },
+      { "numopposite": "confuse ray" },
       { "gen": "" }
     ],
     "score": [
@@ -1095,6 +1115,18 @@
         { "gen": "" }
       ]
     },
+    "start game": [
+      { "translation": "Start game" },
+      { "gen": "" }
+    ],
+    "options": [
+      { "translation": "Options" },
+      { "gen": "" }
+    ],
+    "exit game": [
+      { "translation": "Exit game" },
+      { "gen": "" }
+    ],
     "restart": [
       { "translation": "Restart the game to apply the changes" },
       { "gen": "" }

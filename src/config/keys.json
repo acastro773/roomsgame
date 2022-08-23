@@ -1,18 +1,21 @@
 {
-	'movement': {
-		'left': 0,
-	    'right': 1,
-	    'down': 2,
-	    'up': 3
+	"movement": {
+		"left": 0,
+	    "right": 1,
+	    "down": 2,
+	    "up": 3
 	},
-	'inventory': {
-		'item1': 131,
-	    'item2': 132,
-	    'item3': 133,
-	    'item4': 134,
-	    'item5': 135,
-	    'item6': 136
+	"inventory": {
+		"item1": 131,
+	    "item2": 132,
+	    "item3": 133,
+	    "item4": 134,
+	    "item5": 135,
+	    "item6": 136
 	},
-	'pickItem': 68,
-	'attach': 87
+	"pickItem": 68,
+	"attach": 87,
+	"enter": 10,
+	"enter2": 89,
+	"enter3": 87
 }

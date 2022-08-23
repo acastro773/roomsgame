@@ -17,7 +17,7 @@ public class Rat extends ActiveCharacter {
 	
 	public Rat(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
 		super("rat", "", map, room, position, 2+level, 1+(int)Math.ceil(level*0.5), 8+(3*level), 30+(level*5),
-				70, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
+				0, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
 				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "R", 3, null, adjectives, level);
 		this.setMovementType(getMovementTypeFromMood());
 		this.setExperienceGiven(20+level*10);

@@ -25,6 +25,9 @@ import grammars.grammars.PrintableObject;
 import grammars.parsing.JSONParsing;
 import util.RandUtil;
 import util.Tuple;
+import magic.ConfuseRay;
+import magic.FireRing;
+import magic.Fireball;
 import magic.Spell;
 import items.consumables.Consumable;
 import items.wereables.WereableWeapon;
@@ -83,7 +86,7 @@ public class ActiveCharacter extends Character {
 	private int experience = 0;
 	private int nextLevelExperience = 0;
 	private int experienceGiven = 0;
-	public int confusionTurns = 0;
+	private int confusionTurns = 0;
 	private boolean hasBeenAttackedByHeroe = false;
 
 	public ActiveCharacter(String name, String description,
@@ -96,6 +99,8 @@ public class ActiveCharacter extends Character {
 			ArrayList<String> adjectives, int level) {
 		super(name, description, map, room, position, weight, length, carryWeight, actualCarryWeight, 
 				inventory, symbolRepresentation, mood, adjectives);
+		if (("CONFUSED").equals(this.getMood().toString()))
+			this.setConfusionTurns(RandUtil.RandomNumber(1, 4));
 		this.damage = damage;
 		this.totalMagic = totalMagic;
 		this.magic = magic;
@@ -119,6 +124,35 @@ public class ActiveCharacter extends Character {
 		//every 5 units of weight subtracts 1 unit of speed
 		//minimum speed = 2
 		this.speed = speed;
+	}
+	
+	public void setRandomSpells() {
+		int randNum = RandUtil.RandomNumber(0, 9);
+		switch(randNum) {
+		case 0:
+			this.addSpell(new FireRing());
+			this.addSpell(new Fireball());
+			break;
+		case 1:
+		case 2:
+			this.addSpell(new FireRing());
+			break;
+		case 3:
+			this.addSpell(new ConfuseRay());
+			break;
+		case 4:
+			this.addSpell(new Fireball());
+			this.addSpell(new ConfuseRay());
+			break;
+		case 5:
+			this.addSpell(new Fireball());
+			this.addSpell(new ConfuseRay());
+			this.addSpell(new FireRing());
+			break;
+		default:
+			this.addSpell(new Fireball());
+			break;
+		}
 	}
 	
 	public void setSpeedWeight() {
@@ -846,8 +880,15 @@ public class ActiveCharacter extends Character {
 	
 	public Pair<Tuple<Boolean, Boolean>, String> spellAttack(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords, ArrayList<PrintableObject> names){
 		int nspells = this.getSpells().size();
+		System.out.println("nspells: " + nspells);
 		if (nspells > 0) {
-			int getSpell = RandUtil.RandomNumber(0, nspells-1);
+			int getSpell;
+			if (nspells == 1)
+				getSpell = 0;
+			else
+				getSpell = RandUtil.RandomNumber(0, nspells-1);
+			System.out.println("Se escoge magia en posición " + getSpell);
+			System.out.println("Magia en pos 1: " + this.getSpells().get(0));
 			Spell spell = this.getSpells().get(getSpell);
 			if (RandUtil.containsTuple(user.getPosition(), spell.getDamagedPositions(this))
 					&& spell.getManaCost() <= this.getMagic()) {
@@ -942,8 +983,9 @@ public class ActiveCharacter extends Character {
 				move = true;
 				break;
 			}
-			System.out.println("ESTE BICHO PUEDE HACER: ");
-			if (spellAt) {
+			System.out.println("ESTE BICHO PUEDE HACER: " + this.getName());
+			System.out.println("MAGIAS: " + this.getSpells().size());
+			if (this.getSpells().size() > 0 && spellAt) {
 				//first boolean defines if it has dealt damage
 				//the second one defines if it has hit itself
 				//the ActiveCharacter variable returns the instance of the enemy if it has damaged itself bc of confusion
@@ -962,9 +1004,9 @@ public class ActiveCharacter extends Character {
 				System.out.println("ATACA");
 				if (result.getA().y)
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
-				else if (result.getA().x) {
+				else {
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
-				}
+				} 
 			} else if (move) {
 				System.out.println("SE MUEVE");
 				makeMoves(user);
@@ -1352,6 +1394,14 @@ public class ActiveCharacter extends Character {
 
 	public void setLevel(int level) {
 		this.level = level;
+	}
+	
+	public int getConfusionTurns() {
+		return confusionTurns;
+	}
+
+	public void setConfusionTurns(int confusionTurns) {
+		this.confusionTurns = confusionTurns;
 	}
 
 	public int getNextLevelExperience() {
