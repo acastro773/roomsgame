@@ -1127,6 +1127,42 @@
       { "translation": "Exit game" },
       { "gen": "" }
     ],
+    "color palette": [
+      { "translation": "Change color palette" },
+      { "gen": "" }
+    ],
+    "volume": [
+      { "translation": "Volume" },
+      { "gen": "" }
+    ],
+    "remap keys": [
+      { "translation": "Remap keys" },
+      { "gen": "" }
+    ],
+    "controls": [
+      { "translation": "Controls" },
+      { "gen": "" }
+    ],
+    "reset controls": [
+      { "translation": "Reset controls to default" },
+      { "gen": "" }
+    ],
+    "back": [
+      { "translation": "Back" },
+      { "gen": "" }
+    ],
+    "resume": [
+      { "translation": "Resume" },
+      { "gen": "" }
+    ],
+    "quit": [
+      { "translation": "Quit" },
+      { "gen": "" }
+    ],
+    "roomsgame": [
+      { "translation": "ROOMSGAME" },
+      { "gen": "" }
+    ],
     "restart": [
       { "translation": "Restart the game to apply the changes" },
       { "gen": "" }

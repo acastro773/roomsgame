@@ -50,6 +50,7 @@ import items.wereables.WereableWeapon;
 import magic.FireRing;
 import map.Map;
 import map.Room;
+import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Pair;
 import net.slashie.util.Util;
@@ -92,6 +93,7 @@ public class Main {
 	static Integer[] activateSoundInput;
 	static Integer[] increaseFontInput;
 	static Integer[] decreaseFontInput;
+	static Integer[] pauseGameInput;
 	static Integer[] arrayColors1 = new Integer[]{12,2,3,11,5,15,7};
 	static Integer[] arrayColors2 = new Integer[]{8,4,3,11,15,6,14};
 	public static Integer[][] arrayColors = {arrayColors1, arrayColors2};
@@ -176,8 +178,11 @@ public class Main {
 	public static Pair<Boolean, ActiveCharacter> monsterTurn = new Pair<Boolean, ActiveCharacter>(false, null);
 	public static boolean menu = true;
 	public static boolean chooseOptions = false;
+	public static boolean chooseControls = false;
+	public static boolean gamePaused = false;
 	private static int pointerMenu = 0;
 	private static ArrayList<String> eleMenu = new ArrayList<>();
+	private static ArrayList<Pair<String, Integer>> defaultControls = new ArrayList<>();
 	
 	
 	public static boolean isInputType(Integer[] type, int key) {
@@ -208,7 +213,9 @@ public class Main {
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement();
 			String value = keyBinding.getString(key);
-			System.out.println("Cogido: " + key + " - " + value);
+			defaultControls.add(new Pair<String, Integer>(key, Integer.valueOf(value)));
+			Pair<String, Integer> current = defaultControls.get(defaultControls.size()-1);
+			System.out.println("Cogido: " + current.getA() + " - " + current.getB());
 			keysMap.put(key, Integer.parseInt(value));
 		}
 		_bindKeys();
@@ -263,6 +270,7 @@ public class Main {
 		activateSoundInput = new Integer[] {keysMap.get("activateSound")};
 		increaseFontInput = new Integer[] {keysMap.get("increaseFont")};
 		decreaseFontInput = new Integer[] {keysMap.get("decreaseFont")};
+		pauseGameInput = new Integer[] {keysMap.get("pause")};
 	}
 	
 	private static void printUserInformation() {
@@ -499,123 +507,131 @@ public class Main {
 		hasPickedItem = false;
 	}
 	
+	public static void changeColors() {
+		if (selectedColor == arrayColors.length - 1) {
+    		selectedColor = 0;
+    	} else {
+    		selectedColor++;
+    	}
+	}
+	
 	public static void makeMovement(int i) throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		boolean actionDone = false;
 		boolean attackDone = false;
 		double now = System.currentTimeMillis();
-		
-			if(now - lastTime > cooldPressKey && isInputType(movementInput, i)){
-				attackDone = true;
-	        	actionDone = true;
-	        	_moveCharacterAction(i);
-	        	setFlagsToFalse();
-	        	if (countAction > 0) {
-	        		countAction--;
-	        		System.out.println("countAction: " + countAction);
-	        	}
-	        }
-	        else if (now - lastTime > cooldPressKey && isInputType(inventoryInput, i)) {
-	        	attackDone = true;
-	        	actionDone = true;
-	        	actionHandler._inventoryAction(i, usePronoun());
-	        	canUsePronoun = true;
-	        	printEverything(false);
-	        	hasUnequipedItem = false;
-	        	hasThrownItem = false;
-	        	hasPickedItem = false;
-	        }
-	        else if (now - lastTime > cooldPressKey && isInputType(pickItemInput, i)) {
-	        	actionDone = true;
-	        	actionHandler._pickItemAction(usePronoun(), hasPickedItem);
-	        	canUsePronoun = true;
-	        	printEverything(true);
-	        	hasEquipedItem = false;
-	        	hasUnequipedItem = false;
-	        	hasThrownItem = false;
-	        }
-	        else if (now - lastTime > cooldPressKey && isInputType(attackInput, i)) {
-	        	actionDone = true;
-	        	attackDone = true;
-	        	actionHandler._attackAction(usePronoun());
-	        	canUsePronoun = true;
-	        	printEverything(true);
-	        	setFlagsToFalse();
-	        } 
-	        else if (now - lastTime > cooldPressKey && isInputType(spellInput, i)) {
-	        	actionDone = true;
-	        	attackDone = true;
-	        	spellsPressed = true;
-	        	setFlagsToFalse();
-	        	messageLabel.requestFocus();
-	        } else if (now - lastTime > cooldPressKey && (isInputType(descriptionInput, i) || isInputType(descriptionWereableInput, i))) {
-	        	actionDone = true;
-	        	setFlagsToFalse();
-	        	actionHandler._descriptionAction(i, usePronoun(), isNumericDescription);
-	        	canUsePronoun = true;
-	        	printEverything(false);
-	        } else if (now - lastTime > cooldPressKey && isInputType(throwItemInput, i)) {
-	        	actionDone = true;
-	        	hasUnequipedItem = false;
-	        	hasEquipedItem = false;
-	        	hasPickedItem = false;
-	        	throwPressed = true;
-	        	messageLabel.requestFocus();
-	        } else if (now - lastTime > cooldPressKey && isInputType(changeNumericDescInput, i)) {
-	        	actionDone = true;
-	        	isNumericDescription = !isNumericDescription;
-	        } else if (now - lastTime > cooldPressKey && isInputType(changeColorsInput, i)) {
-	        	actionDone = true;
-	        	if (selectedColor == arrayColors.length - 1) {
-	        		selectedColor = 0;
-	        	} else {
-	        		selectedColor++;
-	        	}
-	        	printEverything(true);
-	        } else if (now - lastTime > cooldPressKey && isInputType(unequipItemInput, i)) {
-	        	actionDone = true;
-	        	hasEquipedItem = false;
-	        	hasPickedItem = false;
-	        	hasThrownItem = false;
-	        	unequipPressed = true;
-	        	messageLabel.requestFocus();
-	        } else if (now - lastTime > cooldPressKey && isInputType(rebindKeysInput, i)) {
-	        	actionDone = true;
-	        	rebindKeys();
-	        } else if (now - lastTime > cooldPressKey && isInputType(descriptionSpellInput, i)) {
-	        	actionDone = true;
-	        	MessageDescriptionsUtil.describeSpells(user, rootObjWords, grammarSimpleVerb);
-	        } else if (now - lastTime > cooldPressKey && isInputType(activateSoundInput, i)) {
-	        	actionDone = true;
-	        	activateDeactivateSound();
-	        } else if (now - lastTime > cooldPressKey && isInputType(increaseFontInput, i)) {
-	        	actionDone = true;
-	        	increaseFontSize();
-	        } else if (now - lastTime > cooldPressKey && isInputType(decreaseFontInput, i)) {
-	        	actionDone = true;
-	        	decreaseFontSize();
-	        }
-			if (actionDone) {
-				if (attackDone) {
-					if (("CONFUSED").equals(user.getMood().toString())) {
-						if (user.getConfusionTurns() > 0) {
-							System.out.println("CONFUSION TURNS: " + user.getConfusionTurns());
-							if (user.getConfusionTurns() == 1) {
-								user.setConfusionTurns(0);
-								user.setMood(Mood.NEUTRAL);
-							} else
-								user.setConfusionTurns(user.getConfusionTurns()-1);
-						}
+		if (now - lastTimeMenu > cooldMenu && isInputType(pauseGameInput, i)) {
+			gamePaused = true;
+			lastTimeMenu = now;
+			return;
+		}
+		if(now - lastTime > cooldPressKey && isInputType(movementInput, i)){
+			attackDone = true;
+        	actionDone = true;
+        	_moveCharacterAction(i);
+        	setFlagsToFalse();
+        	if (countAction > 0) {
+        		countAction--;
+        		System.out.println("countAction: " + countAction);
+        	}
+        }
+        else if (now - lastTime > cooldPressKey && isInputType(inventoryInput, i)) {
+        	attackDone = true;
+        	actionDone = true;
+        	actionHandler._inventoryAction(i, usePronoun());
+        	canUsePronoun = true;
+        	printEverything(false);
+        	hasUnequipedItem = false;
+        	hasThrownItem = false;
+        	hasPickedItem = false;
+        }
+        else if (now - lastTime > cooldPressKey && isInputType(pickItemInput, i)) {
+        	actionDone = true;
+        	actionHandler._pickItemAction(usePronoun(), hasPickedItem);
+        	canUsePronoun = true;
+        	printEverything(true);
+        	hasEquipedItem = false;
+        	hasUnequipedItem = false;
+        	hasThrownItem = false;
+        }
+        else if (now - lastTime > cooldPressKey && isInputType(attackInput, i)) {
+        	actionDone = true;
+        	attackDone = true;
+        	actionHandler._attackAction(usePronoun());
+        	canUsePronoun = true;
+        	printEverything(true);
+        	setFlagsToFalse();
+        } 
+        else if (now - lastTime > cooldPressKey && isInputType(spellInput, i)) {
+        	actionDone = true;
+        	attackDone = true;
+        	spellsPressed = true;
+        	setFlagsToFalse();
+        	messageLabel.requestFocus();
+        } else if (now - lastTime > cooldPressKey && (isInputType(descriptionInput, i) || isInputType(descriptionWereableInput, i))) {
+        	actionDone = true;
+        	setFlagsToFalse();
+        	actionHandler._descriptionAction(i, usePronoun(), isNumericDescription);
+        	canUsePronoun = true;
+        	printEverything(false);
+        } else if (now - lastTime > cooldPressKey && isInputType(throwItemInput, i)) {
+        	actionDone = true;
+        	hasUnequipedItem = false;
+        	hasEquipedItem = false;
+        	hasPickedItem = false;
+        	throwPressed = true;
+        	messageLabel.requestFocus();
+        } else if (now - lastTime > cooldPressKey && isInputType(changeNumericDescInput, i)) {
+        	actionDone = true;
+        	isNumericDescription = !isNumericDescription;
+        } else if (now - lastTime > cooldPressKey && isInputType(changeColorsInput, i)) {
+        	actionDone = true;
+        	changeColors();
+        	printEverything(true);
+        } else if (now - lastTime > cooldPressKey && isInputType(unequipItemInput, i)) {
+        	actionDone = true;
+        	hasEquipedItem = false;
+        	hasPickedItem = false;
+        	hasThrownItem = false;
+        	unequipPressed = true;
+        	messageLabel.requestFocus();
+        } else if (now - lastTime > cooldPressKey && isInputType(rebindKeysInput, i)) {
+        	actionDone = true;
+        	rebindKeys();
+        } else if (now - lastTime > cooldPressKey && isInputType(descriptionSpellInput, i)) {
+        	actionDone = true;
+        	MessageDescriptionsUtil.describeSpells(user, rootObjWords, grammarSimpleVerb);
+        } else if (now - lastTime > cooldPressKey && isInputType(activateSoundInput, i)) {
+        	actionDone = true;
+        	activateDeactivateSound();
+        } else if (now - lastTime > cooldPressKey && isInputType(increaseFontInput, i)) {
+        	actionDone = true;
+        	increaseFontSize();
+        } else if (now - lastTime > cooldPressKey && isInputType(decreaseFontInput, i)) {
+        	actionDone = true;
+        	decreaseFontSize();
+        }
+		if (actionDone) {
+			if (attackDone) {
+				if (("CONFUSED").equals(user.getMood().toString())) {
+					if (user.getConfusionTurns() > 0) {
+						System.out.println("CONFUSION TURNS: " + user.getConfusionTurns());
+						if (user.getConfusionTurns() == 1) {
+							user.setConfusionTurns(0);
+							user.setMood(Mood.NEUTRAL);
+						} else
+							user.setConfusionTurns(user.getConfusionTurns()-1);
 					}
-						
-					if (user.getRoom().getTurnsList().size() > 0)
-						user.getRoom().removeCurrentTurn();
-				} else {
-					if (isSoundActivated) {
-		        		beepSound.reproduce();
-		        	}
 				}
-				lastTime = System.currentTimeMillis();
+					
+				if (user.getRoom().getTurnsList().size() > 0)
+					user.getRoom().removeCurrentTurn();
+			} else {
+				if (isSoundActivated) {
+	        		beepSound.reproduce();
+	        	}
 			}
+			lastTime = System.currentTimeMillis();
+		}
 
 	}
 	
@@ -710,53 +726,61 @@ public class Main {
 	
 	public static void turnLoop() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		for (;;) {
-			for (ActiveCharacter monster : user.getRoom().getMonsters()) {
-				monster.setAdjectivesMonster(user);
-			}
-			user.setAdjectivesUser();
-			if (user.getLife() > 0) {
-				GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
-				if (monsterTurn.getA())
-					enemyTurn(monsterTurn.getB(), grammarIndividual);
-				else {
-					if (user.getRoom().getTurnsList().size() > 0) {
-						ActiveCharacter thing = user.getRoom().getTurnsList().get(0);
-						if (thing != null && !thing.isDead())
-							System.out.println("***** CURRENT TURN ***** -> " + thing.getName());
-						if (thing != user && !thing.isDead()) {
-							monsterTurn = new Pair<Boolean, ActiveCharacter>(true, thing);
-						} else if (thing == user && !thing.isDead()) {
-							System.out.println("HAY ENEMIGOS Y TURNO USER");		
-							playerTurn();	
-						}
-						if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
+			if (!gamePaused) {
+				for (ActiveCharacter monster : user.getRoom().getMonsters()) {
+					monster.setAdjectivesMonster(user);
+				}
+				user.setAdjectivesUser();
+				if (user.getLife() > 0) {
+					GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
+					if (monsterTurn.getA())
+						enemyTurn(monsterTurn.getB(), grammarIndividual);
+					else {
+						if (user.getRoom().getTurnsList().size() > 0) {
+							ActiveCharacter thing = user.getRoom().getTurnsList().get(0);
+							if (thing != null && !thing.isDead())
+								System.out.println("***** CURRENT TURN ***** -> " + thing.getName());
+							if (thing != user && !thing.isDead()) {
+								monsterTurn = new Pair<Boolean, ActiveCharacter>(true, thing);
+							} else if (thing == user && !thing.isDead()) {
+								System.out.println("HAY ENEMIGOS Y TURNO USER");		
+								playerTurn();	
+							}
+							if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
+								user.getRoom().setListOfTurns(user);
+							}
+						} else if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
 							user.getRoom().setListOfTurns(user);
+						} else if (user.getRoom().getMonsters().size() < 1 || user.getMap().allEnemiesRoomDead(user.getRoom())){
+							System.out.println("SIN MONSTROS");
+							playerTurn();
 						}
-					} else if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
-						user.getRoom().setListOfTurns(user);
-					} else if (user.getRoom().getMonsters().size() < 1 || user.getMap().allEnemiesRoomDead(user.getRoom())){
-						System.out.println("SIN MONSTROS");
-						playerTurn();
+					}
+					if (countAction == 0) {
+						if (isSoundActivated)
+							waterdropSound.reproduce();
+						countAction = Util.rand(25, 50);
 					}
 				}
-				if (countAction == 0) {
+				else {
 					if (isSoundActivated)
-						waterdropSound.reproduce();
-					countAction = Util.rand(25, 50);
-					System.out.println("countAction set: " + countAction);
+						deathSound.reproduce();
+					MessageDescriptionsUtil._messageDescriptionDead(user, true, grammarAdjectiveDescription);
+					try {
+						deepnessScore = 0;
+						newMatch = true;
+						messageLabel.setText("");
+						main(null);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
-			}
-			else {
-				if (isSoundActivated)
-					deathSound.reproduce();
-				MessageDescriptionsUtil._messageDescriptionDead(user, true, grammarAdjectiveDescription);
-				try {
-					deepnessScore = 0;
-					newMatch = true;
-					messageLabel.setText("");
-					main(null);
-				} catch (IOException e) {
-					e.printStackTrace();
+			} else {
+				configurePauseMenu();
+				while(gamePaused) {
+					printMenu();
+					int n = j.inkey().code;
+					menuLoopInputs(n);
 				}
 			}
 		}
@@ -871,31 +895,90 @@ public class Main {
 	}
 	
 	public static void configureMenu() {
+		eleMenu.clear();
 		String gamestart = JSONParsing.getTranslationWord("start game", "OTHERS", rootObjWords);
 		eleMenu.add(gamestart);
 		gamestart = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
 		eleMenu.add(gamestart);
 		gamestart = JSONParsing.getTranslationWord("exit game", "OTHERS", rootObjWords);
 		eleMenu.add(gamestart);
+		pointerMenu = 0;
 	}
 	
-	public static void printMenu() {
-		j.cls();
-		for (int i = 0; i < eleMenu.size(); i++) {
-			j.print(22, 12+i, eleMenu.get(i));
+	public static void configurePauseMenu() {
+		eleMenu.clear();
+		String gamestart = JSONParsing.getTranslationWord("resume", "OTHERS", rootObjWords);
+		eleMenu.add(gamestart);
+		gamestart = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
+		eleMenu.add(gamestart);
+		gamestart = JSONParsing.getTranslationWord("quit", "OTHERS", rootObjWords);
+		eleMenu.add(gamestart);
+		pointerMenu = 0;
+	}
+	
+	public static void configureOptions() {
+		eleMenu.clear();
+		String color = JSONParsing.getTranslationWord("color palette", "OTHERS", rootObjWords);
+		String volume = JSONParsing.getTranslationWord("volume", "OTHERS", rootObjWords);
+		String controls = JSONParsing.getTranslationWord("controls", "OTHERS", rootObjWords);
+		String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+		eleMenu.add(color);
+		eleMenu.add(volume);
+		eleMenu.add(controls);
+		eleMenu.add(back);
+		pointerMenu = 0;
+	}
+	
+	public static void configureControls() {
+		eleMenu.clear();
+		String rebind = JSONParsing.getTranslationWord("remap keys", "OTHERS", rootObjWords);
+		String reset = JSONParsing.getTranslationWord("reset controls", "OTHERS", rootObjWords);
+		String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+		eleMenu.add(rebind);
+		eleMenu.add(reset);
+		eleMenu.add(back);
+		pointerMenu = 0;
+	}
+	
+	public static void printTitleMenu() {
+		int xstart = (((j.xdim + 1)/2)/2)/2;
+		int xmed = (j.xdim+1)/2;
+		
+		String title = JSONParsing.getTranslationWord("roomsgame", "OTHERS", rootObjWords);
+		
+		for (int i = 0; i < 7; i++) {
+			j.print(xmed-xstart+(i*2), 6, "H", arrayColors[selectedColor][i]);
+			j.print(xmed-xstart+(i*2)+1, 6, "H", arrayColors[selectedColor][i]);
+			j.print(xmed-xstart+(i*2), 10, "H", arrayColors[selectedColor][i]);
+			j.print(xmed-xstart+(i*2)+1, 10, "H", arrayColors[selectedColor][i]);
 		}
-		j.print(20, 12 + pointerMenu, ">");
-		j.refresh();
+		int phrase_size = (int)Math.floor(title.length() * 0.5);
+		int startX = xmed - phrase_size;
+		j.print(startX, 8, title);
 	}
 	
-	public static void printOptions() {
+	public static void printCurrentControls() {
 		
 	}
 	
-	public static void optionsMenuLoop() {
-		while(chooseOptions) {
-			printOptions();
+	public static void printMenu() {
+		//each time this function is called it will cleanse and refresh the game window
+		//updating the cursor position
+		j.cls();
+		int xtam = (int)Math.floor((j.xdim + 1) * 0.5);
+		ArrayList<Integer> listX = new ArrayList<>();
+		for (int i = 0; i < eleMenu.size(); i++) {
+			int phrase_size = (int)Math.floor(eleMenu.get(i).length() * 0.5);
+			int startX = xtam - phrase_size;
+			listX.add(startX);
+			j.print(startX, 12+i, eleMenu.get(i));
 		}
+		int pointerStartX = Collections.min(listX);
+		j.print(pointerStartX-2, 12 + pointerMenu, ">");
+		printTitleMenu();
+		if (chooseControls)
+			printCurrentControls();
+		j.refresh();
 	}
 	
 	public static void menuLoopInputs(int i) {
@@ -903,17 +986,94 @@ public class Main {
 		if (now - lastTimeMenu > cooldMenu && isInputType(enterMenuInput,i)) {
 			String chosen = eleMenu.get(pointerMenu);
 			System.out.println("Escogido: " + chosen);
-			String start = JSONParsing.getTranslationWord("start game", "OTHERS", rootObjWords);
-			String options = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
-			String exit = JSONParsing.getTranslationWord("exit game", "OTHERS", rootObjWords);
-			if (chosen.equals(start)) {
-				menu = false;
-			} else if (chosen.equals(options)) {
-				chooseOptions = true;
-			} else if (chosen.equals(exit)) {
-				System.exit(0);
+			if (chooseOptions) {
+				String color = JSONParsing.getTranslationWord("color palette", "OTHERS", rootObjWords);
+				String volume = JSONParsing.getTranslationWord("volume", "OTHERS", rootObjWords);
+				String controls = JSONParsing.getTranslationWord("controls", "OTHERS", rootObjWords);
+				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+				
+				if (chosen.equals(color)) {
+					changeColors();
+				} else if (chosen.equals(volume)) {
+					activateDeactivateSound();
+				} else if (chosen.equals(controls)) {
+					chooseControls = true;
+					chooseOptions = false;
+					configureControls();
+				} else if (chosen.equals(back)) {
+					chooseOptions = false;
+					if (gamePaused)
+						configurePauseMenu();
+					else
+						configureMenu();
+				}
+			} else if (chooseControls){
+				String rebind = JSONParsing.getTranslationWord("remap keys", "OTHERS", rootObjWords);
+				String reset = JSONParsing.getTranslationWord("reset controls", "OTHERS", rootObjWords);
+				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+				
+				if (chosen.equals(rebind)) {
+					rebindKeys();
+				} else if (chosen.equals(reset)) {
+					keysMap.clear();
+					for (Pair<String, Integer> original : defaultControls) {
+						keysMap.put(original.getA(), original.getB());
+					}
+					_bindKeys();
+					_bindKeysMenu();
+				} else if (chosen.equals(back)) {
+					chooseControls = false;
+					chooseOptions = true;
+					configureOptions();
+				}
+			} else if (gamePaused){
+				String resume = JSONParsing.getTranslationWord("resume", "OTHERS", rootObjWords);
+				String options = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
+				String quit = JSONParsing.getTranslationWord("quit", "OTHERS", rootObjWords);
+				if (chosen.equals(resume)) {
+					gamePaused = false;
+					printEverything(true);
+				} else if (chosen.equals(options)) {
+					chooseOptions = true;
+					configureOptions();
+				} else if (chosen.equals(quit)) {
+					gamePaused = false;
+					menu = true;
+					try {
+						main(null);
+					} catch (JsonIOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JsonSyntaxException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (InstantiationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			} else {
+				String start = JSONParsing.getTranslationWord("start game", "OTHERS", rootObjWords);
+				String options = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
+				String exit = JSONParsing.getTranslationWord("exit game", "OTHERS", rootObjWords);
+				if (chosen.equals(start)) {
+					menu = false;
+				} else if (chosen.equals(options)) {
+					chooseOptions = true;
+					configureOptions();
+				} else if (chosen.equals(exit)) {
+					System.exit(0);
+				}
 			}
 			lastTimeMenu = now;
+			if (isSoundActivated)
+				beepSound.reproduce();
 			System.out.println("pointer: " + pointerMenu);
 		}
 		if (now - lastTimeMenu > cooldMenu && isInputType(downkeyMenuInput,i)) {
@@ -922,6 +1082,8 @@ public class Main {
 			else
 				pointerMenu++;
 			lastTimeMenu = now;
+			if (isSoundActivated)
+				beepSound.reproduce();
 			System.out.println("pointer: " + pointerMenu);
 		}
 		if (now - lastTimeMenu > cooldMenu && isInputType(upkeyMenuInput,i)) {
@@ -930,6 +1092,8 @@ public class Main {
 			else
 				pointerMenu--;
 			lastTimeMenu = now;
+			if (isSoundActivated)
+				beepSound.reproduce();
 			System.out.println("pointer: " + pointerMenu);
 		}
 	}
@@ -937,14 +1101,11 @@ public class Main {
 	public static void menuLoop() {
 		configureMenu();
 		while(menu) {
-			if (!chooseOptions) {
-				printMenu();
-				int i = j.inkey().code;
-				menuLoopInputs(i);
-			} else {
-				optionsMenuLoop();
-			}
-			
+			printMenu();
+			CharKey e = j.inkey();
+			int i = e.code;
+			System.out.println("Input: " + e + " - " + (char)(i+1));
+			menuLoopInputs(i);
 		}
 	}
 
