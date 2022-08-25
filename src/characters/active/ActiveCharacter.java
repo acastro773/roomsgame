@@ -56,7 +56,7 @@ import main.Main;
  *
  */
 
-public class ActiveCharacter extends Character {
+public abstract class ActiveCharacter extends Character {
 	private int maxNumberSpells = 2;
 	private int damage;
 	private int defense;
@@ -71,6 +71,7 @@ public class ActiveCharacter extends Character {
 	private int evasion;
 	private int vision;
 	private int limLifeLevel;
+	private int limManaLevel;
 	private Movement movementType;
 	private boolean isDead;
 	private boolean isFirstTimeDead;
@@ -107,6 +108,7 @@ public class ActiveCharacter extends Character {
 		this.defense = defense;
 		this.life = life;
 		this.limLifeLevel = life;
+		this.limManaLevel = magic;
 		this.luck = luck; // number between 0 and 100
 		this.weaponsEquipped = weaponsEquipped;
 		this.armorsEquipped = armorsEquipped;
@@ -400,13 +402,7 @@ public class ActiveCharacter extends Character {
 		character.setInventory(new ArrayList<Item>());
 	}
 	
-	public void setCharacterDead(ActiveCharacter character) {
-		if (character.getLife() <= 0){
-			character.setDead(true);
-			this.dropAllItems(character);
-			character.getRoom().removeTurnDead(character);
-		}
-	}
+	public abstract void setCharacterDead(ActiveCharacter character);
 
 	//tuple of 2 booleans, the first one returns true if the user has inflicted damage on the foe
 	//and the second value returns true if the user has damaged itself
@@ -457,7 +453,7 @@ public class ActiveCharacter extends Character {
 		if (Main.debug){
 			System.out.println("Spell attack Done: " + spell.getDamage());
 		}
-		int defenderLife = defender.getLife() - this.getDamageLuckMood(this, spell.getDamage()).y;
+		int defenderLife = defender.getLife() - (this.getDamageLuckMood(this, spell.getDamage() + this.getDamage()).y - getDefenseMood(defender));
 		defenderLife = defenderLife < 0 ? 0 : defenderLife;
 		defender.setLife(defenderLife);
 		this.setCharacterDead(defender);
@@ -473,7 +469,7 @@ public class ActiveCharacter extends Character {
 			luck -= (int)(Math.ceil(luck*1));
 			System.out.println("Self attack? luck: " + luck + "rand: " + randLuck);
 			if (luck <= randLuck && this.generateSpell(spell)) {
-				int selfDamage = (int)(Math.ceil(this.getDamageLuckMood(this, spell.getDamage()).y*0.5));
+				int selfDamage = (int)(Math.ceil(this.getDamageLuckMood(this, spell.getDamage() + this.getDamage()).y*0.5));
 				int attackerLife = this.getLife() - selfDamage;
 				attackerLife = attackerLife < 0 ? 0 : attackerLife;
 				this.setLife(attackerLife);
@@ -492,7 +488,7 @@ public class ActiveCharacter extends Character {
 				charactersPositions.add(user.getPosition());
 				if (spellDamagedPositions.size() > 0) {
 					for (Tuple<Integer, Integer> pos : spellDamagedPositions) {
-						if (RandUtil.sameTuple(pos, user.getPosition())) {
+						if (RandUtil.sameTuple(pos, user.getPosition()) && this != user) {
 							hurtCharacters.add(user);
 							this.attackWithSpell(user, spell);
 						}
@@ -887,8 +883,6 @@ public class ActiveCharacter extends Character {
 				getSpell = 0;
 			else
 				getSpell = RandUtil.RandomNumber(0, nspells-1);
-			System.out.println("Se escoge magia en posición " + getSpell);
-			System.out.println("Magia en pos 1: " + this.getSpells().get(0));
 			Spell spell = this.getSpells().get(getSpell);
 			if (RandUtil.containsTuple(user.getPosition(), spell.getDamagedPositions(this))
 					&& spell.getManaCost() <= this.getMagic()) {
@@ -1050,24 +1044,21 @@ public class ActiveCharacter extends Character {
 		this.limLifeLevel = newLimLife;
 	}
 	
+	public void setLimMana(int newLimMana) {
+		this.limManaLevel = newLimMana;
+	}
+	
 	public void setNewLimLife(int newLimLife) {
 		this.setLimLife(newLimLife);
 		this.setLife(newLimLife);
 	}
 	
-	public void addNewExperience(int addExperience) {
-		if (this.getExperience() + addExperience >= this.getNextLevelExperience()) {
-			int experienceToNextLevel = this.getNextLevelExperience() - this.getExperience();
-			this.setExperience(addExperience - experienceToNextLevel);
-			this.setSpeed(this.getSpeed()+2);
-			this.setDamage(this.getDamage()+2);
-			this.setDefense(this.getDefense()+1);
-			this.setNewLevel(this.getLevel() + 1);
-			this.setNewLimLife(this.getTotalLife() + 5);
-		} else {
-			this.setExperience(this.getExperience() + addExperience);
-		}
+	public void setNewLimMana(int newLimMana) {
+		this.setLimMana(newLimMana);
+		this.setMagic(newLimMana);
 	}
+	
+	public abstract void addNewExperience(int addExperience);
 	
 	public void getRandomEquip() {
 		WereableWeapon oneHandSword;
@@ -1229,7 +1220,7 @@ public class ActiveCharacter extends Character {
 	}
 	
 	public int getTotalMagic() {
-		return totalMagic;
+		return limManaLevel;
 	}
 
 	public void setTotalMagic(int totalMagic) {

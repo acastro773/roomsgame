@@ -23,6 +23,8 @@ public class ConfuseRay extends Spell {
 		ArrayList<Tuple<Integer, Integer>> positionsToAdd = new ArrayList<Tuple<Integer, Integer>>();
 		positionsToAdd.add(new Tuple<Integer, Integer>(0, 1));
 		positionsToAdd.add(new Tuple<Integer, Integer>(0, -1));
+		positionsToAdd.add(new Tuple<Integer, Integer>(1, 0));
+		positionsToAdd.add(new Tuple<Integer, Integer>(-1, 0));
 		ArrayList<Tuple<Integer, Integer>> damagedPositions = new ArrayList<Tuple<Integer, Integer>>();
 		for(Tuple<Integer, Integer> tuple : positionsToAdd) {			
 			damagedPositions.add(RandUtil.add(user.getPosition(), tuple));

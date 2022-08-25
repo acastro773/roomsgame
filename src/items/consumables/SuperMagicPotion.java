@@ -8,14 +8,15 @@ import util.Tuple;
 import characters.Character;
 import characters.active.ActiveCharacter;
 
-public class MagicPotion extends Consumable{
+public class SuperMagicPotion extends Consumable {
 	
-	int magicEffect = 50;
+	int magicEffect = 150;
 	ArrayList<String> attributes = new ArrayList<String>();
 
-	public MagicPotion(Character character, Map map, Room room,
+	public SuperMagicPotion(Character character, Map map, Room room,
 			Tuple<Integer, Integer> position) {
-		super("potion", null, null, 5, 1, "", character, map, room, position);
+		super("potion", null, null, 5, 1, "",
+				character, map, room, position);
 		this.setAdjectives(this.getMagicPotionAttributes());
 	}
 	

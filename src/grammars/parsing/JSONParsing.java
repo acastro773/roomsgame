@@ -83,7 +83,10 @@ public class JSONParsing {
 	public static String getSoundSource(JsonObject sndObj, ActiveCharacter src, String action) {
 		JsonObject snd = null;
 		if (src != null) {
-			snd = sndObj.get(src.getName().toUpperCase()).getAsJsonObject();
+			if (Main.user != src)
+				snd = sndObj.get(src.getName().toUpperCase()).getAsJsonObject();
+			else
+				snd = sndObj.get("PLAYER").getAsJsonObject();
 		} else {
 			snd = sndObj;
 		}

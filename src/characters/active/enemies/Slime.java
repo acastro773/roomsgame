@@ -50,4 +50,10 @@ public class Slime extends ActiveCharacter {
 		adjectives.add("big");
 		return adjectives;
 	}
+
+	@Override
+	public void addNewExperience(int addExperience) {
+		// TODO Auto-generated method stub
+		
+	}
 }

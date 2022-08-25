@@ -32,6 +32,8 @@ import com.google.gson.JsonSyntaxException;
 
 import characters.Character.Mood;
 import characters.active.ActiveCharacter;
+import characters.active.playerclass.Knight;
+import characters.active.playerclass.Mage;
 import config.ChangeKeyBinding;
 import grammars.grammars.GrammarIndividual;
 import grammars.grammars.GrammarSelectorNP;
@@ -48,6 +50,7 @@ import items.wereables.ShortSword;
 import items.wereables.WereableArmor;
 import items.wereables.WereableWeapon;
 import magic.FireRing;
+import magic.Fireball;
 import map.Map;
 import map.Room;
 import net.slashie.libjcsi.CharKey;
@@ -140,7 +143,7 @@ public class Main {
 	static GrammarsGeneral grammarUnvalidDescription;
 	static GrammarsGeneral grammarAdjectiveDescription;
 	static GrammarsGeneral grammarMissDescription;
-	static GrammarsGeneral grammarGeneralDescription;
+	public static GrammarsGeneral grammarGeneralDescription;
 	static GrammarsGeneral grammarSimpleVerb;
 	static GrammarsGeneral grammarGeneralObj;
 	static GrammarsGeneral grammarSelfharmDescription;
@@ -180,9 +183,12 @@ public class Main {
 	public static boolean chooseOptions = false;
 	public static boolean chooseControls = false;
 	public static boolean gamePaused = false;
+	public static boolean chooseClass = false;
 	private static int pointerMenu = 0;
 	private static ArrayList<String> eleMenu = new ArrayList<>();
 	private static ArrayList<Pair<String, Integer>> defaultControls = new ArrayList<>();
+	private static String userClass = "";
+	
 	
 	
 	public static boolean isInputType(Integer[] type, int key) {
@@ -343,18 +349,24 @@ public class Main {
 	public static void _initialize(){
 		if (user == null || newMatch) {
 			ArrayList<String> adjectives = new ArrayList<String>();
-			adjectives.add("big");
-			adjectives.add("brave");
 			adjectives.add("glorious");
-			user = new ActiveCharacter("hero", "", null, null, null, 
-					40, 2, 20, 200000, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
-					new ArrayList<WereableArmor>(), 100, 100, 0,
-					new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 20);
-			user.setNextLevelExperience();
-			WereableWeapon oneHandSword = new ShortSword(user, null, null, null, user.getLevel(), true);
-			user.putItemInventory(oneHandSword);
-			FireRing fireRing = new FireRing();
-			user.addSpell(fireRing);
+			String knight = JSONParsing.getTranslationWord("knight", "N", rootObjWords);
+			String mage = JSONParsing.getTranslationWord("mage", "N", rootObjWords);
+			
+			if (userClass.equals(knight)) {
+				adjectives.add("big");
+				adjectives.add("brave");
+				user = new Knight(null, null, null, adjectives, 1, 4, 5, 15, 100, 90, 120, 0, 40);
+				user.setNextLevelExperience();
+				WereableWeapon oneHandSword = new ShortSword(user, null, null, null, user.getLevel(), true);
+				user.putItemInventory(oneHandSword);
+			} else if (userClass.equals(mage)) {
+				adjectives.add("wise");
+				user = new Mage(null, null, null, adjectives, 3, 200, 2, 26, 80, 100, 90, 0, 100);
+				user.setNextLevelExperience();
+				Fireball fireball = new Fireball();
+				user.addSpell(fireball);
+			}
 		}
 		walkSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "STEP"));
 		collisionSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "COLLISION"));
@@ -940,6 +952,17 @@ public class Main {
 		pointerMenu = 0;
 	}
 	
+	public static void configureChooseClass() {
+		eleMenu.clear();
+		String knight = JSONParsing.getTranslationWord("knight", "N", rootObjWords);
+		String mage = JSONParsing.getTranslationWord("mage", "N", rootObjWords);
+		String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+		eleMenu.add(knight.toUpperCase());
+		eleMenu.add(mage.toUpperCase());
+		eleMenu.add(back);
+		pointerMenu = 0;
+	}
+	
 	public static void printTitleMenu() {
 		int xstart = (((j.xdim + 1)/2)/2)/2;
 		int xmed = (j.xdim+1)/2;
@@ -957,10 +980,6 @@ public class Main {
 		j.print(startX, 8, title);
 	}
 	
-	public static void printCurrentControls() {
-		
-	}
-	
 	public static void printMenu() {
 		//each time this function is called it will cleanse and refresh the game window
 		//updating the cursor position
@@ -976,8 +995,6 @@ public class Main {
 		int pointerStartX = Collections.min(listX);
 		j.print(pointerStartX-2, 12 + pointerMenu, ">");
 		printTitleMenu();
-		if (chooseControls)
-			printCurrentControls();
 		j.refresh();
 	}
 	
@@ -1058,12 +1075,29 @@ public class Main {
 						e.printStackTrace();
 					}
 				}
+			} else if (chooseClass) {
+				String knight = JSONParsing.getTranslationWord("knight", "N", rootObjWords);
+				String mage = JSONParsing.getTranslationWord("mage", "N", rootObjWords);
+				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+				if (chosen.equals(knight.toUpperCase())) {
+					userClass = knight;
+					menu = false;
+					chooseClass = false;
+				} else if (chosen.equals(mage.toUpperCase())) {
+					userClass = mage;
+					menu = false;
+					chooseClass = false;
+				} else if (chosen.equals(back)) {
+					chooseClass = false;
+					configureMenu();
+				}
 			} else {
 				String start = JSONParsing.getTranslationWord("start game", "OTHERS", rootObjWords);
 				String options = JSONParsing.getTranslationWord("options", "OTHERS", rootObjWords);
 				String exit = JSONParsing.getTranslationWord("exit game", "OTHERS", rootObjWords);
 				if (chosen.equals(start)) {
-					menu = false;
+					chooseClass = true;
+					configureChooseClass();
 				} else if (chosen.equals(options)) {
 					chooseOptions = true;
 					configureOptions();
@@ -1104,7 +1138,6 @@ public class Main {
 			printMenu();
 			CharKey e = j.inkey();
 			int i = e.code;
-			System.out.println("Input: " + e + " - " + (char)(i+1));
 			menuLoopInputs(i);
 		}
 	}

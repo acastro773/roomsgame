@@ -40,4 +40,20 @@ public class Goblin extends ActiveCharacter {
 		return adjectives;
 	}
 
+	@Override
+	public void addNewExperience(int addExperience) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCharacterDead(ActiveCharacter character) {
+		if (character.getLife() <= 0){
+			character.setDead(true);
+			this.dropAllItems(character);
+			character.getRoom().removeTurnDead(character);
+		}
+		
+	}
+
 }

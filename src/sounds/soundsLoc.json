@@ -1,10 +1,11 @@
 {
-  "HERO": {
+  "PLAYER": {
     "STEP": "./src/sounds/steps.wav",
     "ATTACK": "",
     "DEAD": "./src/sounds/death.wav",
     "COLLISION": "./src/sounds/collision.wav",
-    "HURT": "./src/sounds/herohit.wav"
+    "HURT": "./src/sounds/herohit.wav",
+    "AVOID": ""
   },
   "GOBLIN": {
     "IDLE": "./src/sounds/goblinappear.wav",

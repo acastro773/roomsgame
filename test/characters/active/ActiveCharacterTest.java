@@ -28,6 +28,8 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
 import characters.Character;
+import characters.active.enemies.Goblin;
+import characters.active.playerclass.Knight;
 import util.Tuple;
 
 public class ActiveCharacterTest {
@@ -80,38 +82,14 @@ public class ActiveCharacterTest {
 		ArrayList<String> adjectives = new ArrayList<String>();
 		adjectives.add("small");
 
-		attacker = new ActiveCharacter("hero", "", map, room, position, 40, 10, 10,
-				100, 100, 100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
-		defender = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 10,
-				100, 0, 100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
-		c1 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 10, 10,
-				50, 100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
-		c2 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 10, 100, 50,
-				100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 95,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
-		c3 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 10, 100,
-				50, 100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
-		c4 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 10, 100,
-				50, 100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
-		c5 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 10, 100,
-				50, 100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
-		c6 = new ActiveCharacter("goblin", "", map, room, position, 40, 10, 10, 100,
-				50, 100, 100, Character.getRandomMood(), new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
+		attacker = new Knight(null, null, null, adjectives, 1, 4, 5, 15, 100, 90, 120, 0, 40);
+		defender = new Goblin(null, null, position, new ArrayList<String>(), 1);
+		c1 = new Goblin(null, null, position, new ArrayList<String>(), 1);
+		c2 = new Goblin(null, null, position, new ArrayList<String>(), 1);
+		c3 = new Goblin(null, null, position, new ArrayList<String>(), 1);
+		c4 = new Goblin(null, null, position, new ArrayList<String>(), 1);
+		c5 = new Goblin(null, null, position, new ArrayList<String>(), 1);
+		c6 = new Goblin(null, null, position, new ArrayList<String>(), 1);
 		itemTypeArmor1 = new ArrayList<ItemEnumerate.ArmorType>();
 		itemTypeArmor1.add(ArmorType.CHEST);
 		itemTypeArmor2 = new ArrayList<ItemEnumerate.ArmorType>();

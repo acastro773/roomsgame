@@ -99,6 +99,12 @@
       { "numopposite": "average" },
       { "gen": "" }
     ],
+    "wise": [
+      { "num": "" },
+      { "translation": "wise" },
+      { "numopposite": "wise" },
+      { "gen": "" }
+    ],
     "big": [
       { "num": "" },
       { "translation": "big" },
@@ -348,6 +354,38 @@
       { "num": "plural" },
       { "translation": "heroes" },
       { "numopposite": "hero" },
+      { "gen": "masc" },
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
+    ],
+    "knight": [
+      { "num": "sing" },
+      { "translation": "knight" },
+      { "numopposite": "knights" },
+      { "gen": "masc" },
+      { "pronoun": "he" },
+      { "pronoun_ref": "himself" }
+    ],
+    "knights": [
+      { "num": "plural" },
+      { "translation": "knights" },
+      { "numopposite": "knight" },
+      { "gen": "masc" },
+      { "pronoun": "they" },
+      { "pronoun_ref": "theirselves" }
+    ],
+    "mage": [
+      { "num": "sing" },
+      { "translation": "mage" },
+      { "numopposite": "mages" },
+      { "gen": "masc" },
+      { "pronoun": "he" },
+      { "pronoun_ref": "himself" }
+    ],
+    "mages": [
+      { "num": "plural" },
+      { "translation": "mages" },
+      { "numopposite": "mage" },
       { "gen": "masc" },
       { "pronoun": "they" },
       { "pronoun_ref": "theirselves" }
@@ -824,6 +862,20 @@
         { "num": "plural" },
         { "translation": "cast" },
         { "numopposite": "casts" },
+        { "gen": "" }
+      ]
+    },
+    "LEARN": {
+      "learn": [
+        { "num": "plural" },
+        { "translation": "learn" },
+        { "numopposite": "learns" },
+        { "gen": "" }
+      ],
+      "learns": [
+        { "num": "sing" },
+        { "translation": "learns" },
+        { "numopposite": "learn" },
         { "gen": "" }
       ]
     },

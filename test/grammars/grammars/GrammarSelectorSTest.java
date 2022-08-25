@@ -20,6 +20,7 @@ import com.google.gson.JsonSyntaxException;
 import characters.Character.Mood;
 import characters.active.ActiveCharacter;
 import characters.active.enemies.Goblin;
+import characters.active.playerclass.Knight;
 import grammars.parsing.JSONParsing;
 import items.Item;
 import items.ItemEnumerate;
@@ -52,10 +53,7 @@ public class GrammarSelectorSTest {
 		grammarDescribeCharacterWears = new GrammarsGeneral(objectCharacterWears);
 		ArrayList<String> adjectives = new ArrayList<String>();
 		adjectives.add("small");
-		user = new ActiveCharacter("hero", "", map, room, position, 40, 10, 10,
-				100, 100, 100, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
-				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, 0, 100, 100, 100, "@", 4, null, adjectives, 0);
+		user = new Knight(null, null, null, adjectives, 1, 4, 5, 15, 100, 90, 120, 0, 40);
 		ArrayList<ItemEnumerate.WeaponType> itemTypeWeapon;
 		itemTypeWeapon = new ArrayList<ItemEnumerate.WeaponType>();
 		itemTypeWeapon.add(WeaponType.LEFTHAND);

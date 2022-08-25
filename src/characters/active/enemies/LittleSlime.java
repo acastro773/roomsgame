@@ -35,4 +35,19 @@ public class LittleSlime extends ActiveCharacter {
 		adjectives.add("small");
 		return adjectives;
 	}
+
+	@Override
+	public void setCharacterDead(ActiveCharacter character) {
+		if (character.getLife() <= 0){
+			character.setDead(true);
+			this.dropAllItems(character);
+			character.getRoom().removeTurnDead(character);
+		}
+	}
+
+	@Override
+	public void addNewExperience(int addExperience) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -4,6 +4,7 @@ import items.Item;
 import items.consumables.LifePotion;
 import items.consumables.MagicPotion;
 import items.consumables.SuperLifePotion;
+import items.consumables.SuperMagicPotion;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -521,7 +522,7 @@ public class Room{
 		int randEvents = RandUtil.RandomNumber(0, 5);
 		if (this.checkFreePositions().size() > 0 && randEvents == 1) {
 			//generate potions in room
-			int rand = RandUtil.RandomNumber(0, 9);
+			int rand = RandUtil.RandomNumber(0, 10);
 			int number = RandUtil.RandomNumber(0, this.checkFreePositions().size());
 			Tuple<Integer, Integer> position = this.getFreePositions().get(number);
 			if (user.getLevel() < 5) {
@@ -531,9 +532,13 @@ public class Room{
 					this.getItemsRoom().add(superLifePotion);
 					break;
 				case 1:
+					SuperMagicPotion superMagicPotion = new SuperMagicPotion(null, map, this, position);
+					this.getItemsRoom().add(superMagicPotion);
+					break;
 				case 2:
 				case 3:
 				case 4:
+				case 5:
 					MagicPotion magicPotion = new MagicPotion(null, map, this, position);
 					this.getItemsRoom().add(magicPotion);
 					break;
@@ -551,10 +556,14 @@ public class Room{
 					break;
 				case 2:
 				case 3:
-				case 4:
-				case 5:
 					MagicPotion magicPotion = new MagicPotion(null, map, this, position);
 					this.getItemsRoom().add(magicPotion);
+					break;
+				case 4:
+				case 5:
+				case 6:
+					SuperMagicPotion superMagicPotion = new SuperMagicPotion(null, map, this, position);
+					this.getItemsRoom().add(superMagicPotion);
 					break;
 				default:
 					SuperLifePotion superLifePotion = new SuperLifePotion(null, map, this, position);
