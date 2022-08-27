@@ -14,11 +14,11 @@ public class SmallShield extends WereableWeapon {
 ArrayList<String> attributes = new ArrayList<String>();
 	
 	public SmallShield (Character character, Map map, Room room, Tuple<Integer, Integer> position,
-			int level, boolean isMagic) {
+			int level, boolean isMagic, int price) {
 		super("shield", null, "", "m",
 				3, 3, 100, character, 
 				new ArrayList<WeaponType>(),
-				map, room, position, 0, 0, true, 1+level, level, isMagic);
+				map, room, position, 0, 0, true, 1+level, level, isMagic, price, 300);
 		this.setAdjectives(this.getSmallShieldAttributes());
 		if (isMagic){
 			attributes = this.getAdjectives();
@@ -26,7 +26,7 @@ ArrayList<String> attributes = new ArrayList<String>();
 			this.setAdjectives(attributes);
 		}
 		this.setAttributes(this.getLevel(), true);
-		
+		setRandomPrice();
 	}
 	
 	public ArrayList<String> getSmallShieldAttributes(){

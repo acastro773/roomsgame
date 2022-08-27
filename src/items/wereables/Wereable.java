@@ -19,8 +19,8 @@ public abstract class Wereable extends Item {
 	public Wereable(String name, ArrayList<String> nameAttributes, String description, 
 			String gender, int weight, int space, int durability, Character character, 
 			Map map, Room room, Tuple<Integer, Integer> position, 
-			int erosion, int level, boolean isMagic) {
-		super(name, nameAttributes, description, gender, weight, space, character, map, room, position, "A");
+			int erosion, int level, boolean isMagic, int price) {
+		super(name, nameAttributes, description, gender, weight, space, character, map, room, position, "A", price);
 		this.durability = durability;
 		this.erosion = erosion;
 		this.isWereable = (this.durability > 0) ? true : false;

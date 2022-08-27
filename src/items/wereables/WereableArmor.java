@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import map.Map;
 import map.Room;
+import util.RandUtil;
 import util.Tuple;
 import items.ItemEnumerate;
 import items.ItemEnumerate.ArmorType;
@@ -13,17 +14,19 @@ public class WereableArmor extends Wereable {
 
 	private ArrayList<ItemEnumerate.ArmorType> armorType;
 	private int defense;
+	private int minimumPrice;
 
 	public WereableArmor(String name, ArrayList<String> nameAttributes, 
 			String description, String gender, int weight,
 			int space, ArrayList<ItemEnumerate.ArmorType> armorType,
 			int durability, Character character, int defense, Map map,
 			Room room, Tuple<Integer, Integer> position,
-			int erosion, int level, boolean isMagic) {
+			int erosion, int level, boolean isMagic, int price, int minimumPrice) {
 		super(name, nameAttributes, description, gender, weight, space, durability, character, map,
-				room, position, erosion, level, isMagic);
+				room, position, erosion, level, isMagic, price);
 		this.armorType = armorType;
 		this.defense = defense;
+		this.minimumPrice = minimumPrice;
 	}
 	
 	public void setAttributes(int level){
@@ -69,6 +72,15 @@ public class WereableArmor extends Wereable {
 	
 	public void setDefense(int defense) {
 		this.defense = defense;
+	}
+	
+	public int getMinimumPrice() {
+		return minimumPrice;
+	}
+
+	@Override
+	public void setRandomPrice() {
+		this.setPrice(RandUtil.RandomNumber(this.getMinimumPrice(), (int)Math.ceil(getMinimumPrice()*1.3)));
 	}
 
 }

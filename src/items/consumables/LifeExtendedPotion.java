@@ -15,9 +15,9 @@ public class LifeExtendedPotion extends Consumable {
 
 	public LifeExtendedPotion(int weight, int space, String effectDescription,
 			Character character, Map map, Room room,
-			Tuple<Integer, Integer> position, int lifeExtendedEffect) {
+			Tuple<Integer, Integer> position, int lifeExtendedEffect, int price) {
 		super("potion", null, null, weight, space, effectDescription,
-				character, map, room, position);
+				character, map, room, position, price);
 		this.lifeExtendedEffect = lifeExtendedEffect;
 		this.setAdjectives(this.getLifeExtendedPotionAttributes());
 	}
@@ -36,6 +36,12 @@ public class LifeExtendedPotion extends Consumable {
 	public void consume(ActiveCharacter character) {
 		character.setTotalLife(character.getTotalLife() + this.getLifeExtendedEffect());
 		character.setLife(character.getLife() + this.getLifeExtendedEffect());
+	}
+
+	@Override
+	public void setRandomPrice() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

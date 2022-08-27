@@ -6,6 +6,7 @@ import items.wereables.WereableArmor;
 import items.wereables.WereableWeapon;
 import magic.FireRing;
 import magic.Fireball;
+import main.Main;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class Dragon extends ActiveCharacter {
 	public Dragon(Map map, Room room, Tuple<Integer, Integer> position, ArrayList<String> adjectives, int level) {
 		super("dragon", "", map, room, position, 8+level, 3+level, 15+(3*level), 80+(level*20),
 				100, 100, 100, getRandomMood(), new ArrayList<WereableWeapon>(), new ArrayList<WereableArmor>(), 60,
-				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "D", 2, null, adjectives, level);
+				70, 0, new ArrayList<Item>(), 0, 0, 100, 50, 0, "D", 2, null, adjectives, level, 0);
 		this.setMovementType(getMovementTypeFromMood());
 		this.setTirenessTotal(7);
 		this.setExperienceGiven(100+level*10);
@@ -33,7 +34,7 @@ public class Dragon extends ActiveCharacter {
 		if (RandUtil.RandomNumber(0, randNum) == 0) {
 			this.putRandomItemInventory();
 		}
-		//this.setSpeed(getSpeedWeight(this.getSpeed()));
+		setMoney(RandUtil.RandomNumber(30, 30*level));
 	}
 	
 	public ArrayList<String> getAdjectivesIndividual() {
@@ -48,6 +49,7 @@ public class Dragon extends ActiveCharacter {
 			character.setDead(true);
 			this.dropAllItems(character);
 			character.getRoom().removeTurnDead(character);
+			Main.user.setMoney(Main.user.getMoney()+this.getMoney());
 		}
 	}
 

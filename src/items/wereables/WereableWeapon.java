@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import map.Map;
 import map.Room;
+import util.RandUtil;
 import util.Tuple;
 import characters.Character;
 import items.ItemEnumerate;
@@ -14,19 +15,21 @@ public class WereableWeapon extends Wereable {
 	private int attack;
 	private int defense;
 	private boolean isSingleHand; // If it needs one or two hands to be used
+	private int minimumPrice;
 
 	public WereableWeapon(String name, ArrayList<String> nameAttributes, 
 			String description, String gender, int weight,
 			int space, int durability, Character character,
 			ArrayList<ItemEnumerate.WeaponType> weaponType, Map map, Room room,
 			Tuple<Integer, Integer> position, int attack, int erosion, boolean isSingleHand,
-			int defense, int level, boolean isMagic) {
+			int defense, int level, boolean isMagic, int price, int minimumPrice) {
 		super(name, nameAttributes, description, gender, weight, space, durability, character, map,
-				room, position, erosion, level, isMagic);
+				room, position, erosion, level, isMagic, price);
 		this.attack = attack;
 		this.defense = defense;
 		this.weaponType = weaponType;
 		this.isSingleHand = isSingleHand;
+		this.minimumPrice = minimumPrice;
 	}
 	
 	public void setAttributes(int level, boolean isShield){
@@ -78,6 +81,15 @@ public class WereableWeapon extends Wereable {
 
 	public void setSingleHand(boolean isSingleHand) {
 		this.isSingleHand = isSingleHand;
+	}
+	
+	public int getMinimumPrice() {
+		return minimumPrice;
+	}
+
+	@Override
+	public void setRandomPrice() {
+		this.setPrice(RandUtil.RandomNumber(this.getMinimumPrice(), (int)Math.ceil(getMinimumPrice()*1.3)));
 	}
 
 }

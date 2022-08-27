@@ -14,10 +14,10 @@ public class NormalGloves extends WereableArmor {
 ArrayList<String> attributes = new ArrayList<String>();
 	
 	public NormalGloves (Character character, Map map, Room room, Tuple<Integer, Integer> position,
-			int level, boolean isMagic) {
+			int level, boolean isMagic, int price) {
 		super("gloves", null, "", "m", 
 				1, 3, new ArrayList<ArmorType>(), 100, character,
-				2+level, map, room, position, 0, level, isMagic);
+				2+level, map, room, position, 0, level, isMagic, price, 300);
 		ArrayList<ArmorType> armorType = new ArrayList<ArmorType>();
 		armorType.add(ArmorType.HANDS);
 		this.setArmorType(armorType);
@@ -28,7 +28,7 @@ ArrayList<String> attributes = new ArrayList<String>();
 			this.setAdjectives(attributes);
 		}
 		this.setAttributes(level);
-		
+		setRandomPrice();
 	}
 	
 	public ArrayList<String> getNormalGlovesAttributes(){

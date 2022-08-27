@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import map.Map;
 import map.Room;
+import util.RandUtil;
 import util.Tuple;
 import characters.Character;
 
@@ -14,11 +15,11 @@ public class Axe extends WereableWeapon {
 	ArrayList<String> attributes = new ArrayList<String>();
 	
 	public Axe (Character character, Map map, Room room, Tuple<Integer, Integer> position,
-			int level, boolean isMagic) {
+			int level, boolean isMagic, int price) {
 		super("axe", null, "", "m", 
 				8, 5, 100, character, 
 				new ArrayList<WeaponType>(),
-				map, room, position, 15 + level, 0, true, 0, level, isMagic);
+				map, room, position, 15 + level, 0, true, 0, level, isMagic, price, 350);
 		this.setAdjectives(this.getTwoHandSwordAttributes());
 		ArrayList<WeaponType> weaponType = new ArrayList<WeaponType>();
 		weaponType.add(WeaponType.LEFTHAND);
@@ -29,6 +30,7 @@ public class Axe extends WereableWeapon {
 			attributes.add("magic");
 			this.setAdjectives(attributes);
 		}
+		setRandomPrice();
 		this.setAttributes(this.getLevel(), false);
 		
 	}
@@ -37,5 +39,4 @@ public class Axe extends WereableWeapon {
 		attributes.add("big");
 		return attributes;
 	}
-
 }

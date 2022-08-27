@@ -40,7 +40,7 @@ public class JTextAreaWithListener extends JTextArea implements KeyListener{
 				main.Main.unequipPressed = false;
 			}
 			else if (main.Main.spellsPressed) {
-				main.Main.spellAction(code);
+				//main.Main.spellAction(code);
 				main.Main.spellsPressed = false;
 			}
 			else if (main.Main.throwPressed) {

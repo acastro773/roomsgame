@@ -245,6 +245,18 @@
     ]
   },
   "N": {
+    "money": [
+      { "num": "sing" },
+      { "translation": "money" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
+    "shop": [
+      { "num": "sing" },
+      { "translation": "shop" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
     "confusion": [
       { "num": "sing" },
       { "translation": "confusion" },
@@ -879,6 +891,58 @@
         { "gen": "" }
       ]
     },
+    "BUY": {
+      "buys": [
+        { "num": "sing" },
+        { "translation": "buys" },
+        { "numopposite": "buy" },
+        { "gen": "" }
+      ],
+      "buy": [
+        { "num": "plural" },
+        { "translation": "buy" },
+        { "numopposite": "buys" },
+        { "gen": "" }
+      ],
+      "purchases": [
+        { "num": "sing" },
+        { "translation": "purchases" },
+        { "numopposite": "purchase" },
+        { "gen": "" }
+      ],
+      "purchase": [
+        { "num": "plural" },
+        { "translation": "purchase" },
+        { "numopposite": "purchases" },
+        { "gen": "" }
+      ],
+      "acquires": [
+        { "num": "sing" },
+        { "translation": "acquires" },
+        { "numopposite": "acquire" },
+        { "gen": "" }
+      ],
+      "acquire": [
+        { "num": "plural" },
+        { "translation": "acquire" },
+        { "numopposite": "acquires" },
+        { "gen": "" }
+      ]
+    },
+    "SELL": {
+      "sells": [
+        { "num": "sing" },
+        { "translation": "sells" },
+        { "numopposite": "sell" },
+        { "gen": "" }
+      ],
+      "sell": [
+        { "num": "plural" },
+        { "translation": "sell" },
+        { "numopposite": "sells" },
+        { "gen": "" }
+      ]
+    },
     "PICK": {
       "picks": [
         { "num": "sing" },
@@ -1217,6 +1281,22 @@
     ],
     "restart": [
       { "translation": "Restart the game to apply the changes" },
+      { "gen": "" }
+    ],
+    "not enough money": [
+      { "translation": "not enough money" },
+      { "gen": "" }
+    ],
+    "not enough space": [
+      { "translation": "not enough space" },
+      { "gen": "" }
+    ],
+    "buy items": [
+      { "translation": "Buy items" },
+      { "gen": "" }
+    ],
+    "sell items": [
+      { "translation": "Sell items" },
       { "gen": "" }
     ]
   }

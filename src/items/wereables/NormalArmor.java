@@ -6,18 +6,19 @@ import java.util.ArrayList;
 
 import map.Map;
 import map.Room;
+import util.RandUtil;
 import util.Tuple;
 import characters.Character;
 
 public class NormalArmor extends WereableArmor {
 	
-ArrayList<String> attributes = new ArrayList<String>();
+	ArrayList<String> attributes = new ArrayList<String>();
 	
 	public NormalArmor (Character character, Map map, Room room, Tuple<Integer, Integer> position,
-			int level, boolean isMagic) {
+			int level, boolean isMagic, int price) {
 		super("armor", null, "", "m", 
 				10, 3, new ArrayList<ArmorType>(), 100, character,
-				4 + level, map, room, position, 0, level, isMagic);
+				4 + level, map, room, position, 0, level, isMagic, price, 600);
 		ArrayList<ArmorType> armorType = new ArrayList<ArmorType>();
 		armorType.add(ArmorType.CHEST);
 		this.setArmorType(armorType);
@@ -28,6 +29,7 @@ ArrayList<String> attributes = new ArrayList<String>();
 			this.setAdjectives(attributes);
 		}
 		this.setAttributes(level);
+		setRandomPrice();
 		
 	}
 	
@@ -36,5 +38,4 @@ ArrayList<String> attributes = new ArrayList<String>();
 		attributes.add("average");
 		return attributes;
 	}
-
 }

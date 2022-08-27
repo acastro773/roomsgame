@@ -23,10 +23,12 @@ public abstract class Item extends PrintableObject{
 	private Map map;
 	private Room room;
 	private String symbolRepresentation;
+	private int price;
+	private int sellPrice;
 
 	public Item(String name, ArrayList<String> adjectives, String description, 
 			String gender, int weight, int space, Character character, 
-			Map map, Room room, Tuple<Integer, Integer> position, String symbolRepresentation) {
+			Map map, Room room, Tuple<Integer, Integer> position, String symbolRepresentation, int price) {
 		super(name, description, adjectives, position);
 		this.weight = weight;
 		this.space = space;
@@ -34,12 +36,20 @@ public abstract class Item extends PrintableObject{
 		this.map = map;
 		this.room = room;
 		this.symbolRepresentation = symbolRepresentation;
+		this.price = price;
+		this.sellPrice = price;
 	}
 	
 	public void setAttributesFromCharacter(Character c){
 		this.setMap(c.getMap());
 		this.setRoom(c.getRoom());
 		this.setPosition(c.getPosition());
+	}
+	
+	public abstract void setRandomPrice();
+	
+	public void setSellPriceInit() {
+		this.setSellPrice((int)Math.ceil(this.getPrice()*0.7));
 	}
 	
 	public void printItemsInformation(WSwingConsoleInterface j, int initPos_i, int initPos_j) {
@@ -109,5 +119,20 @@ public abstract class Item extends PrintableObject{
 	public void setSymbolRepresentation(String symbolRepresentation ) {
 		this.symbolRepresentation = symbolRepresentation ;
 	}
-
+	
+	public int getPrice() {
+		return price;
+	}
+	
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	
+	public int getSellPrice() {
+		return sellPrice;
+	}
+	
+	public void setSellPrice(int sellPrice) {
+		this.sellPrice = sellPrice;
+	}
 }

@@ -14,10 +14,10 @@ public class ShortSword extends WereableWeapon {
 	ArrayList<String> attributes = new ArrayList<String>();
 
 	public ShortSword(Character character, Map map, Room room, Tuple<Integer, Integer> position,
-			int level, boolean isMagic) {
+			int level, boolean isMagic, int price) {
 		super("sword", null, "", "m", 
 				3, 3, 100, character, new ArrayList<WeaponType>(),
-				map, room, position, 4+level, 0, true, 0, level, isMagic);
+				map, room, position, 4+level, 0, true, 0, level, isMagic, price, 200);
 		this.setAdjectives(this.getOneHandSwordAttributes());
 		if (isMagic){
 			attributes = this.getAdjectives();
@@ -25,7 +25,7 @@ public class ShortSword extends WereableWeapon {
 			this.setAdjectives(attributes);
 		}
 		this.setAttributes(this.getLevel(), false);
-		
+		setRandomPrice();
 	}
 	
 	public ArrayList<String> getOneHandSwordAttributes(){

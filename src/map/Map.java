@@ -15,6 +15,7 @@ import grammars.grammars.GrammarsGeneral;
 import grammars.parsing.JSONParsing;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Util;
+import shop.Shop;
 import main.Main;
 import util.GenericMatrixFunctions;
 import util.RandUtil;
@@ -717,6 +718,13 @@ public class Map {
 				return true;
 		}
 		return false;
+	}
+	
+	public void printShop(WSwingConsoleInterface j, ActiveCharacter user) {
+		Shop shop = user.getRoom().getShop();
+		if (RandUtil.containsTuple(shop.getPosition(), user.getVisiblePositions())) {
+			j.print(shop.getPosition().y, shop.getPosition().x, shop.getSymbolRepresentation(), main.Main.arrayColors[main.Main.selectedColor][5]);
+		}
 	}
 	
 	public void printMonsters(WSwingConsoleInterface j, ActiveCharacter user){	

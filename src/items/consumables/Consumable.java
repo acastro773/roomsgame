@@ -15,8 +15,8 @@ public abstract class Consumable extends Item {
 	
 	public Consumable(String name, ArrayList<String> nameAttributes, String gender, int weight, int space,
 			String effectDescription, Character character, Map map, Room room, 
-			Tuple<Integer, Integer> position) {
-		super(name, nameAttributes, "", gender, weight, space, character, map, room, position, "P");
+			Tuple<Integer, Integer> position, int price) {
+		super(name, nameAttributes, "", gender, weight, space, character, map, room, position, "P", price);
 		this.effectDescription = effectDescription;
 	}
 	

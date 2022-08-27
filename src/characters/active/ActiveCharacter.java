@@ -89,6 +89,7 @@ public abstract class ActiveCharacter extends Character {
 	private int experienceGiven = 0;
 	private int confusionTurns = 0;
 	private boolean hasBeenAttackedByHeroe = false;
+	private int money = 0;
 
 	public ActiveCharacter(String name, String description,
 			Map map, Room room, Tuple<Integer, Integer> position, int damage,
@@ -97,7 +98,7 @@ public abstract class ActiveCharacter extends Character {
 			ArrayList<WereableArmor> armorsEquipped, int inventorySpace, int carryWeight,
 			int actualCarryWeight, ArrayList<Item> inventory, int actualInventorySpace, int evasion,
 			int totalLife, int magic, int totalMagic, String symbolRepresentation, int vision, Movement movementType,
-			ArrayList<String> adjectives, int level) {
+			ArrayList<String> adjectives, int level, int money) {
 		super(name, description, map, room, position, weight, length, carryWeight, actualCarryWeight, 
 				inventory, symbolRepresentation, mood, adjectives);
 		if (("CONFUSED").equals(this.getMood().toString()))
@@ -126,6 +127,7 @@ public abstract class ActiveCharacter extends Character {
 		//every 5 units of weight subtracts 1 unit of speed
 		//minimum speed = 2
 		this.speed = speed;
+		this.money = money;
 	}
 	
 	public void setRandomSpells() {
@@ -220,29 +222,31 @@ public abstract class ActiveCharacter extends Character {
 		Item item = null;
 		switch(itemRandom) {
 			case 0:
-				item = new LongSword(this, null, null, null, itemLevel, isMagic);
+				item = new LongSword(this, null, null, null, itemLevel, isMagic, 0);
 			break;
 			case 1:
-				item = new ShortSword(this, null, null, null, itemLevel, isMagic);
+				item = new ShortSword(this, null, null, null, itemLevel, isMagic, 0);
 			break;
 			case 2:
-				item = new NormalArmor(this, null, null, null, itemLevel, isMagic);
+				item = new NormalArmor(this, null, null, null, itemLevel, isMagic, 0);
 			break;
 			case 3:
-				item = new NormalGloves(this, null, null, null, itemLevel, isMagic);
+				item = new NormalGloves(this, null, null, null, itemLevel, isMagic, 0);
 			break;
 			case 4:
-				item = new NormalHelmet(this, null, null, null, itemLevel, isMagic);
+				item = new NormalHelmet(this, null, null, null, itemLevel, isMagic, 0);
 			break;
 			case 5:
-				item = new SmallShield(this, null, null, null, itemLevel, isMagic);
+				item = new SmallShield(this, null, null, null, itemLevel, isMagic, 0);
 			break;
 			case 6:
-				item = new NormalPants(this, null, null, null, itemLevel, isMagic);
+				item = new NormalPants(this, null, null, null, itemLevel, isMagic, 0);
 			break;
 		}
 		
 		if (item != null && !this.itemContainInventory(item)) {
+			item.setRandomPrice();
+			item.setSellPriceInit();
 			this.getInventory().add(item);
 		}
 	}
@@ -383,7 +387,7 @@ public abstract class ActiveCharacter extends Character {
 				damage = this.getAttackFromWeapons(attacker) - this.getDefenseFromArmor(defender)
 						- this.getDefenseFromShields(defender) - this.getDefenseMood(defender);
 				if (damage < 1)
-					damage = 200;
+					damage = 1;
 		}
 		if (damage > 0){
 			return damage;
@@ -1067,23 +1071,25 @@ public abstract class ActiveCharacter extends Character {
 		if (this.getLevel() < 3) {
 			number = RandUtil.RandomNumber(0, 7);
 			if (number == 0) {
-				oneHandSword = new LongSword(this, null, null, null, level, false);
+				oneHandSword = new LongSword(this, null, null, null, level, false, 0);
 			} else
-				oneHandSword = new ShortSword(this, null, null, null, level, false);
+				oneHandSword = new ShortSword(this, null, null, null, level, false, 0);
 		} else if (this.getLevel() < 6) {
 			if (RandUtil.RandomNumber(0, 5) == 0) {
-				oneHandSword = new LongSword(this, null, null, null, level, false);
+				oneHandSword = new LongSword(this, null, null, null, level, false, 0);
 			} else
-				oneHandSword = new ShortSword(this, null, null, null, level, false);
+				oneHandSword = new ShortSword(this, null, null, null, level, false, 0);
 		} else {
 			int possibility = RandUtil.RandomNumber(0, 8);
 			if (possibility == 0) {
-				oneHandSword = new Axe(this, null, null, null, level, false);
+				oneHandSword = new Axe(this, null, null, null, level, false, 0);
 			} else if (possibility < 4)
-				oneHandSword = new LongSword(this, null, null, null, level, false);
+				oneHandSword = new LongSword(this, null, null, null, level, false, 0);
 			else
-				oneHandSword = new ShortSword(this, null, null, null, level, false);
+				oneHandSword = new ShortSword(this, null, null, null, level, false, 0);
 		}
+		oneHandSword.setRandomPrice();
+		oneHandSword.setSellPriceInit();
 		this.putItemInventory(oneHandSword);
 		this.equipWeapon(oneHandSword);
 		System.out.println("AÑADIDA ARMA: " + this.getWeaponsEquipped() + " - " + oneHandSword.getName());
@@ -1099,28 +1105,30 @@ public abstract class ActiveCharacter extends Character {
 				switch(n) {
 				//choose armor
 				case 0:
-					armor = new NormalArmor(this, null, null, null, this.getLevel(), isMagic);
+					armor = new NormalArmor(this, null, null, null, this.getLevel(), isMagic, 0);
 					break;
 				//choose gloves
 				case 1:
 				case 2:
 				case 3:
-					armor = new NormalGloves(this, null, null, null, this.getLevel(), isMagic);
+					armor = new NormalGloves(this, null, null, null, this.getLevel(), isMagic, 0);
 					break;
 				//choose helmet
 				case 4:
 				case 5:
-					armor = new NormalHelmet(this, null, null, null, this.getLevel(), isMagic);
+					armor = new NormalHelmet(this, null, null, null, this.getLevel(), isMagic, 0);
 					break;
 				//choose pants
 				case 6:
-					armor = new NormalPants(this, null, null, null, this.getLevel(), isMagic);
+					armor = new NormalPants(this, null, null, null, this.getLevel(), isMagic, 0);
 					break;
 				default:
 					break;
 				}
 				
 				if (armor != null && !this.itemContainEquipment(armor)) {
+					armor.setRandomPrice();
+					armor.setSellPriceInit();
 					this.putItemInventory(armor);
 					this.equipArmor(armor);
 					System.out.println("Adding armor: " + armor.getName());
@@ -1417,6 +1425,14 @@ public abstract class ActiveCharacter extends Character {
 
 	public void setHasBeenAttackedByHeroe(boolean hasBeenAttackedByHeroe) {
 		this.hasBeenAttackedByHeroe = hasBeenAttackedByHeroe;
+	}
+	
+	public int getMoney() {
+		return money;
+	}
+	
+	public void setMoney(int money) {
+		this.money = money;
 	}
 
 }

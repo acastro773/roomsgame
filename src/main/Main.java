@@ -184,6 +184,9 @@ public class Main {
 	public static boolean chooseControls = false;
 	public static boolean gamePaused = false;
 	public static boolean chooseClass = false;
+	public static boolean shopMenu = false;
+	public static boolean shopMenuBuy = false;
+	public static boolean shopMenuSell = false;
 	private static int pointerMenu = 0;
 	private static ArrayList<String> eleMenu = new ArrayList<>();
 	private static ArrayList<Pair<String, Integer>> defaultControls = new ArrayList<>();
@@ -257,7 +260,6 @@ public class Main {
 	
 	public static void _bindKeys() {
 		movementInput = new Integer[] {keysMap.get("left"), keysMap.get("right"), keysMap.get("down"), keysMap.get("up")};
-		movementInput = new Integer[] {keysMap.get("left"), keysMap.get("right"), keysMap.get("down"), keysMap.get("up")};
 		inventoryInput = new Integer[] {keysMap.get("item1"), keysMap.get("item2"), keysMap.get("item3"), keysMap.get("item4"),
 				keysMap.get("item5"), keysMap.get("item6")};
 		pickItemInput = new Integer[] {keysMap.get("pickItem")};
@@ -291,6 +293,8 @@ public class Main {
 				Integer.toString(user.getLevel()));
 		j.print(map.global_fin().y + 1, 6, "exp" + ": " + 
 				Integer.toString(user.getExperience()) + "/" + user.getNextLevelExperience());
+		j.print(map.global_fin().y + 1, 7, JSONParsing.getTranslationWord("money", "N", rootObjWords) + ": " + 
+				user.getMoney());
 	}
 	
 	public static void printEverything(boolean needsToPrintGroundObjects){
@@ -302,6 +306,8 @@ public class Main {
 		map.printMonsters(j, user);
 		//if (user.getRoom().turnMes)
 			//map.printInformationTurns(j, user.getRoom(), user.getMap().global_fin.x-1, user.getMap().global_fin.y+1);
+		if (user.getRoom().hasShop)
+			map.printShop(j, user);
 		printUserInformation();
 		map._printInformationMonsters(j, user, rootObjWords);
 		if (needsToPrintGroundObjects) {
@@ -358,15 +364,19 @@ public class Main {
 				adjectives.add("brave");
 				user = new Knight(null, null, null, adjectives, 1, 4, 5, 15, 100, 90, 120, 0, 40);
 				user.setNextLevelExperience();
-				WereableWeapon oneHandSword = new ShortSword(user, null, null, null, user.getLevel(), true);
+				ShortSword oneHandSword = new ShortSword(user, null, null, null, user.getLevel(), true, 0);
+				oneHandSword.setRandomPrice();
+				oneHandSword.setSellPriceInit();
 				user.putItemInventory(oneHandSword);
 			} else if (userClass.equals(mage)) {
 				adjectives.add("wise");
-				user = new Mage(null, null, null, adjectives, 3, 200, 2, 26, 80, 100, 90, 0, 100);
+				user = new Mage(null, null, null, adjectives, 1, 6, 2, 26, 80, 100, 90, 0, 100);
 				user.setNextLevelExperience();
 				Fireball fireball = new Fireball();
 				user.addSpell(fireball);
 			}
+			
+			user.setMoney(20000);
 		}
 		walkSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "STEP"));
 		collisionSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "COLLISION"));
@@ -490,11 +500,9 @@ public class Main {
 	}
 	
 	public static void spellAction(int itemCode) {
-		doMonstersTurn = true;
     	if (isInputType(inventoryInput, itemCode)) {
     		actionHandler._spellAction(itemCode, usePronoun());
     		canUsePronoun = true;
-    		printEverything(true);
     		setFlagsToFalse();
     	}
     	canUsePronoun = true;
@@ -531,8 +539,15 @@ public class Main {
 		boolean actionDone = false;
 		boolean attackDone = false;
 		double now = System.currentTimeMillis();
-		if (now - lastTimeMenu > cooldMenu && isInputType(pauseGameInput, i)) {
+		if (now - lastTimeMenu > cooldMenu && isInputType(pauseGameInput, i) && !gamePaused) {
 			gamePaused = true;
+			lastTimeMenu = now;
+			return;
+		}
+		if (now - lastTimeMenu > cooldMenu && user.getRoom().hasShop 
+				&& RandUtil.containsTuple(user.getRoom().getShop().getPosition(), user.getVisiblePositions()) 
+				&& isInputType(attackInput, i) && !shopMenu) {
+			shopMenu = true;
 			lastTimeMenu = now;
 			return;
 		}
@@ -574,6 +589,8 @@ public class Main {
         	setFlagsToFalse();
         } 
         else if (now - lastTime > cooldPressKey && isInputType(spellInput, i)) {
+        	i = j.inkey().code;
+        	spellAction(i);
         	actionDone = true;
         	attackDone = true;
         	spellsPressed = true;
@@ -738,7 +755,7 @@ public class Main {
 	
 	public static void turnLoop() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		for (;;) {
-			if (!gamePaused) {
+			if (!gamePaused && !shopMenu && !shopMenuBuy && !shopMenuSell) {
 				for (ActiveCharacter monster : user.getRoom().getMonsters()) {
 					monster.setAdjectivesMonster(user);
 				}
@@ -788,12 +805,36 @@ public class Main {
 					}
 				}
 			} else {
-				configurePauseMenu();
-				while(gamePaused) {
-					printMenu();
-					int n = j.inkey().code;
-					menuLoopInputs(n);
+				if (gamePaused) {
+					configurePauseMenu();
+					while(gamePaused) {
+						printMenu();
+						int n = j.inkey().code;
+						menuLoopInputs(n);
+					}
+				} else if (shopMenu) {
+					configureShopMenu();
+					while(shopMenu) {
+						printMenu();
+						int n = j.inkey().code;
+						menuLoopInputs(n);
+					}
+				} else if (shopMenuBuy) {
+					configureBuyMenu();
+					while(shopMenuBuy) {
+						printMenu();
+						int n = j.inkey().code;
+						menuLoopInputs(n);
+					}
+				} else if (shopMenuSell) {
+					configureSellMenu();
+					while(shopMenuSell) {
+						printMenu();
+						int n = j.inkey().code;
+						menuLoopInputs(n);
+					}
 				}
+				
 			}
 		}
 	}
@@ -963,6 +1004,41 @@ public class Main {
 		pointerMenu = 0;
 	}
 	
+	public static void configureShopMenu() {
+		eleMenu.clear();
+		String buy = JSONParsing.getTranslationWord("buy items", "OTHERS", rootObjWords);
+		String sell = JSONParsing.getTranslationWord("sell items", "OTHERS", rootObjWords);
+		String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+		eleMenu.add(buy);
+		eleMenu.add(sell);
+		eleMenu.add(back);
+		pointerMenu = 0;
+	}
+	
+	public static void configureBuyMenu() {
+		eleMenu.clear();
+		ArrayList<String> itemList = new ArrayList<>();
+		for (Item item : user.getRoom().getShop().getStoredItems()) {
+			itemList.add(item.getPrintableName() + ": " + item.getPrice());
+		}
+		String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+		itemList.add(back);
+		eleMenu = itemList;
+		pointerMenu = 0;
+	}
+	
+	public static void configureSellMenu() {
+		eleMenu.clear();
+		ArrayList<String> itemList = new ArrayList<>();
+		for (Item item : user.getInventory()) {
+			itemList.add(item.getPrintableName() + ": " + item.getSellPrice());
+		}
+		String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+		itemList.add(back);
+		eleMenu = itemList;
+		pointerMenu = 0;
+	}
+	
 	public static void printTitleMenu() {
 		int xstart = (((j.xdim + 1)/2)/2)/2;
 		int xmed = (j.xdim+1)/2;
@@ -1090,6 +1166,64 @@ public class Main {
 				} else if (chosen.equals(back)) {
 					chooseClass = false;
 					configureMenu();
+				}
+			} else if (shopMenu) {
+				String buy = JSONParsing.getTranslationWord("buy items", "OTHERS", rootObjWords);
+				String sell = JSONParsing.getTranslationWord("sell items", "OTHERS", rootObjWords);
+				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+				if (chosen.equals(buy)) {
+					shopMenuBuy = true;
+					shopMenu = false;
+					configureBuyMenu();
+				} else if (chosen.equals(sell)) {
+					shopMenuSell = true;
+					shopMenu = false;
+					configureSellMenu();
+				} else if (chosen.equals(back)) {
+					shopMenu = false;
+					printEverything(true);
+				}
+			} else if (shopMenuBuy) {
+				ArrayList<String> itemList = new ArrayList<>();
+				for (Item item : user.getRoom().getShop().getStoredItems()) {
+					itemList.add(item.getPrintableName() + ": " + item.getPrice());
+				}
+				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+				boolean done = false;
+				for (int n = 0; n < itemList.size(); n++) {
+					String item = itemList.get(n);
+					if (chosen.equals(item) && !done) {
+						if (user.getRoom().getShop().buyItem(n)) {
+							configureBuyMenu();
+							done = true;
+						}
+					}
+				}
+				if (chosen.equals(back)) {
+					shopMenu = true;
+					shopMenuBuy = false;
+					configureShopMenu();
+				}
+			} else if (shopMenuSell) {
+				ArrayList<String> itemList = new ArrayList<>();
+				for (Item item : user.getInventory()) {
+					itemList.add(item.getPrintableName() + ": " + item.getSellPrice());
+				}
+				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+				boolean done = false;
+				for (int n = 0; n < itemList.size(); n++) {
+					String item = itemList.get(n);
+					if (chosen.equals(item) && !done) {
+						user.getRoom().getShop().sellItem(n);
+						configureSellMenu();
+						done = true;
+						break;
+					}
+				}
+				if (chosen.equals(back)) {
+					shopMenu = true;
+					shopMenuSell = false;
+					configureShopMenu();
 				}
 			} else {
 				String start = JSONParsing.getTranslationWord("start game", "OTHERS", rootObjWords);

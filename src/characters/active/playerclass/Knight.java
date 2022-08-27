@@ -19,7 +19,7 @@ public class Knight extends ActiveCharacter {
 		super("knight", "", map, room, position, 
 				damage, defense, speed, life, luck, weight, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, evasion, 100, magic, 100, "@", 4, null, adjectives, level);	
+				new ArrayList<Item>(), 0, evasion, 100, magic, 100, "@", 4, null, adjectives, level, 0);	
 	}
 	@Override
 	public void addNewExperience(int addExperience) {
@@ -30,7 +30,7 @@ public class Knight extends ActiveCharacter {
 			this.setDamage(this.getDamage()+2);
 			this.setDefense(this.getDefense()+3);
 			this.setNewLevel(this.getLevel() + 1);
-			this.setNewLimLife(this.getTotalLife() + 20);
+			this.setNewLimLife(this.getTotalLife() + 30);
 		} else {
 			this.setExperience(this.getExperience() + addExperience);
 		}

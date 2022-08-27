@@ -101,29 +101,29 @@ public class ActiveCharacterTest {
 		itemTypeWeapon2 = new ArrayList<ItemEnumerate.WeaponType>();
 		itemTypeWeapon.add(WeaponType.LEFTHAND);
 		armor1 = new WereableArmor("gloves", null, "", "", 10, 0, itemTypeArmor1, 10,
-				null, 10, null, null, null, 1, 1, false);
+				null, 10, null, null, null, 1, 1, false, 0, 0);
 		armor2 = new WereableArmor("gloves", null, "", "", 10, 0, itemTypeArmor2, 10,
-				null, 10, null, null, null, 1, 1, false);
+				null, 10, null, null, null, 1, 1, false, 0, 0);
 		armor3 = new WereableArmor("gloves", null, "", "", 10, 0, itemTypeArmor, 0,
-				null, 10, null, null, null, 0, 1, false);
+				null, 10, null, null, null, 0, 1, false, 0, 0);
 		armor4 = new WereableArmor("gloves", null, "", "", 10, 20, itemTypeArmor, 0,
-				null, 10, null, null, null, 0, 1, false);
+				null, 10, null, null, null, 0, 1, false, 0, 0);
 		weapon1 = new WereableWeapon("gloves", null, "", "", 10, 0, 0, null,
-				itemTypeWeapon2, null, null, null, 0, 0, true, 0, 1, false);
+				itemTypeWeapon2, null, null, null, 0, 0, true, 0, 1, false, 0, 0);
 		weapon2 = new WereableWeapon("gloves", null, "", "", 10, 0, 0, null,
-				itemTypeWeapon2, null, null, null, 0, 0, true, 0, 1, false);
+				itemTypeWeapon2, null, null, null, 0, 0, true, 0, 1, false, 0, 0);
 		weapon3 = new WereableWeapon("gloves", null, "", "", 10, 0, 0, null,
 				new ArrayList<WeaponType>(), null, null, null, 0, 0, true, 0,
-				1, false);
+				1, false, 0, 0);
 		weapon5 = new WereableWeapon("gloves", null, "", "", 10, 10, 10, null,
-				itemTypeWeapon, null, null, null, 30, 1, true, 0, 1, false);
+				itemTypeWeapon, null, null, null, 30, 1, true, 0, 1, false, 0, 0);
 		weapon6 = new WereableWeapon("gloves", null, "", "", 10, 95, 0, null,
-				itemTypeWeapon2, null, null, null, 0, 0, true, 0, 1, false);
-		oneHandSword = new ShortSword(attacker, null, null, null, 0, true);
-		lifePotion30 = new LifePotion(null, null, null, null);
-		magicPotion30 = new MagicPotion(null, null, null, null);
+				itemTypeWeapon2, null, null, null, 0, 0, true, 0, 1, false, 0, 0);
+		oneHandSword = new ShortSword(attacker, null, null, null, 0, true, 0);
+		lifePotion30 = new LifePotion(null, null, null, null, 0);
+		magicPotion30 = new MagicPotion(null, null, null, null, 0);
 		lifeExtendedPotion30 = new LifeExtendedPotion(0, 10, "", null, null,
-				null, null, 30);
+				null, null, 30, 0);
 	}
 
 	@Test(expected=IndexOutOfBoundsException.class)

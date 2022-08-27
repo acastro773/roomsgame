@@ -25,7 +25,7 @@ public class Mage extends ActiveCharacter {
 		super("mage", "", map, room, position, 
 				damage, defense, speed, life, luck, weight, 100, Mood.NEUTRAL, new ArrayList<WereableWeapon>(),
 				new ArrayList<WereableArmor>(), 100, 100, 0,
-				new ArrayList<Item>(), 0, evasion, 100, magic, 100, "@", 4, null, adjectives, level);	
+				new ArrayList<Item>(), 0, evasion, 100, magic, 100, "@", 4, null, adjectives, level, 0);	
 	}
 	@Override
 	public void addNewExperience(int addExperience) {
@@ -37,7 +37,7 @@ public class Mage extends ActiveCharacter {
 			this.setDefense(this.getDefense()+1);
 			this.setNewLevel(this.getLevel() + 1);
 			this.setNewLimLife(this.getTotalLife() + 5);
-			this.setNewLimMana(this.getTotalLife() + 60);
+			this.setNewLimMana(this.getTotalMagic() + 60);
 			if (this.getLevel() == 4) {
 				FireRing fireRing = new FireRing();
 				this.addSpell(fireRing);

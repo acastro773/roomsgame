@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import map.Map;
 import map.Room;
+import util.RandUtil;
 import util.Tuple;
 import characters.Character;
 import characters.active.ActiveCharacter;
@@ -12,10 +13,11 @@ public class MagicPotion extends Consumable{
 	
 	int magicEffect = 50;
 	ArrayList<String> attributes = new ArrayList<String>();
+	private int minimumPrice = 100;
 
 	public MagicPotion(Character character, Map map, Room room,
-			Tuple<Integer, Integer> position) {
-		super("potion", null, null, 5, 1, "", character, map, room, position);
+			Tuple<Integer, Integer> position, int price) {
+		super("potion", null, null, 5, 1, "", character, map, room, position, price);
 		this.setAdjectives(this.getMagicPotionAttributes());
 	}
 	
@@ -33,6 +35,11 @@ public class MagicPotion extends Consumable{
 				character.setMagic(character.getMagic() + magicEffect);
 			}
 		}
+	}
+
+	@Override
+	public void setRandomPrice() {
+		this.setPrice(RandUtil.RandomNumber(minimumPrice, (int)Math.ceil(minimumPrice*1.3)));
 	}
 
 }

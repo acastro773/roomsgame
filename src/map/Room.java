@@ -28,6 +28,7 @@ import grammars.grammars.GrammarIndividual;
 import grammars.parsing.JSONParsing;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Pair;
+import shop.Shop;
 import main.Main;
 import util.RandUtil;
 import util.Tuple;
@@ -70,6 +71,8 @@ public class Room{
 	int fin_y;
 	public boolean turnMes = false;
 	public boolean allEnemiesDead = false;
+	public boolean hasShop = false;
+	public Shop shop = null;
 	
 	public Room(Map map, Tuple<Integer, Integer> global_initial, Tuple<Integer, Integer> global_final){
 		this.map = map;
@@ -127,7 +130,6 @@ public class Room{
 	}
 	
 	public void setListOfTurns(ActiveCharacter user) {
-		System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA CREANDO LISTAAAAAAAAAAAAAAAAAAAAAAa");
 		ArrayList<ActiveCharacter> currentIter = new ArrayList<>();
 		int userSpeed = user.getSpeed();
 		int userCount = 0;
@@ -239,6 +241,12 @@ public class Room{
 			if (RandUtil.containsTuple(item.getPosition(), visiblePositions)){
 				j.print(item.getPosition().y, item.getPosition().x, item.getSymbolRepresentation(), main.Main.arrayColors[main.Main.selectedColor][5]);
 			}
+		}
+	}
+	
+	public void printShop(WSwingConsoleInterface j, ArrayList<Tuple<Integer, Integer>> visiblePositions){
+		if (hasShop && RandUtil.containsTuple(shop.getPosition(), visiblePositions)){
+			j.print(shop.getPosition().y, shop.getPosition().x, shop.getSymbolRepresentation(), main.Main.arrayColors[main.Main.selectedColor][5]);
 		}
 	}
 	
@@ -520,57 +528,78 @@ public class Room{
 	
 	public void generateEvents(ActiveCharacter user) {
 		int randEvents = RandUtil.RandomNumber(0, 5);
-		if (this.checkFreePositions().size() > 0 && randEvents == 1) {
-			//generate potions in room
-			int rand = RandUtil.RandomNumber(0, 10);
-			int number = RandUtil.RandomNumber(0, this.checkFreePositions().size());
-			Tuple<Integer, Integer> position = this.getFreePositions().get(number);
-			if (user.getLevel() < 5) {
-				switch(rand) {
-				case 0:
-					SuperLifePotion superLifePotion = new SuperLifePotion(null, map, this, position);
-					this.getItemsRoom().add(superLifePotion);
-					break;
-				case 1:
-					SuperMagicPotion superMagicPotion = new SuperMagicPotion(null, map, this, position);
-					this.getItemsRoom().add(superMagicPotion);
-					break;
-				case 2:
-				case 3:
-				case 4:
-				case 5:
-					MagicPotion magicPotion = new MagicPotion(null, map, this, position);
-					this.getItemsRoom().add(magicPotion);
-					break;
-				default:
-					LifePotion lifePotion = new LifePotion(null, map, this, position);
-					this.getItemsRoom().add(lifePotion);
+		if (this.checkFreePositions().size() > 0) {
+			switch(randEvents) {
+				case 1: {
+					//generate potions in room
+					int rand = RandUtil.RandomNumber(0, 10);
+					int number = RandUtil.RandomNumber(0, this.checkFreePositions().size());
+					Tuple<Integer, Integer> position = this.getFreePositions().get(number);
+					if (user.getLevel() < 5) {
+						switch(rand) {
+						case 0:
+							SuperLifePotion superLifePotion = new SuperLifePotion(null, map, this, position, 0);
+							superLifePotion.setRandomPrice();
+							this.getItemsRoom().add(superLifePotion);
+							break;
+						case 1:
+							SuperMagicPotion superMagicPotion = new SuperMagicPotion(null, map, this, position, 0);
+							superMagicPotion.setRandomPrice();
+							this.getItemsRoom().add(superMagicPotion);
+							break;
+						case 2:
+						case 3:
+						case 4:
+						case 5:
+							MagicPotion magicPotion = new MagicPotion(null, map, this, position, 0);
+							magicPotion.setRandomPrice();
+							this.getItemsRoom().add(magicPotion);
+							break;
+						default:
+							LifePotion lifePotion = new LifePotion(null, map, this, position, 0);
+							lifePotion.setRandomPrice();
+							this.getItemsRoom().add(lifePotion);
+							break;
+						}
+					} else {
+						switch(rand) {
+						case 0:
+						case 1:
+							LifePotion lifePotion = new LifePotion(null, map, this, position, 0);
+							lifePotion.setRandomPrice();
+							this.getItemsRoom().add(lifePotion);
+							break;
+						case 2:
+						case 3:
+							MagicPotion magicPotion = new MagicPotion(null, map, this, position, 0);
+							magicPotion.setRandomPrice();
+							this.getItemsRoom().add(magicPotion);
+							break;
+						case 4:
+						case 5:
+						case 6:
+							SuperMagicPotion superMagicPotion = new SuperMagicPotion(null, map, this, position, 0);
+							superMagicPotion.setRandomPrice();
+							this.getItemsRoom().add(superMagicPotion);
+							break;
+						default:
+							SuperLifePotion superLifePotion = new SuperLifePotion(null, map, this, position, 0);
+							superLifePotion.setRandomPrice();
+							this.getItemsRoom().add(superLifePotion);
+							break;
+						}
+					}
 					break;
 				}
-			} else {
-				switch(rand) {
-				case 0:
-				case 1:
-					LifePotion lifePotion = new LifePotion(null, map, this, position);
-					this.getItemsRoom().add(lifePotion);
-					break;
-				case 2:
-				case 3:
-					MagicPotion magicPotion = new MagicPotion(null, map, this, position);
-					this.getItemsRoom().add(magicPotion);
-					break;
-				case 4:
-				case 5:
-				case 6:
-					SuperMagicPotion superMagicPotion = new SuperMagicPotion(null, map, this, position);
-					this.getItemsRoom().add(superMagicPotion);
-					break;
 				default:
-					SuperLifePotion superLifePotion = new SuperLifePotion(null, map, this, position);
-					this.getItemsRoom().add(superLifePotion);
-					break;
-				}
+					hasShop = true;
+					int number = RandUtil.RandomNumber(0, this.checkFreePositions().size());
+					Tuple<Integer, Integer> position = this.getFreePositions().get(number);
+					ArrayList<String> adjectives = new ArrayList<>();
+					adjectives.add("old");
+					shop = new Shop("shop", "", adjectives, this.getMap(), this, position, "M");
 			}
+			
 		}
 	}
 	
@@ -611,8 +640,6 @@ public class Room{
 			probMin = rateList.get(getAt);
 			
 		}
-		System.out.println("Probability: " + probability + " - probMin: " + probMin + " - probMax: " + probMax);
-		System.out.println("numberList: " + numberList + " - getAt: " + getAt + " - number: " + number + " - dangerLvl: " + dangerLvl);
 		if (probability >= probMin && probability <= probMax) {
 			if (res >= (dangerLvl)) {
 				System.out.println("Creating: " + nameList.get(getAt));
@@ -852,5 +879,13 @@ public class Room{
 
 	public void setMap(Map map) {
 		this.map = map;
+	}
+	
+	public Shop getShop() {
+		return shop;
+	}
+	
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 }
