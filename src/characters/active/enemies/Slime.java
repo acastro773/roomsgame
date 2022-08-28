@@ -29,22 +29,22 @@ public class Slime extends ActiveCharacter {
 		if (RandUtil.RandomNumber(0, randNum) == 0) {
 			this.putRandomItemInventory();
 		}
-		setMoney(RandUtil.RandomNumber(50, 50*level));
+		setMoney(RandUtil.RandomNumber(50, 50*this.getLevel() + 1));
 	}
 	
 	@Override
-	public void setCharacterDead(ActiveCharacter character) {
-		if (character.getLife() <= 0) {
-			int characLvl = character.getLife();
-			character.setDead(true);
-			Tuple<Integer, Integer> position = character.getPosition();
-			ArrayList<ActiveCharacter> monsters = character.getRoom().getMonsters();
-			LittleSlime lilSlime1 = new LittleSlime(character.getMap(), character.getRoom(), position, new ArrayList<String>(), characLvl);
+	public void setCharacterDead() {
+		if (this.getLife() <= 0) {
+			int characLvl = this.getLife();
+			this.setDead(true);
+			Tuple<Integer, Integer> position = this.getPosition();
+			ArrayList<ActiveCharacter> monsters = this.getRoom().getMonsters();
+			LittleSlime lilSlime1 = new LittleSlime(this.getMap(), this.getRoom(), position, new ArrayList<String>(), characLvl);
 			monsters.add(lilSlime1);
-			LittleSlime lilSlime2 = new LittleSlime(character.getMap(), character.getRoom(), position, new ArrayList<String>(), characLvl);
+			LittleSlime lilSlime2 = new LittleSlime(this.getMap(), this.getRoom(), position, new ArrayList<String>(), characLvl);
 			monsters.add(lilSlime2);
-			character.getRoom().setMonsters(monsters);
-			character.getRoom().removeTurnDead(character);
+			this.getRoom().setMonsters(monsters);
+			this.getRoom().removeTurnDead(this);
 			Main.user.setMoney(Main.user.getMoney()+this.getMoney());
 		}
 	}

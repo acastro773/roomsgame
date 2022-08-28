@@ -62,11 +62,11 @@ public class Mage extends ActiveCharacter {
 		}
 	}
 	@Override
-	public void setCharacterDead(ActiveCharacter character) {
-		if (character.getLife() <= 0){
-			character.setDead(true);
-			this.dropAllItems(character);
-			character.getRoom().removeTurnDead(character);
+	public void setCharacterDead() {
+		if (this.getLife() <= 0){
+			this.setDead(true);
+			this.dropAllItems();
+			this.getRoom().removeTurnDead(this);
 		}
 		
 	}

@@ -395,18 +395,18 @@ public abstract class ActiveCharacter extends Character {
 		return 0;
 	}
 	
-	public void dropAllItems(ActiveCharacter character){
-		for(Item item : character.getInventory()){
+	public void dropAllItems(){
+		for(Item item : this.getInventory()){
 			if (Main.debug){
 				System.out.println("Im dropping: " + item.getName());
 			}
-			item.setAttributesFromCharacter(character);
-			character.getMap().putItemRoom(item);
+			item.setAttributesFromCharacter(this);
+			this.getMap().putItemRoom(item);
 		}
-		character.setInventory(new ArrayList<Item>());
+		this.setInventory(new ArrayList<Item>());
 	}
 	
-	public abstract void setCharacterDead(ActiveCharacter character);
+	public abstract void setCharacterDead();
 
 	//tuple of 2 booleans, the first one returns true if the user has inflicted damage on the foe
 	//and the second value returns true if the user has damaged itself
@@ -421,7 +421,7 @@ public abstract class ActiveCharacter extends Character {
 				int attackerLife = this.getLife() - selfDamage;
 				attackerLife = attackerLife < 0 ? 0 : attackerLife;
 				this.setLife(attackerLife);
-				this.setCharacterDead(this);
+				this.setCharacterDead();
 				System.out.println("selfDamage:" + selfDamage);
 				return new Tuple<Boolean, Boolean> (false, true);
 			}
@@ -435,7 +435,7 @@ public abstract class ActiveCharacter extends Character {
 		int defenderLife = defender.getLife() - damageDone;
 		defenderLife = defenderLife < 0 ? 0 : defenderLife;
 		defender.setLife(defenderLife);
-		this.setCharacterDead(defender);
+		defender.setCharacterDead();
 		return new Tuple<Boolean, Boolean> (true, false);
 	}
 	
@@ -460,7 +460,7 @@ public abstract class ActiveCharacter extends Character {
 		int defenderLife = defender.getLife() - (this.getDamageLuckMood(this, spell.getDamage() + this.getDamage()).y - getDefenseMood(defender));
 		defenderLife = defenderLife < 0 ? 0 : defenderLife;
 		defender.setLife(defenderLife);
-		this.setCharacterDead(defender);
+		defender.setCharacterDead();
 	}
 	
 	public Tuple<Boolean, ArrayList<ActiveCharacter>> attackSpell(int itemNumber, ActiveCharacter user) {
@@ -477,7 +477,7 @@ public abstract class ActiveCharacter extends Character {
 				int attackerLife = this.getLife() - selfDamage;
 				attackerLife = attackerLife < 0 ? 0 : attackerLife;
 				this.setLife(attackerLife);
-				this.setCharacterDead(this);
+				this.setCharacterDead();
 				System.out.println("selfDamage:" + selfDamage);
 				hurtCharacters.add(this);
 				return new Tuple<Boolean, ArrayList<ActiveCharacter>> (true, hurtCharacters);
@@ -696,11 +696,11 @@ public abstract class ActiveCharacter extends Character {
 	public void printMonstersInformation(JsonObject rootObjWords, WSwingConsoleInterface j, int initPos_i, int initPos_j){
 		_printName(j, initPos_j, initPos_i);
 		Main.countElements++;
-		_printLife(rootObjWords, j, initPos_j + 1, initPos_i);
+		_printLife(rootObjWords, j, initPos_j + 1, initPos_i + 2);
 		Main.countElements++;
-		_printSpeed(rootObjWords, j, initPos_j + 2, initPos_i);
+		_printSpeed(rootObjWords, j, initPos_j + 2, initPos_i + 2);
 		Main.countElements++;
-		_printMood(rootObjWords, j, initPos_j + 3, initPos_i);
+		_printMood(rootObjWords, j, initPos_j + 3, initPos_i + 2);
 	}
 	
 	public void _printGroundObjects(WSwingConsoleInterface j, JsonObject rootObjWords){

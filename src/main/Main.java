@@ -283,17 +283,17 @@ public class Main {
 	
 	private static void printUserInformation() {
 		user._printInventory(j, rootObjGrammar, rootObjWords);
-		user._printLife(rootObjWords, j, 0, map.global_fin().y + 1);
-		user._printMana(rootObjWords, j, 1, map.global_fin().y + 1);
-		user._printSpeed(rootObjWords, j, 2, map.global_fin().y + 1);
-		user._printMood(rootObjWords, j, 3, map.global_fin().y + 1);
-		j.print(map.global_fin().y + 1, 4, JSONParsing.getTranslationWord("score", "N", rootObjWords) + ": " + 
+		user._printLife(rootObjWords, j, 0, map.global_fin().y + 3);
+		user._printMana(rootObjWords, j, 1, map.global_fin().y + 3);
+		user._printSpeed(rootObjWords, j, 2, map.global_fin().y + 3);
+		user._printMood(rootObjWords, j, 3, map.global_fin().y + 3);
+		j.print(map.global_fin().y + 3, 4, JSONParsing.getTranslationWord("score", "N", rootObjWords) + ": " + 
 				Integer.toString(deepnessScore));
-		j.print(map.global_fin().y + 1, 5, JSONParsing.getTranslationWord("level", "N", rootObjWords) + ": " + 
+		j.print(map.global_fin().y + 3, 5, JSONParsing.getTranslationWord("level", "N", rootObjWords) + ": " + 
 				Integer.toString(user.getLevel()));
-		j.print(map.global_fin().y + 1, 6, "exp" + ": " + 
+		j.print(map.global_fin().y + 3, 6, "exp" + ": " + 
 				Integer.toString(user.getExperience()) + "/" + user.getNextLevelExperience());
-		j.print(map.global_fin().y + 1, 7, JSONParsing.getTranslationWord("money", "N", rootObjWords) + ": " + 
+		j.print(map.global_fin().y + 3, 7, JSONParsing.getTranslationWord("money", "N", rootObjWords) + ": " + 
 				user.getMoney());
 	}
 	
@@ -306,8 +306,6 @@ public class Main {
 		map.printMonsters(j, user);
 		//if (user.getRoom().turnMes)
 			//map.printInformationTurns(j, user.getRoom(), user.getMap().global_fin.x-1, user.getMap().global_fin.y+1);
-		if (user.getRoom().hasShop)
-			map.printShop(j, user);
 		printUserInformation();
 		map._printInformationMonsters(j, user, rootObjWords);
 		if (needsToPrintGroundObjects) {
@@ -1071,6 +1069,9 @@ public class Main {
 		int pointerStartX = Collections.min(listX);
 		j.print(pointerStartX-2, 12 + pointerMenu, ">");
 		printTitleMenu();
+		if (shopMenu || shopMenuBuy || shopMenuSell)
+			j.print(map.global_fin().y + 3, 7, JSONParsing.getTranslationWord("money", "N", rootObjWords) + ": " + 
+					user.getMoney());
 		j.refresh();
 	}
 	

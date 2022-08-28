@@ -65,7 +65,6 @@ public class ActionHandler {
 				main.Main.generatePrintMessage(names, grammarPickItem, "PICK", "PICK", usePronoun, false, false);
 			}
 			
-			main.Main.printEverything(true);
 			main.Main.hasChanged = false;
 		} else {
 			main.Main._messageUnvalid();
@@ -82,7 +81,6 @@ public class ActionHandler {
 		} else {
 			if (user.getMap().getMonstersPosition(user).size() > 0) {
 				Pair<Tuple<Boolean, Boolean>, ActiveCharacter> monster = user.weaponAttack();
-				main.Main.printEverything(true);
 				ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
 				names.add(user);
 				names.add(monster.getB());
@@ -153,7 +151,6 @@ public class ActionHandler {
 			names.add(user);
 			names.add(item);
 			boolean result = user.useItem(item);
-			main.Main.printEverything(false);
 			if (item.isWereableItem()) {
 				if (!result) {
 					main.Main._messageUnvalid();
@@ -186,7 +183,6 @@ public class ActionHandler {
 					main.Main.generatePrintMessage(names, grammarPickItem, "THROW", "THROW", usePronoun, false, false);
 					main.Main.hasThrownItem = true;
 				}
-				main.Main.printEverything(true);
 			}
 			main.Main.hasChanged = false;
 		}

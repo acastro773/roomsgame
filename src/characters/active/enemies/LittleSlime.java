@@ -29,7 +29,7 @@ public class LittleSlime extends ActiveCharacter {
 		if (RandUtil.RandomNumber(0, randNum) == 0) {
 			this.putRandomItemInventory();
 		}
-		setMoney(RandUtil.RandomNumber(10, 10*level));
+		setMoney(RandUtil.RandomNumber(10, 10*this.getLevel() + 1));
 	}
 	
 	public ArrayList<String> getAdjectivesIndividual() {
@@ -39,11 +39,11 @@ public class LittleSlime extends ActiveCharacter {
 	}
 
 	@Override
-	public void setCharacterDead(ActiveCharacter character) {
-		if (character.getLife() <= 0){
-			character.setDead(true);
-			this.dropAllItems(character);
-			character.getRoom().removeTurnDead(character);
+	public void setCharacterDead() {
+		if (this.getLife() <= 0){
+			this.setDead(true);
+			this.dropAllItems();
+			this.getRoom().removeTurnDead(this);
 			Main.user.setMoney(Main.user.getMoney()+this.getMoney());
 		}
 	}

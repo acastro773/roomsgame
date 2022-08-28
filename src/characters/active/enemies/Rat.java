@@ -29,7 +29,7 @@ public class Rat extends ActiveCharacter {
 		if (RandUtil.RandomNumber(0, randNum) == 0) {
 			this.putRandomItemInventory();
 		}
-		setMoney(RandUtil.RandomNumber(8, 8*level));
+		setMoney(RandUtil.RandomNumber(8, 8*this.getLevel() + 1));
 	}
 	
 	public ArrayList<String> getAdjectivesIndividual() {
@@ -39,13 +39,12 @@ public class Rat extends ActiveCharacter {
 	}
 
 	@Override
-	public void setCharacterDead(ActiveCharacter character) {
-		if (character.getLife() <= 0){
-			character.setDead(true);
-			this.dropAllItems(character);
-			character.getRoom().removeTurnDead(character);
+	public void setCharacterDead() {
+		if (this.getLife() <= 0) {
+			this.setDead(true);
+			this.dropAllItems();
+			this.getRoom().removeTurnDead(this);
 			Main.user.setMoney(Main.user.getMoney()+this.getMoney());
-			System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA da dinero: " + Main.user.getMoney());
 		}	
 	}
 

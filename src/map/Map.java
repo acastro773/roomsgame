@@ -670,8 +670,17 @@ public class Map {
 						} 
 						else if (RandUtil.containsTuple(pos, room.getPortals())) {
 							j.print(pos.y, pos.x, 'T', main.Main.arrayColors[main.Main.selectedColor][3]);
-						}
-						else {
+						} else if (user.getRoom().hasShop) {
+							Shop shop = user.getRoom().getShop();
+							if (RandUtil.containsTuple(shop.getPosition(), user.getVisiblePositions())) {
+								ArrayList<Tuple<Integer, Integer>> position = new ArrayList<>();
+								position.add(user.getPosition());
+								if (RandUtil.containsTuple(shop.getPosition(), position))
+									j.print(this.global_fin().y + 3, 9, JSONParsing.getTranslationWord("shop", "N", Main.rootObjWords));
+								j.print(shop.getPosition().y, shop.getPosition().x, shop.getSymbolRepresentation(), main.Main.arrayColors[main.Main.selectedColor][3]);
+
+							}
+						} else {
 							j.print(pos.y, pos.x, '.', main.Main.arrayColors[main.Main.selectedColor][4]);
 						}
 					}
@@ -718,13 +727,6 @@ public class Map {
 				return true;
 		}
 		return false;
-	}
-	
-	public void printShop(WSwingConsoleInterface j, ActiveCharacter user) {
-		Shop shop = user.getRoom().getShop();
-		if (RandUtil.containsTuple(shop.getPosition(), user.getVisiblePositions())) {
-			j.print(shop.getPosition().y, shop.getPosition().x, shop.getSymbolRepresentation(), main.Main.arrayColors[main.Main.selectedColor][5]);
-		}
 	}
 	
 	public void printMonsters(WSwingConsoleInterface j, ActiveCharacter user){	
@@ -784,7 +786,7 @@ public class Map {
 			if (!monster.isDead() && count == 0) {
 				countNum++;
 				main.Main.countElements += 1;
-				j.print(user.getMap().global_fin().y + 1, main.Main.countElements+3, JSONParsing.getTranslationWord("monsters", "N", rootObjWords) + ": ");
+				j.print(user.getMap().global_fin().y + 3, main.Main.countElements+3, JSONParsing.getTranslationWord("monsters", "N", rootObjWords) + ": ");
 				count++;
 			}
 			if (!monster.isDead() && countNum < 3) {
