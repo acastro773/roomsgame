@@ -85,7 +85,7 @@ public class GrammarSelectorNP extends GrammarSelector {
 					break;
 				case "ADJ" : resultArray.add(getRandomAdjective());
 					break;
-					// TODO: This get(0) might not be the best idea
+				//gets the noun ordered before by the programmer's preference
 				case "N" : resultArray.add(getNames().get(0));
 					break;
 			}

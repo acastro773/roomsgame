@@ -39,6 +39,7 @@ public class ConfuseRay extends Spell {
 		case CONFUSED:
 			return false;
 		default:
+			//20% of probability to confuse
 			if (probConfusion > 81) {
 				userAffected.setConfusionTurns(RandUtil.RandomNumber(1, 4));
 				userAffected.setMood(Mood.CONFUSED);

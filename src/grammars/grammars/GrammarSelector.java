@@ -58,8 +58,10 @@ public abstract class GrammarSelector {
 		} else {
 			int wordPos = 0;
 			String type2nd = secondType.split("_")[0];
-			//if the structure is SIMPLEPREP, the word to consider in comparing to the first type should be N
-			//if the structure is SIMPLEPREPPOS, the word to consider in comparing to the first type should be POS
+			//if the structure is SIMPLEPREP, the type of the word to consider for comparing it with the first type should be N (noun)
+			//(e.g.: the *goblin* attacks with the *sword*)
+			//if the structure is SIMPLEPREPPOS, the word to consider for comparing it with the first type should be POS
+			//the possessive must be the same in gender and number comparing it to the subject of the phrase
 			//if not, the word position doesn't matter
 			switch(type2nd) {
 			case "SIMPLEPREP":
@@ -143,7 +145,6 @@ public abstract class GrammarSelector {
 				case "gen": 
 					elementA = restriction.getA().substring(0, dotPointA);
 					elementB = restriction.getB().substring(0, dotPointB);
-					System.out.println("ACÁ ENTRÓ: " + elementA + " --- " + elementB);
 					pair = new Pair<String, String>(elementA, elementB);
 					sentenceArray = applyRestrictions(pair, sentenceArray, null, "gen");
 					break;

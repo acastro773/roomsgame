@@ -90,6 +90,7 @@ public class JSONParsing {
 		} else {
 			snd = sndObj;
 		}
+		//returns the content without the additional ' " '
 		return getElement(snd, action).toString().replace("\"","");
 	}
 }

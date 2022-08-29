@@ -134,6 +134,7 @@ public class Room{
 		int userSpeed = user.getSpeed();
 		int userCount = 0;
 		ArrayList<ActiveCharacter> aliveMonsters = new ArrayList<>();
+		//gets the alive monsters in the room to put them on the current turn list
 		for (ActiveCharacter monster : getMonsters()) {
 			System.out.println("SE MIRA MONSTRO " + monster.getName() + " ID: " + monster + "- vivo? " + !monster.isDead());
 			if (!monster.isDead()) {
@@ -527,7 +528,7 @@ public class Room{
 	}
 	
 	public void generateEvents(ActiveCharacter user) {
-		int randEvents = RandUtil.RandomNumber(0, 5);
+		int randEvents = RandUtil.RandomNumber(0, 8);
 		if (this.checkFreePositions().size() > 0) {
 			switch(randEvents) {
 				case 1: {
@@ -591,7 +592,8 @@ public class Room{
 					}
 					break;
 				}
-				default:
+				case 2:
+					//generates the shop
 					hasShop = true;
 					int number = RandUtil.RandomNumber(0, this.checkFreePositions().size());
 					Tuple<Integer, Integer> position = this.getFreePositions().get(number);
@@ -607,6 +609,7 @@ public class Room{
 		ArrayList<Integer> rateList;
 		ArrayList<Integer> dangerList;
 		ArrayList<String> nameList;
+		//the rateList array has stored the percentage of apparition of the monsters
 		switch (numberList) {
 		case 1:
 			rateList = Main.enemiesList1Rate;
@@ -634,6 +637,9 @@ public class Room{
 		int probMin = 0;
 		int probMax = 100;
 		if (getAt > 0) {
+			//gets the previous monster percentage and current monster percentage
+			//e.g.: goblin's number rate is 91, slimey's number rate is 61
+			//then, slimey's total rate is between 91 and 61 -> 30% apparition rate
 			probMax = rateList.get(getAt-1);
 			probMin = rateList.get(getAt);
 		} else {
@@ -641,6 +647,8 @@ public class Room{
 			
 		}
 		if (probability >= probMin && probability <= probMax) {
+			//dangerLvl is used to balance and limit the number of enemies on the same room
+			//the higher the player's level, the greater the possibility of getting more (strong) enemies 
 			if (res >= (dangerLvl)) {
 				System.out.println("Creating: " + nameList.get(getAt));
 				switch(nameList.get(getAt)) {
@@ -695,6 +703,7 @@ public class Room{
 			probAndDanger.add(new Pair<Integer, Integer>(100, 0));
 			ArrayList<Integer> enemiesList;
 			int getFromList = 1;	
+			//get enemy stats from different lists depending on the player level
 			if (userLvl < 3) {
 				enemiesList = Main.enemiesList1Rate;
 			} else if (userLvl < 5){

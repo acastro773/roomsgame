@@ -38,6 +38,7 @@ public class Mage extends ActiveCharacter {
 			this.setNewLevel(this.getLevel() + 1);
 			this.setNewLimLife(this.getTotalLife() + 5);
 			this.setNewLimMana(this.getTotalMagic() + 60);
+			//learns new spells at level 4 and level 7
 			if (this.getLevel() == 4) {
 				FireRing fireRing = new FireRing();
 				this.addSpell(fireRing);

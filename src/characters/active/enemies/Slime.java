@@ -39,6 +39,7 @@ public class Slime extends ActiveCharacter {
 			this.setDead(true);
 			Tuple<Integer, Integer> position = this.getPosition();
 			ArrayList<ActiveCharacter> monsters = this.getRoom().getMonsters();
+			//spawns two slimeys when the big slime dies
 			LittleSlime lilSlime1 = new LittleSlime(this.getMap(), this.getRoom(), position, new ArrayList<String>(), characLvl);
 			monsters.add(lilSlime1);
 			LittleSlime lilSlime2 = new LittleSlime(this.getMap(), this.getRoom(), position, new ArrayList<String>(), characLvl);

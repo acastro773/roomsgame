@@ -32,7 +32,7 @@ public class ChangeKeyBinding extends JFrame {
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-
+		//it changes the current key configuration to a new one
     	this.newPropertiesFile = new FileOutputStream("src/config/keys.properties");
     	jLab = new JLabel("Press key to start");
     	

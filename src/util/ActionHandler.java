@@ -12,6 +12,7 @@ import grammars.grammars.PrintableObject;
 import grammars.grammars.WordsGrammar;
 import grammars.parsing.JSONParsing;
 import items.Item;
+import main.Main;
 import net.slashie.util.Pair;
 
 public class ActionHandler {
@@ -34,6 +35,7 @@ public class ActionHandler {
 	private ActiveCharacter user;
 	
 	public ActionHandler(HashMap<String, Integer> keysMap, ActiveCharacter user, JsonObject rootObj, JsonObject rootObjWords) {
+		//gets the all the different sentence structures to satisfy the description we want to give
 		grammarAttack = new GrammarsGeneral(JSONParsing.getElement(rootObj, "ATTACK").getAsJsonObject());
 		grammarPickItem = new GrammarsGeneral(JSONParsing.getElement(rootObj, "PICK").getAsJsonObject());
 		grammarUseItem = new GrammarsGeneral(JSONParsing.getElement(rootObj, "USE").getAsJsonObject());
@@ -56,6 +58,8 @@ public class ActionHandler {
 		Item item = user.pickItem(user.getPosition(), user.getRoom());
 		if (user.getInventory().size() <= user.getMaximumItemsInventory() && item != null ) {
 			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+			//e.g.: the knight picks the potion
+			//knight and potion are the nouns of the phrase
 			names.add(user);
 			names.add(item);
 			if (hasPickedItem) {
@@ -79,9 +83,13 @@ public class ActionHandler {
 			names.add(weapons);
 			main.Main.generatePrintMessage(names, grammarGeneralDescription, "NOTHAVE", "NOTHAVE", usePronoun, false, false);
 		} else {
+			if (Main.isSoundActivated)
+				Main.attackSound.play();
 			if (user.getMap().getMonstersPosition(user).size() > 0) {
 				Pair<Tuple<Boolean, Boolean>, ActiveCharacter> monster = user.weaponAttack();
 				ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+				//e.g.: the knight attacks the goblin with the sword
+				//knight, goblin and sword are the nouns of the phrase, we add them here and then it starts forming the phrase
 				names.add(user);
 				names.add(monster.getB());
 				names.add(user.getWeaponsEquipped().get(0));
@@ -100,7 +108,7 @@ public class ActionHandler {
 						} else {
 							monster.getB().setHasBeenAttackedByHeroe(true);
 						}
-						// We only print the message if the enemy is alive
+						//it only prints the message if the enemy is alive
 						main.Main.printMessage(message);
 					}
 				} else {
@@ -192,6 +200,8 @@ public class ActionHandler {
 		int itemNumber = keyPressed % keysMap.get("item1");
 		ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
 		Tuple<Boolean, ArrayList <ActiveCharacter>> spellAt = user.attackSpell(itemNumber, user);
+		if (Main.isSoundActivated)
+			Main.attackSound.play();
 		if (spellAt.x) {
 			names.add(user);
 			names.add(user.getSpells().get(itemNumber));

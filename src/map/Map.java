@@ -75,6 +75,7 @@ public class Map {
 			number = RandUtil.RandomNumber(0, roomCharacter.checkFreePositions().size());
 			user.setMap(this);
 			user.setRoom(roomCharacter);
+			//choose a free space to spawn the player
 			if (number > 0 && roomCharacter.getFreePositions().size() > number) {
 				user.setPosition(roomCharacter.getFreePositions().get(number));
 				user.setVisiblePositions();
@@ -83,6 +84,7 @@ public class Map {
 						room.generateRandomEnemies(user);
 					else
 						room.generateEvents(user);
+					//setting up monster's speed and turn order
 					for (ActiveCharacter monster : room.getMonsters())
 						monster.setSpeedWeight();
 					if (room.getMonsters().size() > 0)
@@ -675,14 +677,17 @@ public class Map {
 							if (RandUtil.containsTuple(shop.getPosition(), user.getVisiblePositions())) {
 								ArrayList<Tuple<Integer, Integer>> position = new ArrayList<>();
 								position.add(user.getPosition());
-								if (RandUtil.containsTuple(shop.getPosition(), position))
+								if (RandUtil.containsTuple(shop.getPosition(), position)) {
 									j.print(this.global_fin().y + 3, 9, JSONParsing.getTranslationWord("shop", "N", Main.rootObjWords));
+									j.print(pos.y, pos.x, '.', main.Main.arrayColors[main.Main.selectedColor][4]);
+								} else
+									j.print(pos.y, pos.x, '.', main.Main.arrayColors[main.Main.selectedColor][4]);
 								j.print(shop.getPosition().y, shop.getPosition().x, shop.getSymbolRepresentation(), main.Main.arrayColors[main.Main.selectedColor][3]);
 
-							}
-						} else {
+							} else
+								j.print(pos.y, pos.x, '.', main.Main.arrayColors[main.Main.selectedColor][4]);
+						} else 
 							j.print(pos.y, pos.x, '.', main.Main.arrayColors[main.Main.selectedColor][4]);
-						}
 					}
 				}
 			}
@@ -748,7 +753,7 @@ public class Map {
 								if (Main.possibleCry <= 0 && enemy.getLife() > 0 && Main.isSoundActivated) {
 									String loc = JSONParsing.getSoundSource(sndObj, enemy, "IDLE");
 									appearSound = new SoundReproduction(loc, enemy, user);
-									appearSound.reproduce();
+									appearSound.play();
 									Main.possibleCry = Util.rand(8, 20);
 								}		
 							}

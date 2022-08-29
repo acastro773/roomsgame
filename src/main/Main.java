@@ -147,14 +147,15 @@ public class Main {
 	static GrammarsGeneral grammarSimpleVerb;
 	static GrammarsGeneral grammarGeneralObj;
 	static GrammarsGeneral grammarSelfharmDescription;
-	static SoundReproduction walkSound;
-	static SoundReproduction beepSound;
-	static SoundReproduction hitSwordSound;
-	static SoundReproduction heroHitSound;
-	static SoundReproduction deathSound;
-	static SoundReproduction deathEnemySound;
-	static SoundReproduction collisionSound;
-	static SoundReproduction waterdropSound;
+	public static SoundReproduction walkSound;
+	public static SoundReproduction beepSound;
+	public static SoundReproduction heroHitSound;
+	public static SoundReproduction deathSound;
+	public static SoundReproduction attackSound;
+	public static SoundReproduction avoidSound;
+	public static SoundReproduction deathEnemySound;
+	public static SoundReproduction collisionSound;
+	public static SoundReproduction waterdropSound;
 	static JsonObject rateAppar1;
 	public static ArrayList<Integer> enemiesList1Rate = new ArrayList<Integer>();
 	public static ArrayList<Integer> enemiesList1Danger = new ArrayList<Integer>();
@@ -333,14 +334,14 @@ public class Main {
             	}
         	}
         	if (isSoundActivated) {
-        		walkSound.reproduce();
+        		walkSound.play();
         	}
         } else {
         	_messageUnvalid();
         	printEverything(true);
         	hasMoved = false;
         	if (isSoundActivated) {
-        		collisionSound.reproduce();
+        		collisionSound.play();
         	}
         }
 		if (user.getRoom().isPortal(user.getPosition())) {
@@ -356,8 +357,9 @@ public class Main {
 			adjectives.add("glorious");
 			String knight = JSONParsing.getTranslationWord("knight", "N", rootObjWords);
 			String mage = JSONParsing.getTranslationWord("mage", "N", rootObjWords);
-			
+			//depends on the user's choice in the choose-class menu	
 			if (userClass.equals(knight)) {
+				//sets up different adjectives depending on the chosen class
 				adjectives.add("big");
 				adjectives.add("brave");
 				user = new Knight(null, null, null, adjectives, 1, 4, 5, 15, 100, 90, 120, 0, 40);
@@ -374,15 +376,18 @@ public class Main {
 				user.addSpell(fireball);
 			}
 			
-			user.setMoney(20000);
+			user.setMoney(500);
 		}
 		walkSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "STEP"));
 		collisionSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "COLLISION"));
 		deathSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "DEAD"));
 		heroHitSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "HURT"));
+		avoidSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "AVOID"));
+		attackSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, user, "ATTACK"));
 		newMatch = false;
 		_initializeMap();
 		j.print(user.getPosition().y, user.getPosition().x, user.getSymbolRepresentation(), arrayColors[selectedColor][0]);
+		//ActionHandler class functions are called every time the user performs an action (e.g.: attacking an enemy)
 		actionHandler = new ActionHandler(keysMap, user, rootObj, rootObjWords);
 	}
 	
@@ -395,6 +400,7 @@ public class Main {
 		map.initialize(user);
 		printEverything(true);
 		j.print(user.getPosition().y, user.getPosition().x, user.getSymbolRepresentation(), arrayColors[selectedColor][0]);
+		//using refresh() function to update the game window 
 		j.refresh();
 	}
 	
@@ -416,11 +422,14 @@ public class Main {
 	
 	public static void generatePrintMessage(ArrayList<PrintableObject> names, GrammarsGeneral grammar, String type, String verbType, 
 			boolean usePronoun, boolean useAnd, boolean isConfused) {
+		//gets the sentence structure depending on the type of phrase we want to formulate
 		GrammarIndividual grammarIndividual = grammar.getRandomGrammar();
+		//prints message
 		printMessage(_getMessage(grammarIndividual, names, type, verbType, usePronoun, useAnd, isConfused));
 	}
 	
 	public static void useAndWithItem(Item item) {
+		//to avoid repeating the same type of phrase
 		String message = JSONParsing.getTranslationWord("and", "OTHERS", rootObjWords);
 		GrammarIndividual grammarIndividual = grammarGeneralObj.getRandomGrammar();
 		GrammarSelectorNP selector = new GrammarSelectorNP(grammarIndividual, rootObjWords, item, "GENERAL");
@@ -499,11 +508,14 @@ public class Main {
 	
 	public static void spellAction(int itemCode) {
     	if (isInputType(inventoryInput, itemCode)) {
+    		//calls the Action Handler function for casting spells 
+    		//so it generates the intended message
     		actionHandler._spellAction(itemCode, usePronoun());
     		canUsePronoun = true;
     		setFlagsToFalse();
     	}
     	canUsePronoun = true;
+    	//refresh game's window
     	printEverything(true);
 	}
 	
@@ -534,9 +546,11 @@ public class Main {
 	}
 	
 	public static void makeMovement(int i) throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
+		//player's turn input check function
 		boolean actionDone = false;
 		boolean attackDone = false;
 		double now = System.currentTimeMillis();
+		//game pause and shop
 		if (now - lastTimeMenu > cooldMenu && isInputType(pauseGameInput, i) && !gamePaused) {
 			gamePaused = true;
 			lastTimeMenu = now;
@@ -549,11 +563,13 @@ public class Main {
 			lastTimeMenu = now;
 			return;
 		}
+		//
 		if(now - lastTime > cooldPressKey && isInputType(movementInput, i)){
 			attackDone = true;
         	actionDone = true;
         	_moveCharacterAction(i);
         	setFlagsToFalse();
+        	//every time the player moves, decreases the counter for playing the water drop sound
         	if (countAction > 0) {
         		countAction--;
         		System.out.println("countAction: " + countAction);
@@ -639,6 +655,7 @@ public class Main {
         }
 		if (actionDone) {
 			if (attackDone) {
+				//this checks if the user is confused, and decreases by 1 the number of confusion turns left
 				if (("CONFUSED").equals(user.getMood().toString())) {
 					if (user.getConfusionTurns() > 0) {
 						System.out.println("CONFUSION TURNS: " + user.getConfusionTurns());
@@ -653,8 +670,9 @@ public class Main {
 				if (user.getRoom().getTurnsList().size() > 0)
 					user.getRoom().removeCurrentTurn();
 			} else {
+				//if a not attacking action is performed, plays a beep sound
 				if (isSoundActivated) {
-	        		beepSound.reproduce();
+	        		beepSound.play();
 	        	}
 			}
 			lastTime = System.currentTimeMillis();
@@ -708,6 +726,7 @@ public class Main {
 					}
 				}
 			} else if (!message.getA().getB().isEmpty()){
+				//if it hasn't dealt damage
 				GrammarIndividual grammarIndividualMiss = grammarMissDescription.getRandomGrammar();
 				ArrayList<PrintableObject> namesMiss = new ArrayList<PrintableObject>();
 				ArrayList<String> preposition = new ArrayList<String>();
@@ -753,45 +772,52 @@ public class Main {
 	
 	public static void turnLoop() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		for (;;) {
+			//if a menu is opened, the game stops the turn thing until the player closes the menu
 			if (!gamePaused && !shopMenu && !shopMenuBuy && !shopMenuSell) {
 				for (ActiveCharacter monster : user.getRoom().getMonsters()) {
 					monster.setAdjectivesMonster(user);
 				}
 				user.setAdjectivesUser();
 				if (user.getLife() > 0) {
+					//sets up the structure of the sentence if a character attacks another
 					GrammarIndividual grammarIndividual = grammarAttack.getRandomGrammar();
+					//getA() returns true if it's monster's turn, getB() returns the monster ID
 					if (monsterTurn.getA())
 						enemyTurn(monsterTurn.getB(), grammarIndividual);
 					else {
+						//if it doesn't know whose turn it is, checks if the current turn hasn't ended yet
 						if (user.getRoom().getTurnsList().size() > 0) {
+							//if not, gets the character
 							ActiveCharacter thing = user.getRoom().getTurnsList().get(0);
-							if (thing != null && !thing.isDead())
-								System.out.println("***** CURRENT TURN ***** -> " + thing.getName());
+							//enemy's turn
 							if (thing != user && !thing.isDead()) {
 								monsterTurn = new Pair<Boolean, ActiveCharacter>(true, thing);
 							} else if (thing == user && !thing.isDead()) {
-								System.out.println("HAY ENEMIGOS Y TURNO USER");		
+								//user turn		
 								playerTurn();	
 							}
+							//if current turn has ended and there are still enemies, calculates next turn
 							if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
 								user.getRoom().setListOfTurns(user);
 							}
 						} else if (user.getRoom().getTurnsList().size() < 1 && !user.getMap().allEnemiesRoomDead(user.getRoom())) {
 							user.getRoom().setListOfTurns(user);
 						} else if (user.getRoom().getMonsters().size() < 1 || user.getMap().allEnemiesRoomDead(user.getRoom())){
-							System.out.println("SIN MONSTROS");
+							//if all enemies are dead or there are no enemies, it's always player's turn
 							playerTurn();
 						}
 					}
 					if (countAction == 0) {
+						//water drop sound plays (for immersion purposes)
 						if (isSoundActivated)
-							waterdropSound.reproduce();
+							waterdropSound.play();
 						countAction = Util.rand(25, 50);
 					}
 				}
 				else {
+					//if the player is dead, restart game
 					if (isSoundActivated)
-						deathSound.reproduce();
+						deathSound.play();
 					MessageDescriptionsUtil._messageDescriptionDead(user, true, grammarAdjectiveDescription);
 					try {
 						deepnessScore = 0;
@@ -803,6 +829,7 @@ public class Main {
 					}
 				}
 			} else {
+				//menu loops for pausing and shopping
 				if (gamePaused) {
 					configurePauseMenu();
 					while(gamePaused) {
@@ -840,6 +867,7 @@ public class Main {
 	public static void gameFlow() throws JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
 		messagesWereables = ResourceBundle.getBundle("translations.files.MessagesWereable");
 		if (deepnessScore == 0){
+			//if deepness equals 0, then the game is starting
 			_initialize();
 		} else {
 			_initializeMap();
@@ -848,14 +876,17 @@ public class Main {
 			printEverything(true);
 			PrintableObject portal = new PrintableObject("portal", "", null, null);
 			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+			//gets the nouns of the sentence that will be formed
 			names.add(user);
 			names.add(portal);
+			//gets the structure of the sentence (check sentenceGrammar's files)
 			GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
 			printMessage(_getMessage(grammarIndividual, names, "DESCGOESTHROUGH", "DESCGOESTHROUGH", false, false, false));
+			//using a portal = new Map object = new level
 			deepnessScore++;
 			hasUsedPortal = false;
 		}
-		
+		//function that checks current ActiveCharacter turn
 		turnLoop();
 		
 	}
@@ -1076,6 +1107,8 @@ public class Main {
 	}
 	
 	public static void menuLoopInputs(int i) {
+		//using currentTimeMillis and a cooldown type variable
+		//it avoids the possibility of getting multiple inputs at once
 		Long now = System.currentTimeMillis();
 		if (now - lastTimeMenu > cooldMenu && isInputType(enterMenuInput,i)) {
 			String chosen = eleMenu.get(pointerMenu);
@@ -1242,9 +1275,10 @@ public class Main {
 			}
 			lastTimeMenu = now;
 			if (isSoundActivated)
-				beepSound.reproduce();
+				beepSound.play();
 			System.out.println("pointer: " + pointerMenu);
 		}
+		//pointer values are limited by the current eleMenu's size to avoid getting errors
 		if (now - lastTimeMenu > cooldMenu && isInputType(downkeyMenuInput,i)) {
 			if (pointerMenu >= eleMenu.size()-1)
 				pointerMenu = 0;
@@ -1252,7 +1286,7 @@ public class Main {
 				pointerMenu++;
 			lastTimeMenu = now;
 			if (isSoundActivated)
-				beepSound.reproduce();
+				beepSound.play();
 			System.out.println("pointer: " + pointerMenu);
 		}
 		if (now - lastTimeMenu > cooldMenu && isInputType(upkeyMenuInput,i)) {
@@ -1262,22 +1296,31 @@ public class Main {
 				pointerMenu--;
 			lastTimeMenu = now;
 			if (isSoundActivated)
-				beepSound.reproduce();
+				beepSound.play();
 			System.out.println("pointer: " + pointerMenu);
 		}
 	}
 	
 	public static void menuLoop() {
+		//the configuration functions set up the different menu's options to choose from
+		//and saves it in the variable called "eleMenu"
+		//it also puts the pointer variable to 0
 		configureMenu();
 		while(menu) {
+			//this function prints the contents of the eleMenu variable
 			printMenu();
+			//waits for the user to press a key
 			CharKey e = j.inkey();
 			int i = e.code;
+			//depending on the type of menu (options menu, choose-class menu, shop menu, etc)
+			//and the position of the pointer variable
+			//it changes different variables' values
 			menuLoopInputs(i);
 		}
 	}
 
 	public static void main(String[] args) throws IOException, JsonIOException, JsonSyntaxException, InstantiationException, IllegalAccessException {
+		//tip: use CTRL+left click (on any function) and CTRL+F to navigate through all the functions, it saves time
 		_setLanguage();
 		//configuring the game window and the text-description window
 		configureTextArea();
@@ -1301,9 +1344,12 @@ public class Main {
 		beepSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "BEEP"));
 		waterdropSound = new SoundReproduction(JSONParsing.getSoundSource(Map.sndObj, null, "WATERDROP"));
 		configureApparitionRate();
+		//this variable sets a counter that, when it gets to 0, plays the water drop sound
 		countAction = Util.rand(12, 25);
+		//this one is used with enemies' cries
 		possibleCry = Util.rand(3, 10);
 		
+		//setting up the controls
 		_setKeyMap();
 		menuLoop();
 		

@@ -187,6 +187,7 @@ public class GrammarSelectorS extends GrammarSelector {
 		}
 		
 		ArrayList<String> grammarsTotal = this.getGrammar().getGrammar().get("keys");
+		//grammar structures in the sentence it has to form
 		System.out.println("GRAMMARS:");
 		for (String a : grammarsTotal) {
 			System.out.print(a + " ");
@@ -196,21 +197,18 @@ public class GrammarSelectorS extends GrammarSelector {
 		
 		ArrayList<Pair<String, JsonArray>> sentenceArray = this.fillWords();
 		System.out.println("FRASE INI");
+		//fills the phrase with a random verb from the list of the type of verb previously indicated
 		for (Pair<String, JsonArray> a : sentenceArray) {
 			if (a != null)
 				System.out.print(a.getA() + " ");
 			else
 				System.out.print("null ");
 		}
-		System.out.println();
+		//apply the needed restrictions
 		sentenceArray = this.applyRestrictions(sentenceArray);
-		System.out.println("FRASE MOM1");
-		for (Pair<String, JsonArray> a : sentenceArray) {
-			System.out.print(a.getA() + " ");
-		}
-		System.out.println();
 		int grammarNP = 0;
 		int iniIndefiniteNP = 0;
+		//stores the index of each word of the sentence in an array list of Integers
 		for (int i = 0; i < grammarsTotal.size(); i++) {
 			if (this.getGrammarsNPPair().size() - 1 >= grammarNP) {
 				int sizeNPPair = this.getGrammarsNPPair().get(grammarNP).size();
@@ -234,8 +232,10 @@ public class GrammarSelectorS extends GrammarSelector {
 				}
 			}
 		}
-		System.out.println("FRASE MOM2");
 		boolean changed = false;
+		//iterates through the array of words and checks the translation value of each word
+		//so that it translates it to another language if necessary
+		//if not, it changes nothing
 		for(int i = 0; i < sentenceArray.size(); i++) {
 			Pair<String, JsonArray> pair = sentenceArray.get(i);
 			if (values.contains(i) && (values.get(values.size() - 2)) == i) {
@@ -256,7 +256,7 @@ public class GrammarSelectorS extends GrammarSelector {
 				}
 			}
 		}
-		System.out.println("TOTAL\n" + sentence);
+		//substitutes a noun for his pronoun
 		if (usePronoun) {
 			String nameToGetPronounFrom = this.getGrammarsNP().get(0).getName().getName();
 			String toChangeFor = "";
@@ -280,7 +280,8 @@ public class GrammarSelectorS extends GrammarSelector {
 			}
 			sentence = sentence.replaceAll(NPToDelete, toChangeFor);
 		}
-		
+		//changes the noun after the verb for its reflexive
+		//e.g.: the hero attacks the hero -> the hero attacks *himself*
 		if (isConfused) {
 			String nameToGetPronounFrom = this.getGrammarsNP().get(0).getName().getName();;
 			String toChangeFor = "";
@@ -300,13 +301,12 @@ public class GrammarSelectorS extends GrammarSelector {
 					NPToDelete += JSONParsing.getElement(word.getB(), "translation") + " ";
 				}
 			}
+			//it recognizes if the phrase has changed the noun for his pronoun
 			if (!sentence.contains(NPToDelete) && usePronoun)
 				NPToDelete = JSONParsing.getElement(WordsGrammar.getName(this.getWordsGrammar(), nameToGetPronounFrom).get(0).getB(), "pronoun");
-			//System.out.println("NPToDelete: " + NPToDelete);
 			if (Main.debug) {
 				System.out.println("NPToDelete: " + NPToDelete);
 			}
-			//System.out.println("SE ELIMINA?: " + sentence.contains(NPToDelete));
 			String[] subsentence = sentence.split(" " + NPToDelete + " ");
 			for (String a : subsentence) {
 				a = a.replaceAll("\\s+", " ").trim();
@@ -321,6 +321,7 @@ public class GrammarSelectorS extends GrammarSelector {
 					sentence = sentence.concat(subsentence[i]);
 			}
 		}
+		//removes all the extra blank spaces formed during the function
 		sentence = sentence.replaceAll("\\s+", " ").trim();
 		return sentence;
 	}
@@ -333,13 +334,16 @@ public class GrammarSelectorS extends GrammarSelector {
 	private ArrayList<Pair<String, JsonArray>> applyRestrictionsSNP(ArrayList<Pair<String, JsonArray>> sentenceArray) {
 		ArrayList<Pair<String, JsonArray>> newSentenceArray = new ArrayList<Pair<String, JsonArray>>();
 		ArrayList<String> getGrammarTypes = this.getGrammarTypes();
-		//numItems specifies the amount of elements in each structure (example: SIMPLE has 2-> DET and N)
+		//to find all the types of different grammar structures that are available:
+		//check objectGrammar and sentenceGrammar files
+		//numItems specifies the amount of elements on each structure (example: SIMPLE has 2-> DET and N)
+		//it will be used to make changes for the restrictions' rules if necessary
+		//newSentenceArray -> variable that stores the new sentence
 		ArrayList<Integer> numItems = new ArrayList<Integer>();
 		int iteration = 0;
 		for(Pair<String, String> restriction : this.getGrammar().getRestrictions()) {
 			int NPgrammarCount = 0;
-			/* We only execute this when there's no data on newSentenceArray, since in that case we already
-			 have the information we need */
+			// We only execute this when there's no data on newSentenceArray
 			int endIteration;
 			if (type == "DESCITEM") {
 				endIteration = this.getNames().size() + 1;
@@ -355,6 +359,7 @@ public class GrammarSelectorS extends GrammarSelector {
 					switch (getGrammarTypes.get(selectElement)) {
 						case "ADJECTIVE" :
 							numItems.add(1);
+							//gets a random adjective for the selected noun
 							Pair<String, JsonArray> adjective = this.getGrammarsNP().get(NPgrammarCount).getRandomAdjective();
 							if (Main.debug) {
 								System.out.println("Adding adjective: " + adjective.getA());
@@ -366,6 +371,8 @@ public class GrammarSelectorS extends GrammarSelector {
 							if (Main.debug) {
 								System.out.println("Adding Verb: " + verb.getA());
 							}
+							//since the verb structure only has one type of element (the verb)
+							//it adds 1 to numItems
 							numItems.add(1);
 							newSentenceArray.add(verb);
 							break;
@@ -381,6 +388,7 @@ public class GrammarSelectorS extends GrammarSelector {
 					}
 				}
 			}
+			//gets the type of the restriction
 			int dotPointA = restriction.getA().indexOf(".");
 			int dotPointB = restriction.getB().indexOf(".");
 			String restrictionType = restriction.getA().substring(dotPointA + 1, restriction.getA().length());

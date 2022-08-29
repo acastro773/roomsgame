@@ -1,11 +1,11 @@
 {
   "PLAYER": {
     "STEP": "./src/sounds/steps.wav",
-    "ATTACK": "",
+    "ATTACK": "./src/sounds/heroattack.wav",
     "DEAD": "./src/sounds/death.wav",
     "COLLISION": "./src/sounds/collision.wav",
     "HURT": "./src/sounds/herohit.wav",
-    "AVOID": ""
+    "AVOID": "./src/sounds/heroavoid.wav"
   },
   "GOBLIN": {
     "IDLE": "./src/sounds/goblinappear.wav",
@@ -23,12 +23,12 @@
     "DEAD": ""
   },
   "SLIME": {
-    "IDLE": "./src/sounds/dragonappear.wav",
+    "IDLE": "./src/sounds/slimeappear.wav",
     "ATTACK": "",
     "DEAD": ""
   },
   "SLIMEY": {
-    "IDLE": "./src/sounds/dragonappear.wav",
+    "IDLE": "./src/sounds/slimeyappear.wav",
     "ATTACK": "",
     "DEAD": ""
   },

@@ -188,6 +188,9 @@ public class Shop extends PrintableObject{
 	public void setRandomStoredItems() {
 		while(getStoredItems().size() < 4) {
 			int randNum = RandUtil.RandomNumber(0, 4);
+			//every shop has different items on sale
+			//the higher the user's level, the greater the possibility of being able to buy
+			//something more valuable and strong
 			switch(randNum) {
 			case 0:
 				addWeapon();
@@ -209,7 +212,7 @@ public class Shop extends PrintableObject{
 		for (Item item : stored)
 			System.out.println(item.getName() + " - " + item.getPrice());
 		Item item = stored.get(pointer);
-		System.out.println("A COMPRAR -> " + item.getName() + " - " + item.getPrice() + " con " + moneyGot);
+		//checks if the user has enough money to buy the selected item 
 		if (moneyGot >= item.getPrice()) {
 			if (user.getInventorySpace() > 0) {
 				stored.remove(pointer);
@@ -230,7 +233,6 @@ public class Shop extends PrintableObject{
 	}
 	
 	public void sellItem(int pointer) {
-		System.out.println("VENDIENDO");
 		ActiveCharacter user = Main.user;
 		ArrayList<Item> inventory = user.getInventory();
 		for (Item item : inventory)

@@ -216,6 +216,7 @@ public abstract class ActiveCharacter extends Character {
 	}
 	
 	public void putRandomItemInventory() {
+		//enemies can drop stuff if they are killed
 		int itemRandom = RandUtil.RandomNumber(0, 12);
 		int itemLevel = RandUtil.RandomNumber(this.getLevel(), this.getLevel() + 3);
 		boolean isMagic = RandUtil.RandomNumber(0, 2) > 0 ? true : false; 
@@ -267,6 +268,7 @@ public abstract class ActiveCharacter extends Character {
 	}
 	
 	public Movement getMovementTypeFromMood() {
+		//gives to enemies different behaviors depending on their mood
 		Movement move;
 		switch(this.getMood()) {
 		case SLEEPY:
@@ -388,6 +390,9 @@ public abstract class ActiveCharacter extends Character {
 						- this.getDefenseFromShields(defender) - this.getDefenseMood(defender);
 				if (damage < 1)
 					damage = 1;
+		} else {
+			if (Main.isSoundActivated)
+				Main.avoidSound.play();
 		}
 		if (damage > 0){
 			return damage;
@@ -495,12 +500,18 @@ public abstract class ActiveCharacter extends Character {
 						if (RandUtil.sameTuple(pos, user.getPosition()) && this != user) {
 							hurtCharacters.add(user);
 							this.attackWithSpell(user, spell);
+						} else {
+							if (Main.isSoundActivated)
+								Main.avoidSound.play();
 						}
 						if (RandUtil.containsTuple(pos, charactersPositions)) {
 							for (ActiveCharacter monsterDamaged : room.getMonstersPosition(pos)) {
 								hurtCharacters.add(monsterDamaged);
 								this.attackWithSpell(monsterDamaged, spell);
 							}
+						} else {
+							if (Main.isSoundActivated)
+								Main.avoidSound.play();
 						}
 					}
 				}
@@ -706,11 +717,11 @@ public abstract class ActiveCharacter extends Character {
 	public void _printGroundObjects(WSwingConsoleInterface j, JsonObject rootObjWords){
 		if (this.getRoom().getItemsPosition(this.getPosition()).size() > 0) {
 			main.Main.countElements += 2;
-			j.print(this.getMap().global_fin().y + 1, main.Main.countElements+2, JSONParsing.getTranslationWord("items", "N", rootObjWords) + ": ");
+			j.print(this.getMap().global_fin().y + 3, main.Main.countElements+2, JSONParsing.getTranslationWord("items", "N", rootObjWords) + ": ");
 		}
 		for (Item item : this.getRoom().getItemsPosition(this.getPosition())) {
 			main.Main.countElements += 1;
-			item.printItemsInformation(j, this.getMap().global_fin().y + 1, main.Main.countElements+2);
+			item.printItemsInformation(j, this.getMap().global_fin().y + 3, main.Main.countElements+2);
 		}
 	}
 	
@@ -957,6 +968,7 @@ public abstract class ActiveCharacter extends Character {
 	
 	public Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter> doTurn(ActiveCharacter user, GrammarIndividual grammarAttack, JsonObject rootObjWords){
 		if (this.getRoom().equals(user.getRoom()) && !this.isDead()){
+			boolean soundOn = Main.isSoundActivated;
 			System.out.println("MONSTRO: " + this.getName() + " ANIMO: " + this.getMood().name());
 			Pair<Tuple<Boolean, Boolean>, String> result;
 			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
@@ -994,6 +1006,8 @@ public abstract class ActiveCharacter extends Character {
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
 				else if (result.getA().x) {
 					//if not
+					if (soundOn)
+						Main.heroHitSound.play();
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
 				}
 			}
@@ -1003,6 +1017,8 @@ public abstract class ActiveCharacter extends Character {
 				if (result.getA().y)
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, this);
 				else {
+					if (soundOn)
+						Main.heroHitSound.play();
 					return new Pair<Pair<Tuple<Boolean, Boolean>, String>, ActiveCharacter>(result, null);
 				} 
 			} else if (move) {
@@ -1066,6 +1082,7 @@ public abstract class ActiveCharacter extends Character {
 	
 	public void getRandomEquip() {
 		WereableWeapon oneHandSword;
+		//gives different weapons and armors depending on the foe's level
 		int number;
 		int numberArmor = RandUtil.RandomNumber(0, this.getLevel()*3);;
 		if (this.getLevel() < 3) {
@@ -1092,7 +1109,6 @@ public abstract class ActiveCharacter extends Character {
 		oneHandSword.setSellPriceInit();
 		this.putItemInventory(oneHandSword);
 		this.equipWeapon(oneHandSword);
-		System.out.println("AÑADIDA ARMA: " + this.getWeaponsEquipped() + " - " + oneHandSword.getName());
 		if (this.getLevel() > 3) {
 			while (numberArmor > 2) {
 				int randNum = 20 - this.getLevel();
@@ -1131,7 +1147,6 @@ public abstract class ActiveCharacter extends Character {
 					armor.setSellPriceInit();
 					this.putItemInventory(armor);
 					this.equipArmor(armor);
-					System.out.println("Adding armor: " + armor.getName());
 					numberArmor -= 3;
 				} else
 					numberArmor--;

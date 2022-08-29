@@ -46,24 +46,30 @@ public class SoundReproduction implements Runnable {
 		this.origin = origin;
 		this.player = player;
 	}
-	public void reproduce() {
+	public void play() {
+		//playing music with threads so it doesn't stop the flow of the game
+		//every time we want to play a sound
 		t = new Thread(this, "thread");
 		t.start();
 	}
 	
-	static void RelativeDistance(SourceDataLine audioLine, FloatControl pan, FloatControl volume) {
+	static void RelativeDistance(FloatControl pan, FloatControl volume) {
 		Tuple<Integer, Integer> pos_or = origin.getPosition();
 		Tuple<Integer, Integer> pos_pl = player.getPosition();
+		//gets the x size of the current room
 		int lim_room = origin.getRoom().getCorners().get(1).x - origin.getRoom().getCorners().get(0).x;
-		//for (Tuple<?, ?> corner : origin.getRoom().getCorners())
-		//	System.out.println(corner.x);
 		float range = volume.getMaximum() - volume.getMinimum();
 		double dist = pos_or.x - pos_pl.x;
 		float vol = (float)(dist/lim_room);
+		//vol = 1 -> can only hear it at your right side
+		//vol = -1 -> can only hear it at your lef
 		if (vol > 1)
 			vol = 1;
 		else if (vol < -1)
 			vol = -1;
+		//if the origin is at the same x position than the foe, check the y coordinate
+		//to calculate the volume relative to the y distance
+		//the greater the volume value, the nearer the other object
 		if (dist == 0)
 			dist = pos_or.y - pos_pl.y;
 		float vol_c = (range - (float)Math.abs(dist) * volume.getMaximum());
@@ -71,15 +77,15 @@ public class SoundReproduction implements Runnable {
 		if (gain > volume.getMaximum())
 			gain = volume.getMaximum();
 		else if (gain < volume.getMinimum())
-			gain = volume.getMinimum();
+			gain = volume.getMinimum(); 
 		pan.setValue(vol);
 		volume.setValue(gain);
-		//System.out.println("Panning: " + pan.getValue());
-		//System.out.println("Volume (dB): " + volume.getValue());
 	}
 	
-	static void WaterdropRand(SourceDataLine audioLine, FloatControl pan, FloatControl volume) {
+	static void WaterdropRand(FloatControl pan, FloatControl volume) {
 		float range = volume.getMaximum() - volume.getMinimum();
+		//the limit is -3 and 3, because of the original file volume
+		//if it reaches values out of the limit, the volume is too low to be able to hear it
 		double dist = Util.rand(-3, 3);
 		System.out.println("VolMax: " + volume.getMaximum());
 		System.out.println("VolMin: " + volume.getMinimum());
@@ -120,14 +126,16 @@ public class SoundReproduction implements Runnable {
 		}
 		FloatControl pan = null;
 		FloatControl volume = null;
+		//checks if the audio file supports panning and volume 
 		if (audioLine.isControlSupported(FloatControl.Type.PAN))
 			pan = (FloatControl) audioLine.getControl(FloatControl.Type.PAN);
 		if (audioLine.isControlSupported(FloatControl.Type.MASTER_GAIN))
 			volume = (FloatControl) audioLine.getControl(FloatControl.Type.MASTER_GAIN);
+		//set up for the panning and volume values
 		if (isEnemy) {
-			RelativeDistance(audioLine, pan, volume);
+			RelativeDistance(pan, volume);
 		} else if (typeSound.equals("waterdrop")) {
-			WaterdropRand(audioLine, pan, volume);
+			WaterdropRand(pan, volume);
 		}
 		audioLine.start();
 		 
@@ -136,6 +144,7 @@ public class SoundReproduction implements Runnable {
 		 
 		try {
 			while ((bytesRead = audioStream.read(bytesBuffer)) != -1) {
+				//goes byte by byte until it reaches the end of the file
 			    audioLine.write(bytesBuffer, 0, bytesRead);
 			}
 			audioLine.drain();
