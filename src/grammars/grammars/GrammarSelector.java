@@ -69,7 +69,6 @@ public abstract class GrammarSelector {
 				break;
 			case "SIMPLEPREPPOS":
 				wordPos = 1;
-				System.out.println("Valor ahora: " + wordPos);
 				break;
 			default:
 				wordPos = 0;

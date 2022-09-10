@@ -58,16 +58,16 @@ public class SoundReproduction implements Runnable {
 		Tuple<Integer, Integer> pos_pl = player.getPosition();
 		//gets the x size of the current room
 		int lim_room = origin.getRoom().getCorners().get(1).x - origin.getRoom().getCorners().get(0).x;
-		float range = volume.getMaximum() - volume.getMinimum();
+		float range = volume.getMaximum() - volume.getMinimum() + 1;
 		double dist = pos_or.x - pos_pl.x;
 		float vol = (float)(dist/lim_room);
 		//vol = 1 -> can only hear it at your right side
-		//vol = -1 -> can only hear it at your lef
+		//vol = -1 -> can only hear it at your left side
 		if (vol > 1)
 			vol = 1;
 		else if (vol < -1)
 			vol = -1;
-		//if the origin is at the same x position than the foe, check the y coordinate
+		//if the origin is at the same x position than the source, check the y coordinate
 		//to calculate the volume relative to the y distance
 		//the greater the volume value, the nearer the other object
 		if (dist == 0)
@@ -83,7 +83,7 @@ public class SoundReproduction implements Runnable {
 	}
 	
 	static void WaterdropRand(FloatControl pan, FloatControl volume) {
-		float range = volume.getMaximum() - volume.getMinimum();
+		float range = volume.getMaximum() - volume.getMinimum() + 1;
 		//the limit is -3 and 3, because of the original file volume
 		//if it reaches values out of the limit, the volume is too low to be able to hear it
 		double dist = Util.rand(-3, 3);
@@ -134,7 +134,7 @@ public class SoundReproduction implements Runnable {
 		//set up for the panning and volume values
 		if (isEnemy) {
 			RelativeDistance(pan, volume);
-		} else if (typeSound.equals("waterdrop")) {
+		} else if (("waterdrop").equals(typeSound)) {
 			WaterdropRand(pan, volume);
 		}
 		audioLine.start();

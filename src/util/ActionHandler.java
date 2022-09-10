@@ -196,8 +196,7 @@ public class ActionHandler {
 		}
 	}
 	
-	public void _spellAction(int keyPressed, boolean usePronoun){
-		int itemNumber = keyPressed % keysMap.get("item1");
+	public void _spellAction(int itemNumber, boolean usePronoun){
 		ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
 		Tuple<Boolean, ArrayList <ActiveCharacter>> spellAt = user.attackSpell(itemNumber, user);
 		if (Main.isSoundActivated)

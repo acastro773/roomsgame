@@ -132,7 +132,6 @@ public class Room{
 	public void setListOfTurns(ActiveCharacter user) {
 		ArrayList<ActiveCharacter> currentIter = new ArrayList<>();
 		int userSpeed = user.getSpeed();
-		int userCount = 0;
 		ArrayList<ActiveCharacter> aliveMonsters = new ArrayList<>();
 		//gets the alive monsters in the room to put them on the current turn list
 		for (ActiveCharacter monster : getMonsters()) {
@@ -142,55 +141,45 @@ public class Room{
 				aliveMonsters.add(monster);
 			}
 		}		
-		ArrayList<ActiveCharacter> monsters = aliveMonsters;
-		if (monsters.size() > 0) {
+		ArrayList<ActiveCharacter> characters = aliveMonsters;
+		if (characters.size() > 0) {
+			characters.add(user);
 			//orders list by speed, descending order
-			Collections.sort(monsters, new Comparator<ActiveCharacter>() {
+			Collections.sort(characters, new Comparator<ActiveCharacter>() {
 				public int compare(ActiveCharacter o1, ActiveCharacter o2) {
 					return o2.getSpeed().compareTo(o1.getSpeed());
 				}
 			});
-			ArrayList<Pair<Pair<Integer, Integer>, ActiveCharacter>> monstersSpeed = new ArrayList<Pair<Pair<Integer, Integer>, ActiveCharacter>>();
-			//sets an array with a pair that contains a counter (of times that the monster has been selected for the turnsList array)
-			//and the other one with the speed of the monster
-			for (ActiveCharacter monster : monsters) {
-				monstersSpeed.add(new Pair<Pair<Integer, Integer>, ActiveCharacter>(new Pair<Integer, Integer>(0, monster.getSpeed()), monster));
-			}
-			//checks if the list of turns contains all the characters
-			//if not, iterate until it satisfies the condition
-			while(!containsAllChars(currentIter, user, monsters)) {
-				for (Pair<Pair<Integer, Integer>, ActiveCharacter> monster : monstersSpeed) {
-					if (!currentIter.contains(monster.getB())) {
-						if (currentIter.contains(user)) {
-							currentIter.add(monster.getB());
-						} else {
-							boolean bothSelected = false;
-							//even if user's speed or monster's speed triples the other's speed, only an extra turn is given
-							while (userCount < 2 && monster.getA().getA() < 2 && !bothSelected) {
-								if (userCount == 1 && monster.getA().getA() == 1) {
-									bothSelected = true;
-								} else {
-									if (userSpeed >= monster.getB().getSpeed()) {
-										userCount++;
-										userSpeed = (int)Math.ceil(userSpeed*0.5);
-										currentIter.add(user);
-									} else {
-										monster.setA(new Pair<Integer, Integer>(monster.getA().getA()+1, (int)Math.ceil(monster.getA().getB()*0.5)));;
-										currentIter.add(monster.getB());
-									}
-								}
-							}
-							if (userCount == 2) {
-								currentIter.add(monster.getB());
-							}
-							userCount = 0;
-							userSpeed = user.getSpeed();
-							monster.setA(new Pair<Integer, Integer>(0, monster.getB().getSpeed()));
-						}
+			//iterates over the characters list
+			for (ActiveCharacter character : characters) {
+				int charSpeed = character.getSpeed();
+				int counter = 0;
+				//add an additional turn to the enemy if its speed at least doubles
+				//the user's speed
+				while (counter < 2) {
+					if (character != user) {
+						if (charSpeed >= userSpeed) {
+							currentIter.add(character);
+							charSpeed = (int)Math.ceil(charSpeed*0.5);
+							counter++;
+						} else if (currentIter.contains(user)) {	
+							currentIter.add(character);
+							counter = 2;
+						} else
+							counter = 2;
+					} else {
+						//if user's speed doubles the speed of the next
+						//enemy on the list, and the user has the highest speed
+						//in the room, add an additional turn to the user
+						int indexUser = characters.indexOf(user);
+						int divUserSpeed = (int)Math.ceil(userSpeed*0.5);
+						if (indexUser + 1 < characters.size() 
+								&& indexUser == 0
+								&& divUserSpeed >= characters.get(indexUser+1).getSpeed()) 
+							currentIter.add(user);
+						currentIter.add(user);
+						counter = 2;
 					}
-				}
-				if (!currentIter.contains(user)) {
-					currentIter.add(user);
 				}
 			}
 		}
@@ -696,14 +685,12 @@ public class Room{
 	public void generateRandomEnemies(ActiveCharacter user) {
 		//check if we have enough space in the room
 		if (this.getFreePositions().size() > 0 && this.getMonsters().size() == 0) {
-			ArrayList<Pair<Integer, Integer>> probAndDanger = new ArrayList<Pair<Integer, Integer>>();
 			int userLvl = user.getLevel();
 			int extraDifficulty = RandUtil.RandomNumber(0, 2);
 			int number = RandUtil.RandomNumber(3 + extraDifficulty, userLvl*5);
-			probAndDanger.add(new Pair<Integer, Integer>(100, 0));
 			ArrayList<Integer> enemiesList;
 			int getFromList = 1;	
-			//get enemy stats from different lists depending on the player level
+			//get enemy's stats from different lists depending on the player level
 			if (userLvl < 3) {
 				enemiesList = Main.enemiesList1Rate;
 			} else if (userLvl < 5){

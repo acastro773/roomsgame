@@ -208,7 +208,7 @@ public class GrammarSelectorS extends GrammarSelector {
 		sentenceArray = this.applyRestrictions(sentenceArray);
 		int grammarNP = 0;
 		int iniIndefiniteNP = 0;
-		//stores the index of each word of the sentence in an array list of Integers
+		//stores the start index of each word of the sentence in an array list of Integers
 		for (int i = 0; i < grammarsTotal.size(); i++) {
 			if (this.getGrammarsNPPair().size() - 1 >= grammarNP) {
 				int sizeNPPair = this.getGrammarsNPPair().get(grammarNP).size();
@@ -286,7 +286,6 @@ public class GrammarSelectorS extends GrammarSelector {
 			String nameToGetPronounFrom = this.getGrammarsNP().get(0).getName().getName();;
 			String toChangeFor = "";
 			String reflexive = JSONParsing.getElement(WordsGrammar.getName(this.getWordsGrammar(), nameToGetPronounFrom).get(0).getB(), "pronoun_ref");
-			System.out.println("CONFUSO: " + nameToGetPronounFrom + " " + reflexive);
 			if (useAnd) {
 				String translationAnd = GrammarsOperational.getAndTranslation(this.getWordsGrammar());
 				toChangeFor += translationAnd;
@@ -343,13 +342,13 @@ public class GrammarSelectorS extends GrammarSelector {
 		int iteration = 0;
 		for(Pair<String, String> restriction : this.getGrammar().getRestrictions()) {
 			int NPgrammarCount = 0;
-			// We only execute this when there's no data on newSentenceArray
 			int endIteration;
 			if (type == "DESCITEM") {
 				endIteration = this.getNames().size() + 1;
 			} else {
 				endIteration = this.getGrammarTypes().size();
 			}
+			// We only execute this when there's no data on newSentenceArray
 			if (newSentenceArray.size() == 0) {
 				for (int i = 0; i < endIteration; i++) {
 					int selectElement = i;

@@ -75,7 +75,6 @@ public class Map {
 			number = RandUtil.RandomNumber(0, roomCharacter.checkFreePositions().size());
 			user.setMap(this);
 			user.setRoom(roomCharacter);
-			//choose a free space to spawn the player
 			if (number > 0 && roomCharacter.getFreePositions().size() > number) {
 				user.setPosition(roomCharacter.getFreePositions().get(number));
 				user.setVisiblePositions();
@@ -85,6 +84,7 @@ public class Map {
 					else
 						room.generateEvents(user);
 					//setting up monster's speed and turn order
+					//after generating all the monsters in all the available rooms
 					for (ActiveCharacter monster : room.getMonsters())
 						monster.setSpeedWeight();
 					if (room.getMonsters().size() > 0)

@@ -37,7 +37,7 @@ public class Goblin extends ActiveCharacter {
 	}
 	
 	public ArrayList<String> getAdjectivesIndividual() {
-		ArrayList<String> adjectives = new ArrayList<String>();
+		ArrayList<String> adjectives = this.getAdjectivesMood();
 		adjectives.add("grey");
 		return adjectives;
 	}

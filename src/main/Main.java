@@ -51,12 +51,14 @@ import items.wereables.WereableArmor;
 import items.wereables.WereableWeapon;
 import magic.FireRing;
 import magic.Fireball;
+import magic.Spell;
 import map.Map;
 import map.Room;
 import net.slashie.libjcsi.CharKey;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Pair;
 import net.slashie.util.Util;
+import shop.Shop;
 import util.ActionHandler;
 import util.JTextAreaWithListener;
 import util.MessageDescriptionsUtil;
@@ -179,6 +181,10 @@ public class Main {
 	public static double cooldTurnEnemy = 50;
 	public static double lastTimeMenu = 0;
 	public static double cooldMenu = 150;
+	public static double cooldHighDelay = 500;
+	public static double cooldLowDelayMenu = 150;
+	public static double cooldLowDelay = 50;
+	public static boolean isHighInput = false;
 	public static Pair<Boolean, ActiveCharacter> monsterTurn = new Pair<Boolean, ActiveCharacter>(false, null);
 	public static boolean menu = true;
 	public static boolean chooseOptions = false;
@@ -220,6 +226,7 @@ public class Main {
 		keyBinding = ResourceBundle.getBundle("config.keys");
 		Enumeration <String> keys = keyBinding.getKeys();
 		keysMap = new HashMap<String, Integer>();
+		//
 		while (keys.hasMoreElements()) {
 			String key = keys.nextElement();
 			String value = keyBinding.getString(key);
@@ -506,17 +513,36 @@ public class Main {
     	}
 	}
 	
-	public static void spellAction(int itemCode) {
+	public static boolean spellAction(int itemCode) {
     	if (isInputType(inventoryInput, itemCode)) {
-    		//calls the Action Handler function for casting spells 
-    		//so it generates the intended message
-    		actionHandler._spellAction(itemCode, usePronoun());
-    		canUsePronoun = true;
-    		setFlagsToFalse();
+    		int itemNumber = itemCode % keysMap.get("item1");
+    		if (itemNumber < user.getSpells().size()) {
+    			//calls the Action Handler function for casting spells 
+        		//so it generates the intended message
+        		actionHandler._spellAction(itemNumber, usePronoun());
+        		canUsePronoun = true;
+        		setFlagsToFalse();
+    		} else {
+    			//if the user pressed the key of a non-existent spell
+    			//print the following error message
+    			printMessage(JSONParsing.getTranslationWord("not a spell", "OTHERS", rootObjWords));
+    			String message = JSONParsing.getTranslationWord("spells", "N", rootObjWords) + ": ";
+    			String spells = "";
+    			ArrayList<Spell> listSpells = user.getSpells();
+    			for (int n = 0; n < listSpells.size(); n++) {
+    				spells += listSpells.get(n).getName() + " (M + " + (n+1) +")";
+    				if ((n + 1) < listSpells.size()) {
+    					spells += ", ";
+    				}
+    			}
+    			printMessage(message + spells);
+            	return false;
+    		}
     	}
     	canUsePronoun = true;
     	//refresh game's window
     	printEverything(true);
+    	return true;
 	}
 	
 	public static void throwAction(int itemCode) {
@@ -561,6 +587,21 @@ public class Main {
 				&& isInputType(attackInput, i) && !shopMenu) {
 			shopMenu = true;
 			lastTimeMenu = now;
+			ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+			//gets the nouns of the sentence that will be formed
+			names.add(user);
+			names.add(user.getRoom().getShop());
+			//gets the structure of the sentence (check sentenceGrammar's files)
+			GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
+			String message = _getMessage(grammarIndividual, names, "ENTER", "ENTER", true, false, false);
+			Shop shop = user.getRoom().getShop();
+			if (shop.heroEnters) {
+				if (RandUtil.RandomNumber(0, 2) == 1) {
+					message += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
+				}
+			} else
+				shop.heroEnters = true;
+			printMessage(message);
 			return;
 		}
 		//
@@ -604,11 +645,13 @@ public class Main {
         } 
         else if (now - lastTime > cooldPressKey && isInputType(spellInput, i)) {
         	i = j.inkey().code;
-        	spellAction(i);
-        	actionDone = true;
-        	attackDone = true;
-        	spellsPressed = true;
-        	setFlagsToFalse();
+        	boolean attacked = spellAction(i);
+        	if (attacked) {
+        		actionDone = true;
+            	attackDone = true;
+            	spellsPressed = true;
+            	setFlagsToFalse();
+        	}
         	messageLabel.requestFocus();
         } else if (now - lastTime > cooldPressKey && (isInputType(descriptionInput, i) || isInputType(descriptionWereableInput, i))) {
         	actionDone = true;
@@ -752,7 +795,9 @@ public class Main {
 			}
 			user.getRoom().removeCurrentTurn();
 			monsterTurn = new Pair<Boolean, ActiveCharacter>(false, null);
-			if (thing.getConfusionTurns() > 0) {
+			ArrayList<Tuple<Integer, Integer>> userPos = new ArrayList<>();
+			userPos.add(user.getPosition());
+			if (thing.getConfusionTurns() > 0 && RandUtil.containsTuple(thing.getPosition(), userPos)) {
 				if (thing.getConfusionTurns() == 1) {
 					thing.setConfusionTurns(0);
 					thing.setMood(Mood.NEUTRAL);
@@ -832,6 +877,7 @@ public class Main {
 				//menu loops for pausing and shopping
 				if (gamePaused) {
 					configurePauseMenu();
+					printMessage(JSONParsing.getTranslationWord("pause", "N", rootObjWords) + ":");
 					while(gamePaused) {
 						printMenu();
 						int n = j.inkey().code;
@@ -839,6 +885,7 @@ public class Main {
 					}
 				} else if (shopMenu) {
 					configureShopMenu();
+					printMessage(JSONParsing.getTranslationWord("shop", "N", rootObjWords) + ":");
 					while(shopMenu) {
 						printMenu();
 						int n = j.inkey().code;
@@ -1013,9 +1060,15 @@ public class Main {
 	
 	public static void configureControls() {
 		eleMenu.clear();
+		String delay;
+		if (isHighInput)
+			delay = JSONParsing.getTranslationWord("low input delay", "OTHERS", rootObjWords);
+		else
+			delay = JSONParsing.getTranslationWord("high input delay", "OTHERS", rootObjWords);
 		String rebind = JSONParsing.getTranslationWord("remap keys", "OTHERS", rootObjWords);
 		String reset = JSONParsing.getTranslationWord("reset controls", "OTHERS", rootObjWords);
 		String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
+		eleMenu.add(delay);
 		eleMenu.add(rebind);
 		eleMenu.add(reset);
 		eleMenu.add(back);
@@ -1103,6 +1156,7 @@ public class Main {
 		if (shopMenu || shopMenuBuy || shopMenuSell)
 			j.print(map.global_fin().y + 3, 7, JSONParsing.getTranslationWord("money", "N", rootObjWords) + ": " + 
 					user.getMoney());
+		printMessage(JSONParsing.getTranslationWord("pointer", "N", rootObjWords) + " = " + eleMenu.get(pointerMenu));
 		j.refresh();
 	}
 	
@@ -1135,12 +1189,28 @@ public class Main {
 						configureMenu();
 				}
 			} else if (chooseControls){
+				String delay;
+				if (isHighInput)
+					delay = JSONParsing.getTranslationWord("low input delay", "OTHERS", rootObjWords);
+				else
+					delay = JSONParsing.getTranslationWord("high input delay", "OTHERS", rootObjWords);
 				String rebind = JSONParsing.getTranslationWord("remap keys", "OTHERS", rootObjWords);
 				String reset = JSONParsing.getTranslationWord("reset controls", "OTHERS", rootObjWords);
 				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
 				
 				if (chosen.equals(rebind)) {
 					rebindKeys();
+				} else if (chosen.equals(delay)) {
+					if (isHighInput) {
+						isHighInput = false;
+						cooldMenu = cooldLowDelayMenu;
+						cooldPressKey = cooldLowDelay;
+					} else {
+						isHighInput = true;
+						cooldMenu = cooldHighDelay;
+						cooldPressKey = cooldHighDelay;
+					}
+					configureControls();
 				} else if (chosen.equals(reset)) {
 					keysMap.clear();
 					for (Pair<String, Integer> original : defaultControls) {
@@ -1215,6 +1285,21 @@ public class Main {
 					configureSellMenu();
 				} else if (chosen.equals(back)) {
 					shopMenu = false;
+					ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
+					//gets the nouns of the sentence that will be formed
+					names.add(user);
+					names.add(user.getRoom().getShop());
+					//gets the structure of the sentence (check sentenceGrammar's files)
+					GrammarIndividual grammarIndividual = grammarGeneralDescription.getRandomGrammar();
+					String message = _getMessage(grammarIndividual, names, "EXIT", "EXIT", true, false, false);
+					Shop shop = user.getRoom().getShop();
+					if (shop.heroLeaves) {
+						if (RandUtil.RandomNumber(0, 2) == 1) {
+							message += ", " + JSONParsing.getRandomWord("OTHERS", "again", rootObjWords);
+						}
+					} else
+						shop.heroLeaves = true;
+					printMessage(message);
 					printEverything(true);
 				}
 			} else if (shopMenuBuy) {
@@ -1224,22 +1309,25 @@ public class Main {
 				}
 				String back = JSONParsing.getTranslationWord("back", "OTHERS", rootObjWords);
 				boolean done = false;
+				Shop shop = user.getRoom().getShop();
 				for (int n = 0; n < itemList.size(); n++) {
 					String item = itemList.get(n);
 					if (chosen.equals(item) && !done) {
-						if (user.getRoom().getShop().buyItem(n)) {
+						if (shop.buyItem(n)) {
 							configureBuyMenu();
 							done = true;
 						}
 					}
 				}
 				if (chosen.equals(back)) {
+					shop.heroBuys = false;
 					shopMenu = true;
 					shopMenuBuy = false;
 					configureShopMenu();
 				}
 			} else if (shopMenuSell) {
 				ArrayList<String> itemList = new ArrayList<>();
+				Shop shop = user.getRoom().getShop();
 				for (Item item : user.getInventory()) {
 					itemList.add(item.getPrintableName() + ": " + item.getSellPrice());
 				}
@@ -1248,13 +1336,14 @@ public class Main {
 				for (int n = 0; n < itemList.size(); n++) {
 					String item = itemList.get(n);
 					if (chosen.equals(item) && !done) {
-						user.getRoom().getShop().sellItem(n);
+						shop.sellItem(n);
 						configureSellMenu();
 						done = true;
 						break;
 					}
 				}
 				if (chosen.equals(back)) {
+					shop.heroSells = false;
 					shopMenu = true;
 					shopMenuSell = false;
 					configureShopMenu();
@@ -1306,10 +1395,13 @@ public class Main {
 		//and saves it in the variable called "eleMenu"
 		//it also puts the pointer variable to 0
 		configureMenu();
+		printMessage(JSONParsing.getTranslationWord("menu", "N", rootObjWords) + ":");
 		while(menu) {
 			//this function prints the contents of the eleMenu variable
 			printMenu();
 			//waits for the user to press a key
+			//CharKey defines a numbered code for each keyboard key
+			//the number keys defined for the controls are specified on the file "keys.properties"
 			CharKey e = j.inkey();
 			int i = e.code;
 			//depending on the type of menu (options menu, choose-class menu, shop menu, etc)

@@ -130,6 +130,34 @@ public abstract class ActiveCharacter extends Character {
 		this.money = money;
 	}
 	
+	public ArrayList<String> getAdjectivesMood() {
+		Mood mood = this.getMood();
+		ArrayList<String> adjectives = new ArrayList<String>();
+		switch(mood) {
+		case TERRIFIED:
+			adjectives.add("terrified");
+			adjectives.add("scared");
+			break;
+		case ANGRY:
+			adjectives.add("angry");
+			adjectives.add("furious");
+			break;
+		case SLEEPY:
+			adjectives.add("sleepy");
+			adjectives.add("somnolient");
+			break;
+		case CONFUSED:
+			adjectives.add("confused");
+			adjectives.add("disoriented");
+			break;
+		case ENCOURAGED:
+			adjectives.add("encouraged");
+			adjectives.add("determined");
+			break;
+		}
+		return adjectives;
+	}
+	
 	public void setRandomSpells() {
 		int randNum = RandUtil.RandomNumber(0, 9);
 		switch(randNum) {
@@ -1317,19 +1345,17 @@ public abstract class ActiveCharacter extends Character {
 	}
 	
 	public ArrayList<String> getAdjectivesIndividual() {
-		ArrayList<String> adjectives = new ArrayList<String>();
+		ArrayList<String> adjectives = this.getAdjectivesMood();
 		adjectives.add("good");
 		return adjectives;
 	}
 	
 	public void setAdjectivesMonster(ActiveCharacter user) {
 		ArrayList<String> adjectives = this.getAdjectivesIndividual();
-		if (user.getLife() >= 70 && this.getLife() <= 20) {
-			adjectives.add("small");
-			adjectives.add("scared");
-		} else if (user.getLife() <= 30 && this.getLife() >= 50){
-			adjectives.add("scary");
-			adjectives.add("big");
+		if (this.getLife() <= 20) {
+			adjectives.add("unwell");
+		} else if (this.getLife() >= 50){
+			adjectives.add("healthy");
 		}
 		this.setAdjectives(adjectives);
 	}
@@ -1337,12 +1363,9 @@ public abstract class ActiveCharacter extends Character {
 	public void setAdjectivesUser() {
 		ArrayList<String> adjectivesUser = this.getAdjectivesIndividual();
 		if (this.getLife() >= 70) {
-			adjectivesUser.add("big");
-			adjectivesUser.add("brave");
-			adjectivesUser.add("glorious");
+			adjectivesUser.add("healthy");
 		} else if (this.getLife() <= 30){
-			adjectivesUser.add("small");
-			adjectivesUser.add("scared");
+			adjectivesUser.add("unwell");
 		} else {
 			adjectivesUser.add("average");
 		}

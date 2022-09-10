@@ -242,9 +242,63 @@
       { "translation": "sleepy" },
       { "numopposite": "sleepy" },
       { "gen": "" }
+    ],
+    "furious": [
+      { "num": "sing" },
+      { "translation": "furious" },
+      { "numopposite": "furious" },
+      { "gen": "" }
+    ],
+    "somnolient": [
+      { "num": "sing" },
+      { "translation": "somnolient" },
+      { "numopposite": "somnolient" },
+      { "gen": "" }
+    ],
+    "disoriented": [
+      { "num": "sing" },
+      { "translation": "disoriented" },
+      { "numopposite": "disoriented" },
+      { "gen": "" }
+    ],
+    "determined": [
+      { "num": "sing" },
+      { "translation": "determined" },
+      { "numopposite": "determined" },
+      { "gen": "" }
+    ],
+    "healthy": [
+      { "num": "sing" },
+      { "translation": "healthy" },
+      { "numopposite": "healthy" },
+      { "gen": "" }
+    ],
+    "unwell": [
+      { "num": "sing" },
+      { "translation": "unwell" },
+      { "numopposite": "unwell" },
+      { "gen": "" }
     ]
   },
   "N": {
+    "pause": [
+      { "num": "sing" },
+      { "translation": "pause" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
+    "pointer": [
+      { "num": "sing" },
+      { "translation": "pointer" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
+    "menu": [
+      { "num": "sing" },
+      { "translation": "menu" },
+      { "gen": "" },
+      { "pronoun": "it" }
+    ],
     "money": [
       { "num": "sing" },
       { "translation": "money" },
@@ -891,6 +945,46 @@
         { "gen": "" }
       ]
     },
+    "ENTER": {
+      "enters": [
+        { "num": "sing" },
+        { "translation": "enters" },
+        { "numopposite": "enter" },
+        { "gen": "" }
+      ],
+      "enter": [
+        { "num": "plural" },
+        { "translation": "enter" },
+        { "numopposite": "enters" },
+        { "gen": "" }
+      ]
+    },
+    "EXIT": {
+      "exits": [
+        { "num": "sing" },
+        { "translation": "exits" },
+        { "numopposite": "exit" },
+        { "gen": "" }
+      ],
+      "exit": [
+        { "num": "plural" },
+        { "translation": "exit" },
+        { "numopposite": "exits" },
+        { "gen": "" }
+      ],
+      "leaves": [
+        { "num": "sing" },
+        { "translation": "leaves" },
+        { "numopposite": "leave" },
+        { "gen": "" }
+      ],
+      "leave": [
+        { "num": "plural" },
+        { "translation": "leave" },
+        { "numopposite": "leaves" },
+        { "gen": "" }
+      ]
+    },
     "BUY": {
       "buys": [
         { "num": "sing" },
@@ -1263,6 +1357,14 @@
       { "translation": "Reset controls to default" },
       { "gen": "" }
     ],
+    "high input delay": [
+      { "translation": "High input delay" },
+      { "gen": "" }
+    ],
+    "low input delay": [
+      { "translation": "Low input delay" },
+      { "gen": "" }
+    ],
     "back": [
       { "translation": "Back" },
       { "gen": "" }
@@ -1297,6 +1399,10 @@
     ],
     "sell items": [
       { "translation": "Sell items" },
+      { "gen": "" }
+    ],
+    "not a spell": [
+      { "translation": "not a spell" },
       { "gen": "" }
     ]
   }

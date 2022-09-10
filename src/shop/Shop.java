@@ -32,6 +32,10 @@ public class Shop extends PrintableObject{
 	private Room room;
 	private String symbolRepresentation;
 	private ArrayList<Item> storedItems = new ArrayList<>();
+	public boolean heroEnters = false;
+	public boolean heroLeaves = false;
+	public boolean heroBuys = false;
+	public boolean heroSells = false;
 	
 	public Shop(String name, String description, ArrayList<String> adjectives, Map map, Room room, Tuple<Integer, Integer> position
 			, String symbolRepresentation) {
@@ -220,10 +224,15 @@ public class Shop extends PrintableObject{
 				user.putItemInventory(item);
 				GrammarIndividual grammarIndividual = Main.grammarGeneralDescription.getRandomGrammar();
 				ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
-				names.add(user);
-				names.add(item);
-				String message = main.Main._getMessage(grammarIndividual, names, "BUY", "BUY", true, false, false);
-				Main.printMessage(message);
+				if (this.heroBuys) {
+					Main.useAndWithItem(item);
+				} else {
+					this.heroBuys = true;
+					names.add(user);
+					names.add(item);
+					String message = main.Main._getMessage(grammarIndividual, names, "BUY", "BUY", true, false, false);
+					Main.printMessage(message);
+				}
 				return true;
 			} else
 				Main.printMessage(JSONParsing.getTranslationWord("not enough space", "OTHERS", Main.rootObjWords));
@@ -244,10 +253,15 @@ public class Shop extends PrintableObject{
 		user.setInventory(inventory);
 		GrammarIndividual grammarIndividual = Main.grammarGeneralDescription.getRandomGrammar();
 		ArrayList<PrintableObject> names = new ArrayList<PrintableObject>();
-		names.add(user);
-		names.add(item);
-		String message = main.Main._getMessage(grammarIndividual, names, "SELL", "SELL", true, false, false);
-		Main.printMessage(message);
+		if (this.heroSells) {
+			Main.useAndWithItem(item);
+		} else {
+			this.heroSells = true;
+			names.add(user);
+			names.add(item);
+			String message = main.Main._getMessage(grammarIndividual, names, "SELL", "SELL", true, false, false);
+			Main.printMessage(message);
+		}
 	}
 	
 	public Map getMap(){

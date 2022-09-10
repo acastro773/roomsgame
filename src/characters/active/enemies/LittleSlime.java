@@ -33,7 +33,7 @@ public class LittleSlime extends ActiveCharacter {
 	}
 	
 	public ArrayList<String> getAdjectivesIndividual() {
-		ArrayList<String> adjectives = new ArrayList<String>();
+		ArrayList<String> adjectives = this.getAdjectivesMood();
 		adjectives.add("small");
 		return adjectives;
 	}
