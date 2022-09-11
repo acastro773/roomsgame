@@ -6,16 +6,9 @@ import items.consumables.MagicPotion;
 import items.consumables.SuperLifePotion;
 import items.consumables.SuperMagicPotion;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
-
-import org.omg.PortableInterceptor.USER_EXCEPTION;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import characters.active.ActiveCharacter;
@@ -25,7 +18,6 @@ import characters.active.enemies.LittleSlime;
 import characters.active.enemies.Rat;
 import characters.active.enemies.Slime;
 import grammars.grammars.GrammarIndividual;
-import grammars.parsing.JSONParsing;
 import net.slashie.libjcsi.wswing.WSwingConsoleInterface;
 import net.slashie.util.Pair;
 import shop.Shop;
